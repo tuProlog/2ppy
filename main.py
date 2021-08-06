@@ -1,17 +1,7 @@
-import jpype
-import jpype.imports
-
-jpype.startJVM(classpath = ['libs/*'])
-
-from it.unibo.tuprolog import Info
-from it.unibo.tuprolog.core import Struct
-from it.unibo.tuprolog.core import Atom
-from it.unibo.tuprolog.core import Integer
-from it.unibo.tuprolog.core import Var
-from it.unibo.tuprolog.solve import Solver
-from it.unibo.tuprolog.theory.parsing import ClausesParser
-
-print("2P-Kt", Info.VERSION)
+from tuprolog import Info
+from tuprolog.core import *
+from tuprolog.solve import *
+from tuprolog.theory.parsing import *
 
 parser = ClausesParser.getWithDefaultOperators()
 
@@ -32,5 +22,5 @@ solver = Solver.getClassic().solverWithDefaultBuiltins(theory)
 
 query = Struct.of("grandparent", Var.of("X"), Var.of("Y"))
 
-for solution in solver.solve(query).iterator():
+for solution in solver.solve(query):
     print(solution)
