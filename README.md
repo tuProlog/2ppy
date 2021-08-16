@@ -18,9 +18,14 @@ Long description of the project
 
 3. Ensure Java and Python are both either 64bit or 32bit
 
-4. Restore python dependencies via PIP, by running
+4. Restore Python dependencies via PIP, by running:
     ```bash
     pip install -r requirements.txt
+    ```
+
+5. Restore JVM dependencies via `download-jars.sh`, by running:
+    ```bash
+    ./download-jars.sh
     ```
 
 ### How to use project
