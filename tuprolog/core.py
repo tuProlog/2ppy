@@ -235,3 +235,73 @@ class AbstractTermFormatter(AbstractFormatter, AbstractTermVisitor):
     @jpype.JOverride
     def visitDirective(self, term):
         return super(AbstractTermVisitor, self).visitDirective(term)
+
+@jpype.JImplements(TermComparator)
+class AbstractTermComparator(object):
+    @jpype.JOverride
+    def equals(self, other):
+        return self is other
+
+    @jpype.JOverride
+    def compare(self, first, second):
+        raise NotImplementedError()
+
+@jpype.JImplements(TermConvertible)
+class AbstractTermConvertible(object):
+    @jpype.JOverride
+    def toTerm(self):
+        raise NotImplementedError()
+
+# def atom(string) -> Atom:
+#     Atom.of(string)
+
+# def block(terms):
+#     list
+
+# def clause():
+#     pass
+
+# def cons(head, tail=):
+#     pass
+
+# def directive():
+#     pass
+
+# def empty_block():
+#     pass
+
+# def empty_logic_list():
+#     pass
+
+# def fact():
+#     pass
+
+# def indicator():
+#     pass
+
+# def integer():
+#     pass
+
+# def logic_list():
+#     pass
+
+# def numeric():
+#     pass
+
+# def real():
+#     pass
+
+# def rule():
+#     pass
+
+# def struct():
+#     pass
+
+# def truth():
+#     pass
+
+# def logic_tuple():
+#     pass
+
+# def var():
+#     pass

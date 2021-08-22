@@ -9,7 +9,7 @@ jpype.startJVM(classpath = ['libs/*'])
 
 logging.debug("Started JVM v" + '.'.join(map(str, jpype.getJVMVersion())))
 
-from . import _ktutils
+from .jvmutils import jiterable, jiterator
 
 from it.unibo.tuprolog import Info
 
