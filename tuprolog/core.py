@@ -33,6 +33,9 @@ from it.unibo.tuprolog.core import Truth
 from it.unibo.tuprolog.core import Tuple
 from it.unibo.tuprolog.core import Var
 
+from ._utils import iterable_or_varargs
+from .jvmutils import jiterable, jmap
+
 logging.debug("Loaded JVM classes from it.unibo.tuprolog.core.*")
 
 
@@ -41,6 +44,7 @@ class AbstractFormatter(object):
     @jpype.JOverride
     def format(self, term):
         raise NotImplementedError()
+
 
 @jpype.JImplements(TermVisitor)
 class AbstractTermVisitor(object):
@@ -236,6 +240,7 @@ class AbstractTermFormatter(AbstractFormatter, AbstractTermVisitor):
     def visitDirective(self, term):
         return super(AbstractTermVisitor, self).visitDirective(term)
 
+
 @jpype.JImplements(TermComparator)
 class AbstractTermComparator(object):
     @jpype.JOverride
@@ -246,62 +251,100 @@ class AbstractTermComparator(object):
     def compare(self, first, second):
         raise NotImplementedError()
 
+
 @jpype.JImplements(TermConvertible)
 class AbstractTermConvertible(object):
     @jpype.JOverride
     def toTerm(self):
         raise NotImplementedError()
 
-# def atom(string) -> Atom:
-#     Atom.of(string)
 
-# def block(terms):
-#     list
+def atom(string):
+    return Atom.of(string)
 
-# def clause():
-#     pass
 
-# def cons(head, tail=):
-#     pass
+def block(*terms):
+    return iterable_or_varargs(terms, lambda ts: Block.of(jiterable(ts)))
 
-# def directive():
-#     pass
 
-# def empty_block():
-#     pass
+def clause(head=None, *body):
+    return iterable_or_varargs(body, lambda bs: Clause.of(head, jiterable(bs)))
 
-# def empty_logic_list():
-#     pass
 
-# def fact():
-#     pass
+def empty_logic_list():
+    return EmptyList.getInstance()
 
-# def indicator():
-#     pass
 
-# def integer():
-#     pass
+def cons(head, tail=None):
+    if tail is None:
+        return Cons.singleton(head)
+    else: 
+        return Cons.of(head, tail)
 
-# def logic_list():
-#     pass
 
-# def numeric():
-#     pass
+def directive(*goals):
+    return iterable_or_varargs(goals, lambda gs: Directive.of(jiterable(gs)))
 
-# def real():
-#     pass
 
-# def rule():
-#     pass
+def empty_block():
+    return EmptyBlock.getInstance()
 
-# def struct():
-#     pass
 
-# def truth():
-#     pass
+def fact(struct):
+    return Fact.of(struct)
 
-# def logic_tuple():
-#     pass
 
-# def var():
-#     pass
+def indicator(name, arity):
+    return Indicator.of(name, arity)
+
+
+def integer(value):
+    return Integer.of(value)
+
+
+def real(value):
+    return Real.of(value)
+
+
+def rule(head, *body):
+    return iterable_or_varargs(body, lambda bs: Rule.of(head, jiterable(bs)))
+
+
+def struct(functor, *args):
+    return iterable_or_varargs(args, lambda xs: Struct.of(functor, jiterable(xs)))
+
+
+def truth(boolean):
+    return Truth.of(boolean)
+
+
+def true():
+    return Truth.TRUE
+
+
+def false():
+    return Truth.FALSE
+
+
+def fail():
+    return Truth.FAIL
+
+
+def logic_tuple(first, second, *others):
+    return iterable_or_varargs(others, lambda os: Tuple.of(jiterable([first, second] + list(os))))
+
+
+def var(name):
+    return Var.of(name)
+
+
+def unifier(assignments={}):
+    return Unifier.of(jmap(assignments))
+
+
+def substitution(assignments={}):
+    return Substitution.of(jmap(assignments))
+
+
+def failed():
+    return Substitution.failed()
