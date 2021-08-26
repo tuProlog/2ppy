@@ -22,11 +22,17 @@ Long description of the project
     ```bash
     pip install -r requirements.txt
     ```
+    On __Mac OS__ this may not work as expected.
+    Consider running the following command instead:
+    ```bash
+    python3 -m pip -r requirements.txt
+    ```
 
 5. Restore JVM dependencies via `download-jars.sh`, by running:
     ```bash
     ./download-jars.sh
     ```
+    Notice that this command requires `curl` and `wget` to be installed on your system (`wget` may be lacking on __Mac OS__ and Windows)
 
 ### How to use project
 
@@ -41,7 +47,7 @@ Long description of the project
     ```
     DEBUG:root:Started JVM vX.Y.Z
     DEBUG:root:Configure Kt-specific extensions
-    DEBUG:root:Using 2P-Kt v0.18.2
+    DEBUG:root:Using 2P-Kt vA.B.C
     DEBUG:root:Loaded JVM classes from it.unibo.tuprolog.core.*
     DEBUG:root:Loaded JVM classes from it.unibo.tuprolog.solve.*
     DEBUG:root:Loaded JVM classes from it.unibo.tuprolog.theory.parsing.*
