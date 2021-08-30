@@ -19,3 +19,7 @@ class TestInterfaces(unittest.TestCase):
         formatter = MyFormatter()
         for term in [Atom.of('a'), Integer.of(1), Var.of("X")]:
             self.assertEqual(formatter.format(term), str(term))
+
+
+if __name__ == '__main__':
+    unittest.main()

@@ -6,4 +6,6 @@ TUPROLOG_GITHUB='tuProlog/2p-kt'
 TUPROLOG_VERSION=`get_latest_release $TUPROLOG_GITHUB`
 TUPROLOG_JAR_URL="https://github.com/$TUPROLOG_GITHUB/releases/download/$TUPROLOG_VERSION/2p-repl-$TUPROLOG_VERSION-redist.jar"
 
+[[ -d ./libs ]] && rm -rf libs/* 
+
 wget -P ./libs/ $TUPROLOG_JAR_URL || (echo "Failed to download $TUPROLOG_JAR_URL"; echo "Ensure command wget is installed (brew install wget on Mac OS)")
