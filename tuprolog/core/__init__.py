@@ -33,8 +33,8 @@ from it.unibo.tuprolog.core import Truth
 from it.unibo.tuprolog.core import Tuple
 from it.unibo.tuprolog.core import Var
 
-from ._utils import iterable_or_varargs
-from .jvmutils import jiterable, jmap
+from tuprolog.pyutils import iterable_or_varargs
+from tuprolog.jvmutils import jiterable, jmap
 
 logging.debug("Loaded JVM classes from it.unibo.tuprolog.core.*")
 
