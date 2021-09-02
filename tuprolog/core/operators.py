@@ -2,8 +2,6 @@ import logging
 import jpype
 import jpype.imports
 
-from functools import singledispatch
-
 from it.unibo.tuprolog.core.operators import Operator
 from it.unibo.tuprolog.core.operators import OperatorSet
 from it.unibo.tuprolog.core.operators import Specifier
@@ -13,6 +11,8 @@ from tuprolog.jvmutils import jiterable, jmap
 from tuprolog.core import Atom
 from tuprolog.core import Integer
 from tuprolog.core import Struct
+
+from functools import singledispatch
 
 logging.debug("Loaded JVM classes from it.unibo.tuprolog.core.operators.*")
 
