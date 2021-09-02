@@ -1,5 +1,8 @@
 import unittest
 from tuprolog.core import *
+from tuprolog.core.visitors import AbstractTermVisitor
+from tuprolog.core.formatters import AbstractTermFormatter
+
 
 class TestInterfaces(unittest.TestCase):
 
