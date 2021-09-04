@@ -103,3 +103,7 @@ def parse_clause(string: str, operators: OperatorSet=None) -> Clause:
         return DEFAULT_TERM_PARSER.parseClause(string)
     else:
         return DEFAULT_TERM_PARSER.parseClause(string, operators)
+
+
+def parse(string: str, operators: OperatorSet=None) -> Term:
+    return parse_term(string, operators)
