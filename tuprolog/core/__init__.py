@@ -135,3 +135,10 @@ def substitution(assignments: Dict[Var, Term]={}) -> Substitution:
 
 def failed() -> Substitution.Fail:
     return Substitution.failed()
+
+
+Term.__lt__ = lambda this, other: this.compareTo(other) < 0
+Term.__gt__ = lambda this, other: this.compareTo(other) > 0
+Term.__le__ = lambda this, other: this.compareTo(other) <= 0
+Term.__ge__ = lambda this, other: this.compareTo(other) >= 0
+Term.__getitem__ = lambda this, item, *items: this.get(item, *items)

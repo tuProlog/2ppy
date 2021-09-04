@@ -54,3 +54,6 @@ XFX: Specifier = Specifier.XFX
 XFY: Specifier = Specifier.XFY
 
 YFX: Specifier = Specifier.YFX
+
+OperatorSet.__add__ = lambda this, other: this.plus(other)
+OperatorSet.__sub__ = lambda this, other: this.minus(other)
