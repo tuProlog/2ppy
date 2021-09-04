@@ -35,16 +35,22 @@ def operator_set(*operators) -> OperatorSet:
 def specifier(name: str) -> Specifier:
     return Specifier.valueOf(name)
 
-XF = Specifier.XF
+EMPTY_OPERATORS: OperatorSet = OperatorSet.EMPTY
 
-YF = Specifier.YF
+DEFAULT_OPERATORS: OperatorSet = OperatorSet.DEFAULT
 
-FX = Specifier.FX
+STANDARD_OPERATORS: OperatorSet = OperatorSet.STANDARD
 
-FY = Specifier.FY
+XF: Specifier = Specifier.XF
 
-XFX = Specifier.XFX
+YF: Specifier = Specifier.YF
 
-XFY = Specifier.XFY
+FX: Specifier = Specifier.FX
 
-YFX = Specifier.YFX
+FY: Specifier = Specifier.FY
+
+XFX: Specifier = Specifier.XFX
+
+XFY: Specifier = Specifier.XFY
+
+YFX: Specifier = Specifier.YFX
