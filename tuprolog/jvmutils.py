@@ -2,6 +2,8 @@ import logging
 import jpype
 import jpype.imports
 
+from _jpype import _JObject as JObjectClass
+
 from java.util import NoSuchElementException 
 from java.util import Map
 from java.util import Iterator
@@ -25,6 +27,13 @@ def jiterator(iterator):
 def jmap(dictionary):
     assert isinstance(dictionary, Mapping)
     return Map@dictionary
+
+
+def _java_obj_repr(java_object):
+    return str(java_object.toString())
+
+# replaces the default __repr__ implementation for java objects, making them use _java_obj_repr
+JObjectClass.__repr__ = _java_obj_repr
 
 
 @jpype.JImplementationFor("kotlin.sequences.Sequence")
