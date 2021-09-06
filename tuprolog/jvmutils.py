@@ -9,6 +9,8 @@ from java.util import Map
 from java.util import Iterator
 from java.lang import Iterable
 
+from it.unibo.tuprolog.utils import PyUtils
+
 from collections.abc import Iterable as PyIterable
 from collections.abc import Iterator as PyIterator
 from collections.abc import Mapping
@@ -42,7 +44,7 @@ class _KtSequence:
         PyIterable.register(self)
 
     def __iter__(self):
-        return self.iterator()
+        return PyUtils.iterable(self).iterator()
 
 
 logging.debug("Configure JVM-specific extensions")

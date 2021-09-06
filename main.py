@@ -22,5 +22,12 @@ solver = Solver.getClassic().solverWithDefaultBuiltins(theory)
 
 query = Struct.of("grandparent", Var.of("X"), Var.of("Y"))
 
-for solution in solver.solve(query):
+solutions = solver.solve(query)
+print(solutions)
+for solution in solutions:
     print(solution)
+
+variables = query.getVariables()
+print(variables)
+for variable in variables:
+    print(variable)
