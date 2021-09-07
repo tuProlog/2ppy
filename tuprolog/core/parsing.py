@@ -3,6 +3,7 @@ import jpype
 import jpype.imports
 
 from it.unibo.tuprolog.core.parsing import TermParser
+from it.unibo.tuprolog.core.parsing import TermReader
 from it.unibo.tuprolog.core.parsing import ParseException
 from it.unibo.tuprolog.core.parsing import InvalidTermTypeException
 
@@ -15,12 +16,12 @@ from tuprolog.core import Numeric
 from tuprolog.core import Integer
 from tuprolog.core import Real
 from tuprolog.core import Clause
+from tuprolog.jvmutils import open_file, InputStream
 
-# from tuprolog.pyutils import iterable_or_varargs
-# from tuprolog.jvmutils import jiterable, jmap
 from tuprolog.core.operators import Operator, OperatorSet, DEFAULT_OPERATORS, EMPTY_OPERATORS
 
-# from typing import Iterable, Union
+from collections.abc import Iterable
+from typing import Union
 
 
 logging.debug("Loaded JVM classes from it.unibo.tuprolog.core.parsing.*")
@@ -39,7 +40,23 @@ def term_parser(with_default_operators: bool=True, operators: OperatorSet=None) 
             return TermParser.withOperators(operators)
 
 
+def term_reader(with_default_operators: bool=True, operators: OperatorSet=None) -> TermParser:
+    if operators is None:
+        if with_default_operators:
+            return TermReader.getWithDefaultOperators()
+        else:
+            return TermReader.getWithNoOperator()
+    else:
+        if with_default_operators:
+            return TermReader.withOperators(DEFAULT_OPERATORS.plus(operators))
+        else:
+            return TermReader.withOperators(operators)
+
+
 DEFAULT_TERM_PARSER = term_parser()
+
+
+DEFAULT_TERM_READER = term_reader()
 
 
 def parse_term(string: str, operators: OperatorSet=None) -> Term:
@@ -105,5 +122,17 @@ def parse_clause(string: str, operators: OperatorSet=None) -> Clause:
         return DEFAULT_TERM_PARSER.parseClause(string, operators)
 
 
-def parse(string: str, operators: OperatorSet=None) -> Term:
-    return parse_term(string, operators)
+def read_term(input: Union[InputStream, str], operators: OperatorSet=None) -> Term:
+    input = ensure_input_steam(input)
+    if operators is None:
+        return DEFAULT_TERM_READER.readTerm(input)
+    else:
+        return DEFAULT_TERM_READER.readTerm(input, operators)
+
+
+def read_terms(input: Union[InputStream, str], operators: OperatorSet=None) -> Iterable[Term]:
+    input = ensure_input_steam(input)
+    if operators is None:
+        return DEFAULT_TERM_READER.readTerms(input)
+    else:
+        return DEFAULT_TERM_READER.readTerms(input, operators)
