@@ -11,7 +11,7 @@ class TestTermCreation(unittest.TestCase):
         self.var = var("X")
         self.true = truth(True)
         self.false = truth(False)
-        self.fail = fail()
+        self.fail = FAIL
         self.struct = struct('f', self.atom, self.integer, self.real)
         self.struct2 = struct('f', [self.atom, self.integer, self.real])
 
