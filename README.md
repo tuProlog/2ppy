@@ -1,4 +1,4 @@
-# Py2P
+# 2PPy (tuProlog in Python)
 
 Experimental porting of [2P-Kt](https://github.com/tuProlog/2p-kt) on Python, via [JPype](https://jpype.readthedocs.io).
 
