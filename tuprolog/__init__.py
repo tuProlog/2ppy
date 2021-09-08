@@ -5,9 +5,15 @@ logging.basicConfig(level=logging.DEBUG)
 import jpype
 import jpype.imports
 
-jpype.startJVM(classpath = ['libs/*'])
+from .libs import CLASSPATH
 
-logging.debug("Started JVM v" + '.'.join(map(str, jpype.getJVMVersion())))
+jars = [str(j.resolve()) for j in CLASSPATH.glob('*.jar')]
+
+jpype.startJVM(classpath = jars)
+
+JVM_VERSION = '.'.join(map(str, jpype.getJVMVersion()))
+
+logging.debug("Started JVM v" + JVM_VERSION + " with classpath: " + str(jars))
 
 from it.unibo.tuprolog import Info
 

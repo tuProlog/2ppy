@@ -1,0 +1,2 @@
+include tuprolog/libs/*.jar
+exclude test/*
