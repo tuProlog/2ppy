@@ -35,6 +35,16 @@ other aimed at  (de)serialising terms theories, namely `tuprolog.theory.serializ
 
 3. Ensure Java and Python are both either 64bit or 32bit
 
+4. If you have installed some prior development version of 2PPy (e.g. `tuppy` or `tuprolog`), uninstall them via
+    ```bash
+    pip uninstall tuppy tuprolog
+    ```
+    On __Mac OS__ this may not work as expected.
+    Consider running the following command instead:
+    ```bash
+    python3 -m pip uninstall tuppy tuprolog
+    ```
+
 ### How to develop 2PPy
 
 5. Restore Python dependencies via PIP, by running:
@@ -55,7 +65,7 @@ other aimed at  (de)serialising terms theories, namely `tuprolog.theory.serializ
 
 ### How to use 2PPy as a library
 
-1. Install 2PPy from Pypi by running:
+5. Install 2PPy from Pypi by running:
     ```bash
     pip install 2ppy
     ```
@@ -65,13 +75,13 @@ other aimed at  (de)serialising terms theories, namely `tuprolog.theory.serializ
     python3 -m pip install 2ppy
     ```
    
-2. Import `tuprolog.*` modules in your Python scripts
+6. Import `tuprolog.*` modules in your Python scripts
 
-3. Profit
+7. Profit
 
 ### How to use 2PPy as an executable
 
-1. Install 2PPy from Pypi by running:
+5. Install 2PPy from Pypi by running:
     ```bash
     pip install 2ppy
     ```
@@ -81,7 +91,7 @@ other aimed at  (de)serialising terms theories, namely `tuprolog.theory.serializ
     python3 -m pip install 2ppy
     ```
    
-2. Run `tuprolog` module via
+6. Run `tuprolog` module via
    ```bash
    python -m tuprolog
    ```

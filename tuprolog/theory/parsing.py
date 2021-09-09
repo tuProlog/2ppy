@@ -70,7 +70,7 @@ def parse_clauses(string: str, operators: OperatorSet=None, lazy: bool=True) -> 
             return DEFAULT_CLAUSES_PARSER.parseClauses(string, operators)
 
 
-def parse_theory(input: Union[InputStream, str], operators: OperatorSet=None) -> Theory:
+def read_theory(input: Union[InputStream, str], operators: OperatorSet=None) -> Theory:
     input = ensure_input_steam(input)
     if operators is None:
         return DEFAULT_CLAUSES_READER.readTheory(input)
@@ -78,7 +78,7 @@ def parse_theory(input: Union[InputStream, str], operators: OperatorSet=None) ->
         return DEFAULT_CLAUSES_READER.readTheory(input, operators)
 
 
-def parse_clauses(input: Union[InputStream, str], operators: OperatorSet=None, lazy: bool=True) -> Iterable[Clause]:
+def read_clauses(input: Union[InputStream, str], operators: OperatorSet=None, lazy: bool=True) -> Iterable[Clause]:
     input = ensure_input_steam(input)
     if lazy:
         if operators is None:

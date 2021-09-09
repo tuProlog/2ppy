@@ -1,2 +1,3 @@
 include tuprolog/libs/*.jar
 exclude test/*
+exclude main.py
