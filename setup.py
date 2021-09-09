@@ -18,8 +18,9 @@ def format_git_describe_version(version):
         splitted = version.split('-')
         tag = splitted[0]
         index = f"dev{splitted[1]}" #{hex(int(splitted[1]))[2:]}"
-        commit = splitted[2] 
-        return f"{tag}.{index}+{commit}"
+        # commit = splitted[2] 
+        # return f"{tag}.{index}+{commit}"
+        return f"{tag}.{index}"
     else:
         return version
 

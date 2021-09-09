@@ -1,4 +1,4 @@
-name: quick-check
+name: deploy
 on:
   push:
     tags:
