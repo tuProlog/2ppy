@@ -13,11 +13,21 @@ print(f"Executing setup.py from {here}")
 # Get the long description from the README file
 long_description = (here / 'README.md').read_text(encoding='utf-8')
 
+def format_git_describe_version(version):
+    if '-' in version:
+        splitted = version.split('-')
+        tag = splitted[0]
+        index = f"dev{hex(int(splitted[1]))[2:]}"
+        commit = splitted[2] 
+        return f"{tag}-{index}+{commit}"
+    else:
+        return version
+
 def get_version_from_git():
     try:
         process = subprocess.run(["git", "describe"], cwd=str(here), check=True, capture_output=True)
-        print(process)
         version = process.stdout.decode('utf-8').strip()
+        version = format_git_describe_version(version)
         with version_file.open('w') as f:
             f.write(version)
         return version
