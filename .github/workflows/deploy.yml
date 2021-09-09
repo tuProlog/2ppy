@@ -1,15 +1,18 @@
 name: quick-check
 on:
   push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
     branches:
-      - '*'
+      - develop
+      - master
 env:
   # jdk-version: openjdk@~1.15.0
   project-name: 2PPy
-  workflow: quick-check
+  workflow: deploy
   # gradle-options: "--no-daemon --console=plain --stacktrace"
 jobs:
-  run-unit-tests:
+  deploy-on-pypi:
     runs-on: ubuntu-latest
     steps:
       - name: Show Env
@@ -24,8 +27,8 @@ jobs:
         with:
           fetch-depth: 0 # all history
 
-      # - name: Get All Tags
-      #   run: git fetch --tags -f
+      - name: Get All Tags
+        run: git fetch --tags -f
 
       - name: Restore Python dependencies
         run: pip install -r requirements.txt
@@ -35,3 +38,19 @@ jobs:
 
       - name: Test
         run: python -m unittest
+
+      - name: Pack
+        run: python -m build
+
+      - name: Archive Dist Artifacts
+        if: failure() || success()
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: './dist'
+
+      - name: Upload
+        run: python -m twine upload dist/*
+        env:
+          TWINE_USERNAME: ${{ secrets.PYPI_USERANAME }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
