@@ -2,7 +2,7 @@
 
 Experimental porting of [2P-Kt](https://github.com/tuProlog/2p-kt) on Python, via [JPype](https://jpype.readthedocs.io).
 
-> This is a __work in progress__. Py2P is not ready for general availability, yet.
+> This is a __work in progress__. 2PPy is not ready for general availability, yet.
 
 ## Introduction
 
@@ -35,7 +35,7 @@ other aimed at  (de)serialising terms theories, namely `tuprolog.theory.serializ
 
 3. Ensure Java and Python are both either 64bit or 32bit
 
-### How to develop Py2P
+### How to develop 2PPy
 
 5. Restore Python dependencies via PIP, by running:
     ```bash
@@ -53,39 +53,39 @@ other aimed at  (de)serialising terms theories, namely `tuprolog.theory.serializ
     ```
     Notice that this command requires `curl` and `wget` to be installed on your system (`wget` may be lacking on __Mac OS__ and Windows)
 
-### How to use Py2P as a library
+### How to use 2PPy as a library
 
-1. Install Py2P from Pypi by running:
+1. Install 2PPy from Pypi by running:
     ```bash
-    pip install py2p
+    pip install 2ppy
     ```
     On __Mac OS__ this may not work as expected.
     Consider running the following command instead:
     ```bash
-    python3 -m pip install py2p
+    python3 -m pip install 2ppy
     ```
    
 2. Import `tuprolog.*` modules in your Python scripts
 
 3. Profit
 
-### How to use Py2P as an executable
+### How to use 2PPy as an executable
 
-1. Install Py2P from Pypi by running:
+1. Install 2PPy from Pypi by running:
     ```bash
-    pip install py2p
+    pip install 2ppy
     ```
     On __Mac OS__ this may not work as expected.
     Consider running the following command instead:
     ```bash
-    python3 -m pip install py2p
+    python3 -m pip install 2ppy
     ```
    
-2. Run Py2P via
+2. Run `tuprolog` module via
    ```bash
-   python -m py2p
+   python -m tuprolog
    ```
 
-For the moment, running Py2P means starting an interactive Python shell with pre-loaded Py2P modules.
+For the moment, running 2PPy means starting an interactive Python shell with pre-loaded `tuprolog.*` modules.
 
-Eventually `python -m py2p` will launch a command-line logic solver.
+Eventually `python -m tuprolog` will launch a command-line logic solver.
