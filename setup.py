@@ -72,6 +72,7 @@ setup(
     keywords='prolog, symbolic ai, ecosystem, tuprolog, 2p, python',  # Optional
     # package_dir={'': 'src'},  # Optional
     packages=find_packages(),  # Required
+    include_package_data=True,
     python_requires='>=3.6, <4',
     install_requires=['JPype1==1.3.0'],  # Optional
     zip_safe = False,
