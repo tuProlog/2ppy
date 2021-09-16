@@ -1,20 +1,23 @@
 import logging
 
-logging.basicConfig(level=logging.DEBUG)
-
+# noinspection PyUnresolvedReferences
 import jpype
 import jpype.imports
 
 from .libs import CLASSPATH
 
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger('tuprolog')
+
 jars = [str(j.resolve()) for j in CLASSPATH.glob('*.jar')]
 
-jpype.startJVM(classpath = jars)
+jpype.startJVM(classpath=jars)
+
+# noinspection PyUnresolvedReferences
+from it.unibo.tuprolog import Info
 
 JVM_VERSION = '.'.join(map(str, jpype.getJVMVersion()))
 
-logging.debug("Started JVM v" + JVM_VERSION + " with classpath: " + str(jars))
+logger.debug("Started JVM v" + JVM_VERSION + " with classpath: " + str(jars))
 
-from it.unibo.tuprolog import Info
-
-logging.debug("Using 2P-Kt v" + str(Info.VERSION))
+logger.debug("Using 2P-Kt v" + str(Info.VERSION))

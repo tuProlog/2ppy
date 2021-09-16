@@ -1,13 +1,12 @@
-import logging
+from tuprolog import logger
+
+# noinspection PyUnresolvedReferences
 import jpype
+# noinspection PyUnresolvedReferences
 import jpype.imports
 
-# from tuprolog.pyutils import iterable_or_varargs
-# from tuprolog.jvmutils import jiterable, jmap
-
+# noinspection PyUnresolvedReferences
 from tuprolog.core import TermVisitor
-
-logging.debug("Loaded compatibility layer for JVM subtypes of " + str(TermVisitor.class_.getName()))
 
 
 @jpype.JImplements(TermVisitor)
@@ -105,3 +104,5 @@ class AbstractTermVisitor(object):
     def visitDirective(self, term):
         return TermVisitor.DefaultImpls.visitDirective(self, term)
 
+
+logger.debug("Loaded compatibility layer for JVM subtypes of " + str(TermVisitor.class_.getName()))

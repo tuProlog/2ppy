@@ -1,9 +1,9 @@
-from tuprolog import Info
 from tuprolog.core import *
+from tuprolog.core.operators import *
 from tuprolog.solve import *
 from tuprolog.theory.parsing import *
 
-parser = ClausesParser.getWithDefaultOperators()
+parser = clauses_parser(with_default_operators=True, operators=operator_set(operator('f', XFX, 100)))
 
 theory = parser.parseTheory(
     """
@@ -20,7 +20,7 @@ theory = parser.parseTheory(
 
 solver = Solver.getClassic().solverWithDefaultBuiltins(theory)
 
-query = Struct.of("grandparent", Var.of("X"), Var.of("Y"))
+query = struct("grandparent", var("X"), var("Y"))
 
 solutions = solver.solve(query)
 print(solutions)

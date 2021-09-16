@@ -1,30 +1,30 @@
-import logging
+from tuprolog import logger
+
+# noinspection PyUnresolvedReferences
 import jpype
+# noinspection PyUnresolvedReferences
 import jpype.imports
 
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.core.parsing import TermParser
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.core.parsing import TermReader
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.core.parsing import ParseException
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.core.parsing import InvalidTermTypeException
 
-from tuprolog.core import Term
-from tuprolog.core import Struct
-from tuprolog.core import Constant
-from tuprolog.core import Var
-from tuprolog.core import Atom
-from tuprolog.core import Numeric
-from tuprolog.core import Integer
-from tuprolog.core import Real
-from tuprolog.core import Clause
+# noinspection PyUnresolvedReferences
+from tuprolog.core import Term, Struct, Constant, Var, Atom, Numeric, Integer, Real, Clause
+# noinspection PyUnresolvedReferences
 from tuprolog.jvmutils import open_file, InputStream
 
+# noinspection PyUnresolvedReferences
 from tuprolog.core.operators import Operator, OperatorSet, DEFAULT_OPERATORS, EMPTY_OPERATORS
 
 from collections.abc import Iterable
+
 from typing import Union
-
-
-logging.debug("Loaded JVM classes from it.unibo.tuprolog.core.parsing.*")
 
 
 def term_parser(with_default_operators: bool=True, operators: OperatorSet=None) -> TermParser:
@@ -136,3 +136,5 @@ def read_terms(input: Union[InputStream, str], operators: OperatorSet=None) -> I
         return DEFAULT_TERM_READER.readTerms(input)
     else:
         return DEFAULT_TERM_READER.readTerms(input, operators)
+
+logger.debug("Loaded JVM classes from it.unibo.tuprolog.core.parsing.*")
