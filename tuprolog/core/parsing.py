@@ -55,7 +55,6 @@ def term_reader(with_default_operators: bool=True, operators: OperatorSet=None) 
 
 DEFAULT_TERM_PARSER = term_parser()
 
-
 DEFAULT_TERM_READER = term_reader()
 
 
@@ -136,5 +135,6 @@ def read_terms(input: Union[InputStream, str], operators: OperatorSet=None) -> I
         return DEFAULT_TERM_READER.readTerms(input)
     else:
         return DEFAULT_TERM_READER.readTerms(input, operators)
+
 
 logger.debug("Loaded JVM classes from it.unibo.tuprolog.core.parsing.*")

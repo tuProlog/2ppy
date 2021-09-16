@@ -2,7 +2,10 @@ from tuprolog import logger
 
 # noinspection PyUnresolvedReferences
 import jpype
+# noinspection PyUnresolvedReferences
 import jpype.imports
+
+from ._ktadapt import *
 
 # noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.core import Atom
@@ -165,11 +168,5 @@ def substitution(assignments: Dict[Var, Term]={}) -> Substitution:
 def failed() -> Substitution.Fail:
     return Substitution.failed()
 
-
-Term.__lt__ = lambda this, other: this.compareTo(other) < 0
-Term.__gt__ = lambda this, other: this.compareTo(other) > 0
-Term.__le__ = lambda this, other: this.compareTo(other) <= 0
-Term.__ge__ = lambda this, other: this.compareTo(other) >= 0
-Term.__getitem__ = lambda this, item, *items: this.get(item, *items)
 
 logger.debug("Loaded JVM classes from it.unibo.tuprolog.core.*")
