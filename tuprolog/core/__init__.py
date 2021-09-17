@@ -1,45 +1,77 @@
-import logging
+from tuprolog import logger
+
+# noinspection PyUnresolvedReferences
 import jpype
+# noinspection PyUnresolvedReferences
 import jpype.imports
 
+from ._ktadapt import *
+
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.core import Atom
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.core import Block
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.core import Clause
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.core import Cons
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.core import Constant
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.core import Directive
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.core import Empty
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.core import EmptyBlock
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.core import EmptyList
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.core import Fact
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.core import Formatter
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.core import Indicator
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.core import Integer
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.core import List
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.core import Numeric
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.core import Real
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.core import Recursive
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.core import Rule
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.core import Scope
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.core import Struct
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.core import Substitution
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.core import Term
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.core import TermComparator
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.core import TermConvertible
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.core import TermFormatter
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.core import Terms
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.core import TermVisitor
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.core import Truth
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.core import Tuple
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.core import Var
 
 from tuprolog.pyutils import iterable_or_varargs
 from tuprolog.jvmutils import jiterable, jmap
 
 from typing import Iterable, Union, Dict
-
-
-logging.debug("Loaded JVM classes from it.unibo.tuprolog.core.*")
 
 
 @jpype.JImplements(TermConvertible)
@@ -137,8 +169,4 @@ def failed() -> Substitution.Fail:
     return Substitution.failed()
 
 
-Term.__lt__ = lambda this, other: this.compareTo(other) < 0
-Term.__gt__ = lambda this, other: this.compareTo(other) > 0
-Term.__le__ = lambda this, other: this.compareTo(other) <= 0
-Term.__ge__ = lambda this, other: this.compareTo(other) >= 0
-Term.__getitem__ = lambda this, item, *items: this.get(item, *items)
+logger.debug("Loaded JVM classes from it.unibo.tuprolog.core.*")

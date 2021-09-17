@@ -1,15 +1,15 @@
-import logging
+from tuprolog import logger
+
+# noinspection PyUnresolvedReferences
 import jpype
 import jpype.imports
 
-# from tuprolog.pyutils import iterable_or_varargs
-# from tuprolog.jvmutils import jiterable, jmap
-
+# noinspection PyUnresolvedReferences
 from tuprolog.core import Formatter
+# noinspection PyUnresolvedReferences
 from tuprolog.core import TermFormatter
+# noinspection PyUnresolvedReferences
 from tuprolog.core.visitors import AbstractTermVisitor
-
-logging.debug("Loaded compatibility layer for JVM subtypes of " + str(TermFormatter.class_.getName()))
 
 
 @jpype.JImplements(Formatter)
@@ -116,3 +116,6 @@ class AbstractTermFormatter(AbstractFormatter, AbstractTermVisitor):
     @jpype.JOverride
     def visitDirective(self, term):
         return super(AbstractTermVisitor, self).visitDirective(term)
+
+
+logger.debug("Loaded compatibility layer for JVM subtypes of " + str(TermFormatter.class_.getName()))

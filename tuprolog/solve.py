@@ -1,7 +1,11 @@
-import logging
+from tuprolog import logger
+
+# noinspection PyUnresolvedReferences
 import jpype
+# noinspection PyUnresolvedReferences
 import jpype.imports
 
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.solve import Solver
 
-logging.debug("Loaded JVM classes from it.unibo.tuprolog.solve.*")
+logger.debug("Loaded JVM classes from it.unibo.tuprolog.solve.*")

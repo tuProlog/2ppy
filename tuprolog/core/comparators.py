@@ -1,13 +1,11 @@
-import logging
+from tuprolog import logger
+
+# noinspection PyUnresolvedReferences
 import jpype
 import jpype.imports
 
-# from tuprolog.pyutils import iterable_or_varargs
-# from tuprolog.jvmutils import jiterable, jmap
-
+# noinspection PyUnresolvedReferences
 from tuprolog.core import TermComparator
-
-logging.debug("Loaded compatibility layer for JVM subtypes of " + str(TermComparator.class_.getName()))
 
 
 @jpype.JImplements(TermComparator)
@@ -19,3 +17,6 @@ class AbstractTermComparator(object):
     @jpype.JOverride
     def compare(self, first, second):
         raise NotImplementedError()
+
+
+logger.debug("Loaded compatibility layer for JVM subtypes of " + str(TermComparator.class_.getName()))

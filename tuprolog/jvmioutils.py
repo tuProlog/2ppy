@@ -1,12 +1,20 @@
-import logging
+from tuprolog import logger
+
+# noinspection PyUnresolvedReferences
 import jpype
+# noinspection PyUnresolvedReferences
 import jpype.imports
 
-from io import IOBase, TextIOBase, SEEK_SET
+# noinspection PyUnresolvedReferences
 from java.io import InputStream, Reader, InputStreamReader, BufferedReader
+# noinspection PyUnresolvedReferences
 from java.nio.file import Files, Paths
 
+# noinspection PyUnresolvedReferences
+from io import IOBase, TextIOBase, SEEK_SET
+
 from typing import Union
+
 
 @jpype.JImplementationFor("java.io.InputStream")
 class _JvmInputStream:
@@ -58,13 +66,13 @@ class _JvmInputStream:
             stream = stream.limit(hint)
         return list(stream)
 
-    def seek(offset: int, whence=SEEK_SET):
+    def seek(self, offset: int, whence=SEEK_SET):
         raise OSError("This IOBase is backed by an instance of <java.io.InputStream>")
 
-    def tell():
+    def tell(self):
         raise OSError("This IOBase is backed by an instance of <java.io.InputStream>")
 
-    def truncate(size=None):
+    def truncate(self, size=None):
         raise OSError("This IOBase is backed by an instance of <java.io.InputStream>")
 
     def writelines(self):
@@ -83,4 +91,5 @@ def ensure_input_steam(input: Union[str, InputStream]) -> InputStream:
     else:
         raise TypeError("Invalid type: " + type(input))
 
-logging.debug("Configure JVM-specific IO extensions")
+
+logger.debug("Configure JVM-specific IO extensions")

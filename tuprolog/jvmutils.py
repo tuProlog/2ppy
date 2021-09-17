@@ -1,15 +1,25 @@
-import logging
+from tuprolog import logger
+
+# noinspection PyUnresolvedReferences
 import jpype
+# noinspection PyUnresolvedReferences
 import jpype.imports
 
+# noinspection PyProtectedMember
 from _jpype import _JObject as JObjectClass
 
-from java.util import NoSuchElementException 
+# noinspection PyUnresolvedReferences
+from java.util import NoSuchElementException
+# noinspection PyUnresolvedReferences
 from java.util import Map
+# noinspection PyUnresolvedReferences
 from java.util import Iterator
+# noinspection PyUnresolvedReferences
 from java.lang import Iterable
+# noinspection PyUnresolvedReferences
 from java.lang import Object
 
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.utils import PyUtils
 
 from collections.abc import Iterable as PyIterable
@@ -60,4 +70,4 @@ class _JvmStream:
         return self.iterator()
 
 
-logging.debug("Configure JVM-specific extensions")
+logger.debug("Configure JVM-specific extensions")
