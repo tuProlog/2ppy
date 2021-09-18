@@ -9,18 +9,6 @@ class _KtTerm:
     def __jclass_init__(self):
         pass
 
-    def __lt__(self, other):
-        return self.compareTo(other) < 0
-
-    def __gt__(self, other):
-        return self.compareTo(other) > 0
-
-    def __le__(self, other):
-        return self.compareTo(other) <= 0
-
-    def __ge__(self, other):
-        return self.compareTo(other) >= 0
-
     def __getitem__(self, item, *items):
         return self.get(item, *items)
 
@@ -48,7 +36,7 @@ class _KtStruct:
 
 
 @jpype.JImplementationFor("it.unibo.tuprolog.core.Clause")
-class _KtStruct:
+class _KtClause:
     def __jclass_init__(self):
         pass
 

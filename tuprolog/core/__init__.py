@@ -169,4 +169,9 @@ def failed() -> Substitution.Fail:
     return Substitution.failed()
 
 
+EMPTY_UNIFIER: Substitution.Unifier = substitution()
+
+FAILED_SUBSTITUTION: Substitution.Fail = failed()
+
+
 logger.debug("Loaded JVM classes from it.unibo.tuprolog.core.*")
