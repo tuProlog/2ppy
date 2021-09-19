@@ -10,7 +10,11 @@ from tuprolog.unify import *
 from tuprolog.theory import *
 from tuprolog.theory.parsing import *
 from tuprolog.solve import *
+from tuprolog.solve.exception import *
+from tuprolog.solve.channel import *
 
 import code
 
 code.interact(local=locals())
+
+input()

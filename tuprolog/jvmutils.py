@@ -16,11 +16,14 @@ from java.lang import Iterable
 from java.lang import Object
 
 # noinspection PyUnresolvedReferences
+# from kotlin.jvm.functions import Function0, Function1
+
+# noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.utils import PyUtils
 
-from collections.abc import Iterable as PyIterable
-from collections.abc import Iterator as PyIterator
-from collections.abc import Mapping
+from typing import Iterable as PyIterable
+from typing import Iterator as PyIterator
+from typing import Mapping, MutableMapping, Callable, Any
 
 from .jvmioutils import *
 
@@ -140,6 +143,38 @@ class _JvmComparable:
 
     def __ge__(self, other):
         return self.compareTo(other) >= 0
+
+
+class _KtFunction(Callable):
+
+    def __init__(self, arity: int, function: Callable):
+        self._function = function
+        self._arity = arity
+
+    def invoke(self, *args):
+        assert len(args) == self._arity
+        return self._function(*args)
+
+    def __call__(self, *args):
+        return self.invoke(*args)
+
+
+_kt_function_classes: MutableMapping[int, Any] = dict()
+
+
+def kfunction(arity: int):
+    if arity not in _kt_function_classes:
+        @jpype.JImplements("kotlin.jvm.functions.Function" + str(arity), deferred=True)
+        class _KtFunctionN(_KtFunction):
+            def __init__(self, f):
+                super().__init__(arity, f)
+
+            @jpype.JOverride
+            def invoke(self, *args):
+                return super().invoke(*args)
+
+        _kt_function_classes[arity] = _KtFunctionN
+    return _kt_function_classes[arity]
 
 
 logger.debug("Configure JVM-specific extensions")
