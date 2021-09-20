@@ -16,7 +16,7 @@ from java.lang import Iterable
 from java.lang import Object
 
 # noinspection PyUnresolvedReferences
-# from kotlin.jvm.functions import Function0, Function1
+from kotlin import Pair, Triple
 
 # noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.utils import PyUtils
@@ -71,9 +71,33 @@ class _IterableAdapter(object):
         return _IteratorAdapter(iter(self._iterable))
 
 
-@jpype.JConversion("java.lang.Iterable", instanceof=PyIterable, excludes=str)
-def _jIterableConvert(jcls, obj):
-    return _IterableAdapter(obj)
+def kpair(items: PyIterable) -> Pair:
+    if isinstance(items, Pair):
+        return items
+    i = iter(items)
+    first = next(i)
+    second = next(i)
+    return Pair(first, second)
+
+
+@jpype.JConversion("kotlin.Pair", instanceof=PyIterable, excludes=str)
+def _kt_pair_covert(jcls, obj):
+    return kpair(obj)
+
+
+def ktriple(items: PyIterable) -> Triple:
+    if isinstance(items, Triple):
+        return items
+    i = iter(items)
+    first = next(i)
+    second = next(i)
+    third = next(i)
+    return Triple(first, second, third)
+
+
+@jpype.JConversion("kotlin.Triple", instanceof=PyIterable, excludes=str)
+def _kt_triple_covert(jcls, obj):
+    return ktriple(obj)
 
 
 def jlist(iterable: PyIterable) -> Iterable:
@@ -89,6 +113,15 @@ def jlist(iterable: PyIterable) -> Iterable:
 def jiterable(iterable: PyIterable) -> Iterable:
     assert isinstance(iterable, PyIterable)
     return _IterableAdapter(iterable)
+
+
+@jpype.JConversion("java.lang.Iterable", instanceof=PyIterable, excludes=str)
+def _java_iterable_convert(jcls, obj):
+    return jiterable(obj)
+
+
+def jarray(type, rank: int = 1):
+    return jpype.JArray(type, rank)
 
 
 def jiterator(iterator: PyIterator) -> Iterator:

@@ -12,6 +12,7 @@ from tuprolog.theory.parsing import *
 from tuprolog.solve import *
 from tuprolog.solve.exception import *
 from tuprolog.solve.channel import *
+from tuprolog.solve.flags import *
 
 import code
 
