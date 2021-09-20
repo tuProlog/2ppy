@@ -18,7 +18,7 @@ class _KtTerm:
 
 
 @jpype.JImplementationFor("it.unibo.tuprolog.core.operators.Operator")
-class _KOperator:
+class _KtOperator:
     def __jclass_init__(self):
         pass
 

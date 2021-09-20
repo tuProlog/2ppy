@@ -163,7 +163,7 @@ class _JvmStream:
 @jpype.JImplementationFor("java.lang.Comparable")
 class _JvmComparable:
     def __jclass_init__(self):
-        PyIterable.register(self)
+        pass
 
     def __lt__(self, other):
         return self.compareTo(other) < 0
