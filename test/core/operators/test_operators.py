@@ -35,9 +35,6 @@ class TestOperators(unittest.TestCase):
                                        for spec in self.specifiers
                                        for functor in self.functors}
         self.other_operator_set_merged = operator_set(self.other_operators_struct)
-        # Construct specifier to test it
-        self.specifiers_names = {'XF', 'YF', 'FX', 'FY', 'XFY', 'YFX', 'XFX'}
-        self.specifiers = [specifier(name) for name in self.specifiers_names]
 
     def test_operator_construction(self):
         for operators in [self.operators_by_spec, self.operators_by_spec_logic, self.operators_by_spec_struct]:
@@ -91,11 +88,6 @@ class TestOperators(unittest.TestCase):
         # Assert standard operators are in set of constantly defined operators
         for operator in self.standard_operators_set:
             self.assertTrue(operator in self.other_operators)
-
-    def test_specifier(self):
-        # Test specifier is in constants XF, YF, etc.
-        for specifier in self.specifiers:
-            self.assertTrue(specifier in self.specifiers)
 
 
 if __name__ == '__main__':
