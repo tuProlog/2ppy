@@ -22,9 +22,9 @@ from java.lang import Object
 # noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.utils import PyUtils
 
-from collections.abc import Iterable as PyIterable
-from collections.abc import Iterator as PyIterator
-from collections.abc import Mapping
+from typing import Iterable as PyIterable
+from typing import Iterator as PyIterator
+from typing import Mapping
 
 from .jvmioutils import *
 
