@@ -155,6 +155,10 @@ FALSE = Truth.FALSE
 FAIL = Truth.FAIL
 
 
+def logic_list(*items: Union[Term, Iterable[Term]]) -> Tuple:
+    return iterable_or_varargs(items, lambda xs: List.of(jiterable(xs)))
+
+
 def logic_tuple(first: Term, second: Term, *others: Union[Term, Iterable[Term]]) -> Tuple:
     return iterable_or_varargs(others, lambda os: Tuple.of(jiterable([first, second] + list(os))))
 
