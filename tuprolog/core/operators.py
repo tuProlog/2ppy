@@ -16,11 +16,7 @@ from tuprolog.pyutils import iterable_or_varargs
 from tuprolog.jvmutils import jiterable, jmap
 
 # noinspection PyUnresolvedReferences
-from tuprolog.core import Atom
-# noinspection PyUnresolvedReferences
-from tuprolog.core import Integer
-# noinspection PyUnresolvedReferences
-from tuprolog.core import Struct
+from tuprolog.core import Atom, Integer, Struct, Term
 
 from functools import singledispatch
 
@@ -44,8 +40,14 @@ def operator_set(*operators) -> OperatorSet:
     return iterable_or_varargs(operators, lambda os: OperatorSet(jiterable(os)))
 
 
+@singledispatch
 def specifier(name: str) -> Specifier:
-    return Specifier.valueOf(name)
+    return Specifier.valueOf(name.upper())
+
+
+@specifier.register
+def _(term: Term) -> Specifier:
+    return Specifier.fromTerm(term)
 
 
 EMPTY_OPERATORS: OperatorSet = OperatorSet.EMPTY
