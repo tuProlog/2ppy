@@ -1,14 +1,16 @@
-from logging import log
-from tuprolog.core.operators import DEFAULT_OPERATORS, EMPTY_OPERATORS, STANDARD_OPERATORS, XF, XFY, YF, YFX, FX, FY, XFX, operator, operator_set, OperatorSet, specifier, Specifier
+import random
+import string
 import unittest
-import random, string
-from tuprolog import *
+
 from tuprolog.core import *
+from tuprolog.core.operators import DEFAULT_OPERATORS, EMPTY_OPERATORS, STANDARD_OPERATORS, XF, XFY, YF, YFX, FX, FY, \
+    XFX, operator, operator_set, OperatorSet, specifier
+
 
 class TestOperators(unittest.TestCase):
 
     def setUp(self):
-        self.integers = {random.randint(1,10) for _ in range(10)}
+        self.integers = {random.randint(1, 10) for _ in range(10)}
         self.constants = {XF, YF, FX, FY, XFY, YFX, XFX}
         self.strings = {''.join(random.choices(string.ascii_lowercase, k=1)) for _ in range(10)}
         # Construct two identical operator to check equality
@@ -17,16 +19,19 @@ class TestOperators(unittest.TestCase):
         # Construct operators using all override constuctors
         self.my_operator = [operator('a', const, 1) for const in self.constants]
         self.my_operator_logic = [operator(integer(1), const.toTerm(), atom('a')) for const in self.constants]
-        self.my_operator_struct = [operator(struct('op', integer(1), const.toTerm(), atom('a'))) for const in self.constants]
+        self.my_operator_struct = [operator(struct('op', integer(1), const.toTerm(), atom('a'))) for const in
+                                   self.constants]
         # Costruct default operators set to check their validity
         self.empty_operators_set = EMPTY_OPERATORS
         self.default_operators_set = DEFAULT_OPERATORS
         self.standard_operators_set = STANDARD_OPERATORS
-        self.my_standard_operators_sets = {OperatorSet.CONTROL_FLOW, OperatorSet.ARITHMETIC, OperatorSet.ARITHMETIC_COMPARISON,
-                                           OperatorSet.CLAUSES, OperatorSet.TERM_COMPARISON,}
+        self.my_standard_operators_sets = {OperatorSet.CONTROL_FLOW, OperatorSet.ARITHMETIC,
+                                           OperatorSet.ARITHMETIC_COMPARISON,
+                                           OperatorSet.CLAUSES, OperatorSet.TERM_COMPARISON, }
         self.my_standard_operators = {oper for oper_set in self.my_standard_operators_sets for oper in oper_set}
         # Define a new set of operators
-        self.operators = {operator(struct('op', integer(_integer), const.toTerm(), atom(_string))) for _integer in self.integers for const in self.constants for _string in self.strings}
+        self.operators = {operator(struct('op', integer(_integer), const.toTerm(), atom(_string))) for _integer in
+                          self.integers for const in self.constants for _string in self.strings}
         self.my_operator_set = operator_set(self.operators)
         # Construct specifier to test it
         self.specifiers_consts = {'XF', 'YF', 'FX', 'FY', 'XFY', 'YFX', 'XFX'}
@@ -46,10 +51,10 @@ class TestOperators(unittest.TestCase):
         # Check operators are equal if built with same parameters
         self.assertEqual(self.operator1, self.operator2)
         self.assertTrue(self.operator1 == self.operator2)
-    
+
     def test_operators_set_operations(self):
         operators = [operator(struct('op', integer(1), XF.toTerm(), atom('a'))),
-                     operator(struct('op', integer(2), YF.toTerm(), atom('b'))),]
+                     operator(struct('op', integer(2), YF.toTerm(), atom('b'))), ]
         # Test addition
         my_appended_operators_set = operator_set(operators[0])
         my_appended_operators_set += operators[1]
@@ -88,8 +93,6 @@ class TestOperators(unittest.TestCase):
         # Test specifier is in constants XF, YF, etc.
         for specifier in self.my_specifiers:
             self.assertTrue(specifier in self.constants)
-
- 
 
 
 if __name__ == '__main__':
