@@ -121,11 +121,17 @@ def indicator(name: Union[str, Term], arity: Union[int, Term]) -> Indicator:
 
 
 def integer(value: Union[int, str]) -> Integer:
-    return Integer.of(value)
+    if isinstance(value, str):
+        return Integer.of(jpype.JString @ value)
+    else:
+        return Integer.of(jpype.JLong @ value)
 
 
 def real(value: Union[float, str]) -> Real:
-    return Real.of(value)
+    if isinstance(value, str):
+        return Real.of(jpype.JString @ value)
+    else:
+        return Real.of(jpype.JDouble @ value)
 
 
 def rule(head: Struct, *body: Union[Term, Iterable[Term]]) -> Rule:
