@@ -17,6 +17,24 @@ class _KtTerm:
         return self.getVariables()
 
 
+@jpype.JImplementationFor("it.unibo.tuprolog.core.operators.Operator")
+class _KOperator:
+    def __jclass_init__(self):
+        pass
+
+    @property
+    def functor(self):
+        return self.getFunctor()
+
+    @property
+    def specifier(self):
+        return self.getSpecifier()
+
+    @property
+    def priority(self):
+        return self.getPriority()
+
+
 @jpype.JImplementationFor("it.unibo.tuprolog.core.Struct")
 class _KtStruct:
     def __jclass_init__(self):

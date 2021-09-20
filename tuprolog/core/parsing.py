@@ -22,9 +22,7 @@ from tuprolog.jvmutils import open_file, InputStream
 # noinspection PyUnresolvedReferences
 from tuprolog.core.operators import Operator, OperatorSet, DEFAULT_OPERATORS, EMPTY_OPERATORS
 
-from collections.abc import Iterable
-
-from typing import Union
+from typing import Union, Iterable
 
 
 def term_parser(with_default_operators: bool=True, operators: OperatorSet=None) -> TermParser:

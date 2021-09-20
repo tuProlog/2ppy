@@ -21,8 +21,7 @@ from tuprolog.jvmutils import open_file, InputStream, ensure_input_steam
 # noinspection PyUnresolvedReferences
 from tuprolog.core.operators import Operator, OperatorSet, DEFAULT_OPERATORS, EMPTY_OPERATORS
 
-from collections.abc import Iterable
-from typing import Union
+from typing import Union, Iterable
 
 
 def clauses_parser(with_default_operators: bool = True, operators: OperatorSet = None) -> ClausesParser:

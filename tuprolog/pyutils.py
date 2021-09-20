@@ -1,4 +1,4 @@
-from collections.abc import Iterable
+from typing import Iterable
 
 
 def iterable_or_varargs(args, dispatch=lambda x: x):

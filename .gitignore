@@ -5,6 +5,7 @@ VERSION
 
 venv/
 .idea/
+.vscode/
 
 *~
 *.jar
