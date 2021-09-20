@@ -10,41 +10,44 @@ from tuprolog.core.operators import DEFAULT_OPERATORS, EMPTY_OPERATORS, STANDARD
 class TestOperators(unittest.TestCase):
 
     def setUp(self):
-        self.integers = {random.randint(1, 10) for _ in range(10)}
-        self.constants = {XF, YF, FX, FY, XFY, YFX, XFX}
-        self.strings = {''.join(random.choices(string.ascii_lowercase, k=1)) for _ in range(10)}
+        self.priorities = {random.randint(1, 1200) for _ in range(10)}
+        self.specifiers = {XF, YF, FX, FY, XFY, YFX, XFX}
+        self.functors = {''.join(random.choices(string.ascii_lowercase, k=1)) for _ in range(10)}
         # Construct two identical operator to check equality
         self.operator1 = operator('a', XF, 1)
         self.operator2 = operator('a', XF, 1)
         # Construct operators using all override constuctors
-        self.my_operator = [operator('a', const, 1) for const in self.constants]
-        self.my_operator_logic = [operator(integer(1), const.toTerm(), atom('a')) for const in self.constants]
-        self.my_operator_struct = [operator(struct('op', integer(1), const.toTerm(), atom('a'))) for const in
-                                   self.constants]
+        self.operators_by_spec = [operator('a', spec, 1) for spec in self.specifiers]
+        self.operators_by_spec_logic = [operator(integer(1), const.toTerm(), atom('a')) for const in self.specifiers]
+        self.operators_by_spec_struct = [operator(struct('op', integer(1), spec.toTerm(), atom('a')))
+                                         for spec in self.specifiers]
         # Costruct default operators set to check their validity
         self.empty_operators_set = EMPTY_OPERATORS
         self.default_operators_set = DEFAULT_OPERATORS
         self.standard_operators_set = STANDARD_OPERATORS
-        self.my_standard_operators_sets = {OperatorSet.CONTROL_FLOW, OperatorSet.ARITHMETIC,
-                                           OperatorSet.ARITHMETIC_COMPARISON,
-                                           OperatorSet.CLAUSES, OperatorSet.TERM_COMPARISON, }
-        self.my_standard_operators = {oper for oper_set in self.my_standard_operators_sets for oper in oper_set}
+        self.other_operators_sets = {OperatorSet.CONTROL_FLOW, OperatorSet.ARITHMETIC,
+                                     OperatorSet.ARITHMETIC_COMPARISON,
+                                     OperatorSet.CLAUSES, OperatorSet.TERM_COMPARISON, }
+        self.other_operators = {op for op_set in self.other_operators_sets for op in op_set}
         # Define a new set of operators
-        self.operators = {operator(struct('op', integer(_integer), const.toTerm(), atom(_string))) for _integer in
-                          self.integers for const in self.constants for _string in self.strings}
-        self.my_operator_set = operator_set(self.operators)
+        self.other_operators_struct = {operator(struct('op', integer(priority), spec.toTerm(), atom(functor)))
+                                       for priority in self.priorities
+                                       for spec in self.specifiers
+                                       for functor in self.functors}
+        self.other_operator_set_merged = operator_set(self.other_operators_struct)
         # Construct specifier to test it
-        self.specifiers_consts = {'XF', 'YF', 'FX', 'FY', 'XFY', 'YFX', 'XFX'}
-        self.my_specifiers = [specifier(const) for const in self.specifiers_consts]
+        self.specifiers_names = {'XF', 'YF', 'FX', 'FY', 'XFY', 'YFX', 'XFX'}
+        self.specifiers = [specifier(name) for name in self.specifiers_names]
 
     def test_operator_construction(self):
-        for operators in [self.my_operator, self.my_operator_logic, self.my_operator_struct]:
+        for operators in [self.operators_by_spec, self.operators_by_spec_logic, self.operators_by_spec_struct]:
             for operator in operators:
                 self.assertEqual(operator.getFunctor(), 'a')
-                self.assertTrue(operator.getSpecifier() in self.constants)
+                self.assertTrue(operator.getSpecifier() in self.specifiers)
                 self.assertEqual(operator.getPriority(), 1)
+
                 self.assertEqual(operator.functor, 'a')
-                self.assertTrue(operator.specifier in self.constants)
+                self.assertTrue(operator.specifier in self.specifiers)
                 self.assertEqual(operator.priority, 1)
 
     def test_operator_equality(self):
@@ -72,11 +75,11 @@ class TestOperators(unittest.TestCase):
 
     def test_operators_set(self):
         # Check operator set construction works properly
-        for operator in self.my_operator_set:
-            self.assertTrue(operator in self.operators)
-            self.assertTrue(operator.functor in self.strings)
-            self.assertTrue(operator.specifier in self.constants)
-            self.assertTrue(operator.priority in self.integers)
+        for operator in self.other_operator_set_merged:
+            self.assertTrue(operator in self.other_operators_struct)
+            self.assertTrue(operator.functor in self.functors)
+            self.assertTrue(operator.specifier in self.specifiers)
+            self.assertTrue(operator.priority in self.priorities)
 
     def test_constant_operators_set(self):
         # Assert empty set is properly empty
@@ -87,12 +90,12 @@ class TestOperators(unittest.TestCase):
         self.assertEqual(self.default_operators_set, self.standard_operators_set)
         # Assert standard operators are in set of constantly defined operators
         for operator in self.standard_operators_set:
-            self.assertTrue(operator in self.my_standard_operators)
+            self.assertTrue(operator in self.other_operators)
 
     def test_specifier(self):
         # Test specifier is in constants XF, YF, etc.
-        for specifier in self.my_specifiers:
-            self.assertTrue(specifier in self.constants)
+        for specifier in self.specifiers:
+            self.assertTrue(specifier in self.specifiers)
 
 
 if __name__ == '__main__':
