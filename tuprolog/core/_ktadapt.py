@@ -47,8 +47,6 @@ class _KOperator:
         return self.getPriority()
 
 
-
-
 @jpype.JImplementationFor("it.unibo.tuprolog.core.Struct")
 class _KtStruct:
     def __jclass_init__(self):
