@@ -23,6 +23,11 @@ from it.unibo.tuprolog.solve import SolveOptions
 from it.unibo.tuprolog.solve import Solver
 # noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.solve import SolverFactory
+# noinspection PyUnresolvedReferences
+from it.unibo.tuprolog.solve import Time
+# noinspection PyUnresolvedReferences
+from java.lang import System, Long
+
 
 # noinspection PyUnresolvedReferences
 from tuprolog.core import Indicator, Struct, Term, Substitution, EMPTY_UNIFIER
@@ -86,6 +91,13 @@ def halt_solution(signature: Signature, arguments: Iterable[Term], exception: Re
 @halt_solution.register
 def _halt_solution_from_query(query: Struct, exception: ResolutionException) -> Solution.No:
     return Solution.halt(query, exception)
+
+
+def current_time_instant() -> int:
+    return System.currentTimeMillis()
+
+
+MAX_TIME_DURATION: int = Long.MAX_VALUE
 
 
 logger.debug("Loaded JVM classes from it.unibo.tuprolog.solve.*")

@@ -13,6 +13,9 @@ from tuprolog.solve import *
 from tuprolog.solve.exception import *
 from tuprolog.solve.channel import *
 from tuprolog.solve.flags import *
+from tuprolog.solve.function import *
+from tuprolog.solve.primitive import *
+from tuprolog.solve.sideffcts import *
 
 import code
 

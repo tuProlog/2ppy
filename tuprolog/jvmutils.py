@@ -17,6 +17,8 @@ from java.lang import Object
 
 # noinspection PyUnresolvedReferences
 from kotlin import Pair, Triple
+# noinspection PyUnresolvedReferences
+from kotlin.sequences import Sequence, SequencesKt
 
 # noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.utils import PyUtils
@@ -151,6 +153,15 @@ class _KtSequence:
         return PyUtils.iterable(self).iterator()
 
 
+def ksequence(iterable: PyIterable) -> Sequence:
+    return SequencesKt.asSequence(jiterable(iterable))
+
+
+@jpype.JConversion("kotlin.sequences.Sequence", instanceof=PyIterable, excludes=str)
+def _kt_sequence_convert(jcls, obj):
+    return ksequence(obj)
+
+
 @jpype.JImplementationFor("java.util.stream.Stream")
 class _JvmStream:
     def __jclass_init__(self):
@@ -179,7 +190,6 @@ class _JvmComparable:
 
 
 class _KtFunction(Callable):
-
     def __init__(self, arity: int, function: Callable):
         self._function = function
         self._arity = arity
