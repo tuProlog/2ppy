@@ -1,3 +1,5 @@
+from functools import reduce
+
 from tuprolog import logger
 
 # noinspection PyUnresolvedReferences
@@ -30,7 +32,6 @@ from tuprolog.jvmutils import jiterable
 from typing import Union, Mapping, Iterable
 
 
-
 def library(
         alias: str = None,
         primitives: Mapping[Signature, Primitive] = dict(),
@@ -44,8 +45,29 @@ def library(
         return Library.aliased(alias, primitives, theory, operators, functions)
 
 
-def libraries(*libraries: Iterable[AliasedLibrary]) -> Libraries:
-    return iterable_or_varargs(libraries, lambda ls: Libraries.of(jiterable(libraries)))
+def aliased(alias: str, library: Library) -> AliasedLibrary:
+    return Library.of(alias, library)
+
+
+def libraries(
+        *libs: Union[Libraries, AliasedLibrary, Iterable[Union[Libraries, AliasedLibrary]]],
+        **kwargs: Library
+) -> Libraries:
+    all_libraries = []
+    aliased_libs = []
+    queue = list(libs)
+    while len(queue) > 0:
+        current = queue.pop()
+        if isinstance(current, Libraries):
+            all_libraries.append(current)
+        elif isinstance(current, AliasedLibrary):
+            aliased_libs.append(current)
+        else:
+            queue.extend(current)
+    for alias in kwargs:
+        aliased_libs.append(aliased(alias, kwargs[alias]))
+    first = Libraries.of(jiterable(aliased_libs))
+    return reduce(lambda a, b: a.plus(b), all_libraries, first)
 
 
 logger.debug("Loaded JVM classes from it.unibo.tuprolog.solve.library.*")

@@ -10,16 +10,14 @@ from it.unibo.tuprolog.solve.data import CustomDataStore
 # noinspection PyUnresolvedReferences
 from java.util import Map as CustomData
 
+from tuprolog.pyutils import dict_or_keyword_args
 from tuprolog.jvmutils import jmap
 
 from typing import Mapping, Any
 
 
 def custom_data(data: Mapping[str, Any] = {}, **kwargs) -> CustomData:
-    all_data = dict(**kwargs)
-    for k, v in data:
-        all_data[k] = v
-    return jmap(all_data)
+    return dict_or_keyword_args(data, kwargs, lambda ds: jmap(ds))
 
 
 EMPTY_DATA: CustomData = custom_data()
