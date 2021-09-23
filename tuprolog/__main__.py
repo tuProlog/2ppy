@@ -18,6 +18,7 @@ from tuprolog.solve.primitive import *
 from tuprolog.solve.sideffcts import *
 from tuprolog.solve.library import *
 from tuprolog.solve.library.exception import *
+from tuprolog.solve.data import *
 
 import code
 
