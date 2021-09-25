@@ -19,6 +19,10 @@ from tuprolog.solve.sideffcts import *
 from tuprolog.solve.library import *
 from tuprolog.solve.library.exception import *
 from tuprolog.solve.data import *
+from tuprolog.solve.stdlib import *
+from tuprolog.solve.stdlib.primitive import *
+from tuprolog.solve.stdlib.rule import *
+from tuprolog.solve.stdlib.function import *
 
 import code
 
