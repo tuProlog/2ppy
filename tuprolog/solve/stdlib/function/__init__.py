@@ -65,4 +65,61 @@ from it.unibo.tuprolog.solve.stdlib.function import ToFloat
 from it.unibo.tuprolog.solve.stdlib.function import Truncate
 
 
+Addition = Addition.INSTANCE
+
+ArcTangent = ArcTangent.INSTANCE
+
+BitwiseAnd = BitwiseAnd.INSTANCE
+
+BitwiseComplement = BitwiseComplement.INSTANCE
+
+BitwiseLeftShift = BitwiseLeftShift.INSTANCE
+
+BitwiseOr = BitwiseOr.INSTANCE
+
+BitwiseRightShift = BitwiseRightShift.INSTANCE
+
+Ceiling = Ceiling.INSTANCE
+
+Cosine = Cosine.INSTANCE
+
+Exponential = Exponential.INSTANCE
+
+Exponentiation = Exponentiation.INSTANCE
+
+FloatFractionalPart = FloatFractionalPart.INSTANCE
+
+FloatIntegerPart = FloatIntegerPart.INSTANCE
+
+FloatingPointDivision = FloatingPointDivision.INSTANCE
+
+Floor = Floor.INSTANCE
+
+IntegerDivision = IntegerDivision.INSTANCE
+
+Modulo = Modulo.INSTANCE
+
+Multiplication = Multiplication.INSTANCE
+
+NaturalLogarithm = NaturalLogarithm.INSTANCE
+
+Remainder = Remainder.INSTANCE
+
+Round = Round.INSTANCE
+
+Sign = Sign.INSTANCE
+
+SignReversal = SignReversal.INSTANCE
+
+Sine = Sine.INSTANCE
+
+SquareRoot = SquareRoot.INSTANCE
+
+Subtraction = Subtraction.INSTANCE
+
+ToFloat = ToFloat.INSTANCE
+
+Truncate = Truncate.INSTANCE
+
+
 logger.debug("Loaded JVM classes from it.unibo.tuprolog.solve.stdlib.function.*")

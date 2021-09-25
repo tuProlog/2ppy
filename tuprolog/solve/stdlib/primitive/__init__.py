@@ -144,5 +144,144 @@ from it.unibo.tuprolog.solve.stdlib.primitive import Var
 # noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.solve.stdlib.primitive import Write
 
+Abolish = Abolish.INSTANCE
+
+Arg = Arg.INSTANCE
+
+ArithmeticEqual = ArithmeticEqual.INSTANCE
+
+ArithmeticGreaterThan = ArithmeticGreaterThan.INSTANCE
+
+ArithmeticGreaterThanOrEqualTo = ArithmeticGreaterThanOrEqualTo.INSTANCE
+
+ArithmeticLowerThan = ArithmeticLowerThan.INSTANCE
+
+ArithmeticLowerThanOrEqualTo = ArithmeticLowerThanOrEqualTo.INSTANCE
+
+ArithmeticNotEqual = ArithmeticNotEqual.INSTANCE
+
+Assert = Assert.INSTANCE
+
+AssertA = AssertA.INSTANCE
+
+AssertZ = AssertZ.INSTANCE
+
+Atom = Atom.INSTANCE
+
+AtomChars = AtomChars.INSTANCE
+
+AtomCodes = AtomCodes.INSTANCE
+
+AtomConcat = AtomConcat.INSTANCE
+
+AtomLength = AtomLength.INSTANCE
+
+Atomic = Atomic.INSTANCE
+
+BagOf = BagOf.INSTANCE
+
+Between = Between.INSTANCE
+
+Callable = Callable.INSTANCE
+
+CharCode = CharCode.INSTANCE
+
+Clause = Clause.INSTANCE
+
+Compound = Compound.INSTANCE
+
+CopyTerm = CopyTerm.INSTANCE
+
+CurrentFlag = CurrentFlag.INSTANCE
+
+CurrentOp = CurrentOp.INSTANCE
+
+EnsureExecutable = EnsureExecutable.INSTANCE
+
+FindAll = FindAll.INSTANCE
+
+Float = Float.INSTANCE
+
+Functor = Functor.INSTANCE
+
+GetDurable = GetDurable.INSTANCE
+
+GetEphemeral = GetEphemeral.INSTANCE
+
+GetPersistent = GetPersistent.INSTANCE
+
+Ground = Ground.INSTANCE
+
+Halt = Halt.INSTANCE
+
+Halt1 = Halt1.INSTANCE
+
+Integer = Integer.INSTANCE
+
+Is = Is.INSTANCE
+
+Natural = Natural.INSTANCE
+
+NewLine = NewLine.INSTANCE
+
+NonVar = NonVar.INSTANCE
+
+NotUnifiableWith = NotUnifiableWith.INSTANCE
+
+Number = Number.INSTANCE
+
+NumberChars = NumberChars.INSTANCE
+
+NumberCodes = NumberCodes.INSTANCE
+
+Op = Op.INSTANCE
+
+Repeat = Repeat.INSTANCE
+
+Retract = Retract.INSTANCE
+
+RetractAll = RetractAll.INSTANCE
+
+Reverse = Reverse.INSTANCE
+
+SetDurable = SetDurable.INSTANCE
+
+SetEphemeral = SetEphemeral.INSTANCE
+
+SetFlag = SetFlag.INSTANCE
+
+SetOf = SetOf.INSTANCE
+
+SetPersistent = SetPersistent.INSTANCE
+
+Sleep = Sleep.INSTANCE
+
+SubAtom = SubAtom.INSTANCE
+
+TermGreaterThan = TermGreaterThan.INSTANCE
+
+TermGreaterThanOrEqualTo = TermGreaterThanOrEqualTo.INSTANCE
+
+TermIdentical = TermIdentical.INSTANCE
+
+TermLowerThan = TermLowerThan.INSTANCE
+
+TermLowerThanOrEqualTo = TermLowerThanOrEqualTo.INSTANCE
+
+TermNotIdentical = TermNotIdentical.INSTANCE
+
+TermNotSame = TermNotSame.INSTANCE
+
+TermSame = TermSame.INSTANCE
+
+UnifiesWith = UnifiesWith.INSTANCE
+
+Univ = Univ.INSTANCE
+
+Var = Var.INSTANCE
+
+Write = Write.INSTANCE
+
+
 
 logger.debug("Loaded JVM classes from it.unibo.tuprolog.solve.stdlib.primitive.*")
