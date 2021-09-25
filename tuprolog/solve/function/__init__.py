@@ -9,14 +9,17 @@ import jpype.imports
 from it.unibo.tuprolog.solve.function import LogicFunction
 # noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.solve.function import Compute
+# noinspection PyUnresolvedReferences
+from it.unibo.tuprolog.solve.function import ArithmeticUtilsKt
 
 # noinspection PyUnresolvedReferences
 from tuprolog.core import Term
 # noinspection PyUnresolvedReferences
 from tuprolog.solve import ExecutionContext, Signature, current_time_instant, MAX_TIME_DURATION
+# noinspection PyUnresolvedReferences
+from tuprolog.solve.primitive import SolveRequest
 
-from typing import List
-
+from typing import List, Callable
 
 ComputeRequest = Compute.Request
 
@@ -28,6 +31,14 @@ class AbstractLogicFunction(object):
     @jpype.JOverride
     def compute(self, request: ComputeRequest) -> ComputeResponse:
         raise NotImplementedError()
+
+
+def logic_function(callable: Callable[[ComputeRequest], ComputeResponse]) -> LogicFunction:
+    class CallableToLogicFunctionAdapter(AbstractLogicFunction):
+        def compute(self, request: ComputeRequest) -> ComputeResponse:
+            return callable(request)
+
+    return CallableToLogicFunctionAdapter()
 
 
 def compute_request(
@@ -42,6 +53,14 @@ def compute_request(
 
 def compute_response(result: Term) -> ComputeResponse:
     return ComputeResponse(result)
+
+
+def eval_as_expression(term: Term, request: SolveRequest, index: int = None) -> Term:
+    return ArithmeticUtilsKt.evalAsExpression(term, request, index)
+
+
+def eval_as_arithmetic_expression(term: Term, request: SolveRequest, index: int = None) -> Term:
+    return ArithmeticUtilsKt.evalAsArithmeticExpression(term, request, index)
 
 
 logger.debug("Loaded JVM classes from it.unibo.tuprolog.solve.function.*")
