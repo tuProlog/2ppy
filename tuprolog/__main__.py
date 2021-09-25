@@ -25,6 +25,8 @@ from tuprolog.solve.stdlib import *
 from tuprolog.solve.stdlib.primitive import *
 from tuprolog.solve.stdlib.rule import *
 from tuprolog.solve.stdlib.function import *
+from tuprolog.solve.classic import *
+from tuprolog.solve.prolog import *
 
 import code
 

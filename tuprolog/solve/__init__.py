@@ -8,15 +8,14 @@ import jpype.imports
 # noinspection PyUnresolvedReferences
 import it.unibo.tuprolog.solve as _solve
 # noinspection PyUnresolvedReferences
-from java.lang import System, Long
-from tuprolog.core import Indicator, Struct, Term, Substitution, EMPTY_UNIFIER
+from java.lang import System
+from tuprolog.core import Indicator, Struct, Term, Substitution, EMPTY_UNIFIER, TermFormatter
 from tuprolog.solve.exception import ResolutionException
-from tuprolog.jvmutils import jlist
+from tuprolog.jvmutils import jlist, jmap
 
 from functools import singledispatch
 
-from typing import Iterable
-
+from typing import Iterable, Mapping, Any
 
 ExecutionContext = _solve.ExecutionContext
 
@@ -37,10 +36,6 @@ Solver = _solve.Solver
 SolverFactory = _solve.SolverFactory
 
 Time = _solve.Time
-
-
-def classic_solver_factory() -> SolverFactory:
-    return Solver.getClassic()
 
 
 @singledispatch
@@ -96,7 +91,29 @@ def current_time_instant() -> int:
     return System.currentTimeMillis()
 
 
-MAX_TIME_DURATION: int = Long.MAX_VALUE
+def solution_formatter(term_formatter: TermFormatter = TermFormatter.prettyExpressions()) -> SolutionFormatter:
+    return SolutionFormatter.of(term_formatter)
+
+
+MAX_TIMEOUT: int = SolveOptions.MAX_TIMEOUT
+
+ALL_SOLUTIONS: int = SolveOptions.ALL_SOLUTIONS
+
+
+def solve_options(
+        lazy: bool = True,
+        timeout: int = MAX_TIMEOUT,
+        limit: int = ALL_SOLUTIONS,
+        custom: Mapping[str, Any] = dict(),
+        **kwargs: Any
+) -> SolveOptions:
+    opts = dict(kwargs)
+    for key in custom:
+        opts[key] = custom[key]
+    temp = SolveOptions.of(lazy, timeout, limit)
+    if len(opts) > 0:
+        return temp.setOptions(jmap(opts))
+    return temp
 
 
 logger.debug("Loaded JVM classes from it.unibo.tuprolog.solve.*")

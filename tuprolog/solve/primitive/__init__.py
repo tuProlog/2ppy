@@ -15,7 +15,7 @@ from it.unibo.tuprolog.solve.primitive import PrimitiveWrapper
 # noinspection PyUnresolvedReferences
 from tuprolog.core import Term, Clause, Integer
 # noinspection PyUnresolvedReferences
-from tuprolog.solve import ExecutionContext, Signature, Solution, current_time_instant, MAX_TIME_DURATION
+from tuprolog.solve import ExecutionContext, Signature, Solution, current_time_instant, MAX_TIMEOUT
 # noinspection PyUnresolvedReferences
 from tuprolog.solve.sideffcts import SideEffect
 from tuprolog.pyutils import iterable_or_varargs
@@ -48,7 +48,7 @@ def solve_request(
         arguments: List[Term],
         context: ExecutionContext,
         issuing_instant: int = current_time_instant(),
-        max_duration: int = MAX_TIME_DURATION
+        max_duration: int = MAX_TIMEOUT
 ) -> SolveRequest:
     return SolveRequest(signature, arguments, context, issuing_instant, max_duration)
 

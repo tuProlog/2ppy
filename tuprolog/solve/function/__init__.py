@@ -15,7 +15,7 @@ from it.unibo.tuprolog.solve.function import ArithmeticUtilsKt
 # noinspection PyUnresolvedReferences
 from tuprolog.core import Term
 # noinspection PyUnresolvedReferences
-from tuprolog.solve import ExecutionContext, Signature, current_time_instant, MAX_TIME_DURATION
+from tuprolog.solve import ExecutionContext, Signature, current_time_instant, MAX_TIMEOUT
 # noinspection PyUnresolvedReferences
 from tuprolog.solve.primitive import SolveRequest
 
@@ -46,7 +46,7 @@ def compute_request(
         arguments: List[Term],
         context: ExecutionContext,
         issuing_instant: int = current_time_instant,
-        max_duration: int = MAX_TIME_DURATION
+        max_duration: int = MAX_TIMEOUT
 ) -> ComputeRequest:
     return ComputeRequest(signature, arguments, context, issuing_instant, max_duration)
 
