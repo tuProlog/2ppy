@@ -6,15 +6,17 @@ import jpype
 import jpype.imports
 
 # noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.exception import HaltException
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.exception import LogicError
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.exception import ResolutionException
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.exception import TimeOutException
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.exception import Warning
+import it.unibo.tuprolog.solve.exception as _exceptions
+
+HaltException = _exceptions.HaltException
+
+LogicError = _exceptions.LogicError
+
+ResolutionException = _exceptions.ResolutionException
+
+TimeOutException = _exceptions.TimeOutException
+
+Warning = _exceptions.Warning
 
 
 logger.debug("Loaded JVM classes from it.unibo.tuprolog.solve.exception.*")

@@ -6,38 +6,37 @@ import jpype
 import jpype.imports
 
 # noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve import ExecutionContext
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve import ExecutionContextAware
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve import MutableSolver
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve import Signature
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve import Solution
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve import SolutionFormatter
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve import SolveOptions
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve import Solver
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve import SolverFactory
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve import Time
+import it.unibo.tuprolog.solve as _solve
 # noinspection PyUnresolvedReferences
 from java.lang import System, Long
-
-
-# noinspection PyUnresolvedReferences
 from tuprolog.core import Indicator, Struct, Term, Substitution, EMPTY_UNIFIER
-# noinspection PyUnresolvedReferences
 from tuprolog.solve.exception import ResolutionException
 from tuprolog.jvmutils import jlist
 
 from functools import singledispatch
 
 from typing import Iterable
+
+
+ExecutionContext = _solve.ExecutionContext
+
+ExecutionContextAware = _solve.ExecutionContextAware
+
+MutableSolver = _solve.MutableSolver
+
+Signature = _solve.Signature
+
+Solution = _solve.Solution
+
+SolutionFormatter = _solve.SolutionFormatter
+
+SolveOptions = _solve.SolveOptions
+
+Solver = _solve.Solver
+
+SolverFactory = _solve.SolverFactory
+
+Time = _solve.Time
 
 
 def classic_solver_factory() -> SolverFactory:
