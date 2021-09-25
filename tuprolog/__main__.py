@@ -11,6 +11,8 @@ from tuprolog.theory import *
 from tuprolog.theory.parsing import *
 from tuprolog.solve import *
 from tuprolog.solve.exception import *
+from tuprolog.solve.exception.error import *
+from tuprolog.solve.exception.warning import *
 from tuprolog.solve.channel import *
 from tuprolog.solve.flags import *
 from tuprolog.solve.function import *
