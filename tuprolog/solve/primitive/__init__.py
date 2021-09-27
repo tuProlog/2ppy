@@ -17,7 +17,7 @@ from tuprolog.core import Term, Clause, Integer
 # noinspection PyUnresolvedReferences
 from tuprolog.solve import ExecutionContext, Signature, Solution, current_time_instant, MAX_TIMEOUT
 # noinspection PyUnresolvedReferences
-from tuprolog.solve.sideffcts import SideEffect
+# from tuprolog.solve.sideffcts import SideEffect
 from tuprolog.pyutils import iterable_or_varargs
 from tuprolog.jvmutils import jlist
 
@@ -53,7 +53,7 @@ def solve_request(
     return SolveRequest(signature, arguments, context, issuing_instant, max_duration)
 
 
-def solve_response(solution: Solution, *side_effects: SideEffect) -> SolveResponse:
+def solve_response(solution: Solution, *side_effects) -> SolveResponse:
     return iterable_or_varargs(side_effects, lambda ses: SolveResponse(solution, None, jlist(ses)))
 
 
