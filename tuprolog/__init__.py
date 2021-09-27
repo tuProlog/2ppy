@@ -18,6 +18,6 @@ from it.unibo.tuprolog import Info
 
 JVM_VERSION = '.'.join(map(str, jpype.getJVMVersion()))
 
-logger.debug("Started JVM v" + JVM_VERSION + " with classpath: " + str(jars))
+logger.info("Started JVM v" + JVM_VERSION + " with classpath: " + str(jars))
 
-logger.debug("Using 2P-Kt v" + str(Info.VERSION))
+logger.info("Using 2P-Kt v" + str(Info.VERSION))
