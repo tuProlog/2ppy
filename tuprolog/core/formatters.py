@@ -1,14 +1,8 @@
 from tuprolog import logger
-
 # noinspection PyUnresolvedReferences
 import jpype
 import jpype.imports
-
-# noinspection PyUnresolvedReferences
-from tuprolog.core import Formatter
-# noinspection PyUnresolvedReferences
-from tuprolog.core import TermFormatter
-# noinspection PyUnresolvedReferences
+from tuprolog.core import Formatter, TermFormatter
 from tuprolog.core.visitors import AbstractTermVisitor
 
 

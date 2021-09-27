@@ -1,25 +1,18 @@
 from tuprolog import logger
-
 # noinspection PyUnresolvedReferences
 import jpype
 # noinspection PyUnresolvedReferences
 import jpype.imports
-
 # noinspection PyProtectedMember,PyUnresolvedReferences
 from _jpype import _JObject as JObjectClass
-
 # noinspection PyUnresolvedReferences
 from java.util import Arrays, ArrayList, Iterator, Map, NoSuchElementException
 # noinspection PyUnresolvedReferences
-from java.lang import Iterable
-# noinspection PyUnresolvedReferences
-from java.lang import Object
-
+from java.lang import Iterable, Object
 # noinspection PyUnresolvedReferences
 from kotlin import Pair, Triple
 # noinspection PyUnresolvedReferences
 from kotlin.sequences import Sequence, SequencesKt
-
 # noinspection PyUnresolvedReferences
 from it.unibo.tuprolog.utils import PyUtils
 

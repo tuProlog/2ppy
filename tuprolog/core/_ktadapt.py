@@ -1,6 +1,5 @@
 from tuprolog import logger
 
-# noinspection PyUnresolvedReferences
 import jpype
 
 

@@ -1,23 +1,18 @@
 from tuprolog import logger
-
-# noinspection PyUnresolvedReferences
-import jpype
 # noinspection PyUnresolvedReferences
 import jpype.imports
-
 # noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.core.parsing import TermParser
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.core.parsing import TermReader
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.core.parsing import ParseException
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.core.parsing import InvalidTermTypeException
-
-# noinspection PyUnresolvedReferences
+import it.unibo.tuprolog.core.parsing as _parsing
 from tuprolog.core import Term, Struct, Constant, Var, Atom, Numeric, Integer, Real, Clause
-# noinspection PyUnresolvedReferences
-from tuprolog.jvmutils import open_file, InputStream
+from tuprolog.jvmutils import InputStream
+
+TermParser = _parsing.TermParser
+
+TermReader = _parsing.TermReader
+
+ParseException = _parsing.ParseException
+
+InvalidTermTypeException = _parsing.InvalidTermTypeException
 
 # noinspection PyUnresolvedReferences
 from tuprolog.core.operators import Operator, OperatorSet, DEFAULT_OPERATORS, EMPTY_OPERATORS

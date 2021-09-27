@@ -1,18 +1,12 @@
 from tuprolog import logger
-
-# noinspection PyUnresolvedReferences
-import jpype
 # noinspection PyUnresolvedReferences
 import jpype.imports
-
 # noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.unify import Unificator
+import it.unibo.tuprolog.unify as _unify
+from tuprolog.core import Term, Substitution
 
-# noinspection PyUnresolvedReferences
-from tuprolog.core import Term
 
-# noinspection PyUnresolvedReferences
-from tuprolog.core import Substitution
+Unificator = _unify.Unificator
 
 
 def strict_unificator(context: Substitution = None) -> Unificator:

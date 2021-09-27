@@ -1,75 +1,72 @@
 from tuprolog import logger
-# noinspection PyUnresolvedReferences
 import jpype
-# noinspection PyUnresolvedReferences
 import jpype.imports
 from ._ktadapt import *
-# noinspection PyUnresolvedReferences
-import it.unibo.tuprolog.core as core
+import it.unibo.tuprolog.core as _core
 from tuprolog.pyutils import iterable_or_varargs
 from tuprolog.jvmutils import jiterable, jmap
 from typing import Iterable, Union, Dict
 
 
-Atom = core.Atom
+Atom = _core.Atom
 
-Block = core.Block
+Block = _core.Block
 
-Clause = core.Clause
+Clause = _core.Clause
 
-Cons = core.Cons
+Cons = _core.Cons
 
-Constant = core.Constant
+Constant = _core.Constant
 
-Directive = core.Directive
+Directive = _core.Directive
 
-Empty = core.Empty
+Empty = _core.Empty
 
-EmptyBlock = core.EmptyBlock
+EmptyBlock = _core.EmptyBlock
 
-EmptyList = core.EmptyList
+EmptyList = _core.EmptyList
 
-Fact = core.Fact
+Fact = _core.Fact
 
-Formatter = core.Formatter
+Formatter = _core.Formatter
 
-Indicator = core.Indicator
+Indicator = _core.Indicator
 
-Integer = core.Integer
+Integer = _core.Integer
 
-List = core.List
+List = _core.List
 
-Numeric = core.Numeric
+Numeric = _core.Numeric
 
-Real = core.Real
+Real = _core.Real
 
-Recursive = core.Recursive
+Recursive = _core.Recursive
 
-Rule = core.Rule
+Rule = _core.Rule
 
-Scope = core.Scope
+Scope = _core.Scope
 
-Struct = core.Struct
+Struct = _core.Struct
 
-Substitution = core.Substitution
+Substitution = _core.Substitution
 
-Term = core.Term
+Term = _core.Term
 
-TermComparator = core.TermComparator
+TermComparator = _core.TermComparator
 
-TermConvertible = core.TermConvertible
+TermConvertible = _core.TermConvertible
 
-TermFormatter = core.TermFormatter
+TermFormatter = _core.TermFormatter
 
-Terms = core.Terms
+Terms = _core.Terms
 
-TermVisitor = core.TermVisitor
+TermVisitor = _core.TermVisitor
 
-Truth = core.Truth
+Truth = _core.Truth
 
-Tuple = core.Tuple
+Tuple = _core.Tuple
 
-Var = core.Var
+Var = _core.Var
 
 
 @jpype.JImplements(TermConvertible)

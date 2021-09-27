@@ -1,10 +1,7 @@
 from tuprolog import logger
 
-# noinspection PyUnresolvedReferences
 import jpype
-import jpype.imports
 
-# noinspection PyUnresolvedReferences
 from tuprolog.core import TermComparator
 
 

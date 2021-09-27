@@ -1,11 +1,5 @@
 from tuprolog import logger
-
-# noinspection PyUnresolvedReferences
 import jpype
-# noinspection PyUnresolvedReferences
-import jpype.imports
-
-# noinspection PyUnresolvedReferences
 from tuprolog.core import TermVisitor
 
 

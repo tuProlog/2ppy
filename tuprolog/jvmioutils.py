@@ -1,18 +1,13 @@
 from tuprolog import logger
-
 # noinspection PyUnresolvedReferences
 import jpype
 # noinspection PyUnresolvedReferences
 import jpype.imports
-
 # noinspection PyUnresolvedReferences
 from java.io import InputStream, Reader, InputStreamReader, BufferedReader
 # noinspection PyUnresolvedReferences
 from java.nio.file import Files, Paths
-
-# noinspection PyUnresolvedReferences
-from io import IOBase, TextIOBase, SEEK_SET
-
+from io import IOBase, SEEK_SET
 from typing import Union
 
 

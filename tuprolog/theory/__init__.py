@@ -1,20 +1,18 @@
 from tuprolog import logger
-
-# noinspection PyUnresolvedReferences
-import jpype
 # noinspection PyUnresolvedReferences
 import jpype.imports
-
 # noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.theory import MutableTheory, Theory, RetractResult
-
-# noinspection PyUnresolvedReferences
+import it.unibo.tuprolog.theory as _theory
 from typing import Iterable, Union
-
-# noinspection PyUnresolvedReferences
 from tuprolog.core import Clause
 from tuprolog.pyutils import iterable_or_varargs
 from tuprolog.jvmutils import jiterable
+
+Theory = _theory.Theory
+
+MutableTheory = _theory.MutableTheory
+
+RetractResult = _theory.RetractResult
 
 
 def theory(*clauses: Union[Clause, Iterable[Clause]]) -> Theory:

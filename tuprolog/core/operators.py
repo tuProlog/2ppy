@@ -1,24 +1,21 @@
 from tuprolog import logger
-
 # noinspection PyUnresolvedReferences
 import jpype
 # noinspection PyUnresolvedReferences
 import jpype.imports
-
 # noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.core.operators import Operator
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.core.operators import OperatorSet
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.core.operators import Specifier
-
+import it.unibo.tuprolog.core.operators as _operators
+from tuprolog.jvmutils import jiterable
 from tuprolog.pyutils import iterable_or_varargs
-from tuprolog.jvmutils import jiterable, jmap
-
-# noinspection PyUnresolvedReferences
 from tuprolog.core import Atom, Integer, Struct, Term
-
 from functools import singledispatch
+
+
+Operator = _operators.Operator
+
+OperatorSet = _operators.OperatorSet
+
+Specifier = _operators.Specifier
 
 
 @singledispatch

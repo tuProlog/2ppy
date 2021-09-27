@@ -4,10 +4,13 @@ from tuprolog import logger
 import jpype.imports
 
 # noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.core.exception import TuPrologException
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.core.exception import SubstitutionException
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.core.exception import SubstitutionApplicationException
+import it.unibo.tuprolog.core.exception as _exceptions
+
+TuPrologException = _exceptions.TuPrologException
+
+SubstitutionException = _exceptions.TuPrologException
+
+SubstitutionApplicationException = _exceptions.TuPrologException
+
 
 logger.debug("Loaded JVM classes from it.unibo.tuprolog.core.exception.*")
