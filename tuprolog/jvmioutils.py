@@ -4,11 +4,24 @@ import jpype
 # noinspection PyUnresolvedReferences
 import jpype.imports
 # noinspection PyUnresolvedReferences
-from java.io import InputStream, Reader, InputStreamReader, BufferedReader
+import java.io as _jio
 # noinspection PyUnresolvedReferences
-from java.nio.file import Files, Paths
+import java.nio.file as _jnio_file
 from io import IOBase, SEEK_SET
 from typing import Union
+
+
+InputStream = _jio.InputStream
+
+Reader = _jio.Reader
+
+InputStreamReader = _jio.InputStreamReader
+
+BufferedReader = _jio.BufferedReader
+
+Files = _jnio_file.Files
+
+Paths = _jnio_file.Paths
 
 
 @jpype.JImplementationFor("java.io.InputStream")

@@ -3,24 +3,49 @@ from tuprolog import logger
 import jpype
 # noinspection PyUnresolvedReferences
 import jpype.imports
-# noinspection PyProtectedMember,PyUnresolvedReferences
+# noinspection PyProtectedMember
 from _jpype import _JObject as JObjectClass
 # noinspection PyUnresolvedReferences
-from java.util import Arrays, ArrayList, Iterator, Map, NoSuchElementException
+import java.util as _jutils
 # noinspection PyUnresolvedReferences
-from java.lang import Iterable, Object
+import java.lang as _jlang
 # noinspection PyUnresolvedReferences
-from kotlin import Pair, Triple
+import kotlin as _kotlin
 # noinspection PyUnresolvedReferences
-from kotlin.sequences import Sequence, SequencesKt
+import kotlin.sequences as _ksequences
 # noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.utils import PyUtils
+import it.unibo.tuprolog.utils as _tuprolog_utils
 
 from typing import Iterable as PyIterable
 from typing import Iterator as PyIterator
 from typing import Mapping, MutableMapping, Callable, Any
 
 from .jvmioutils import *
+
+
+Arrays = _jutils.Arrays
+
+ArrayList = _jutils.ArrayList
+
+Iterator = _jutils.Iterator
+
+Map = _jutils.Map
+
+NoSuchElementException = _jutils.NoSuchElementException
+
+Iterable = _jlang.Iterable
+
+Object = _jlang.Object
+
+Pair = _kotlin.Pair
+
+Triple = _kotlin.Triple
+
+Sequence = _ksequences.Sequence
+
+SequencesKt = _ksequences.SequencesKt
+
+PyUtils = _tuprolog_utils.PyUtils
 
 
 @jpype.JImplements("java.util.Iterator", deferred=True)
