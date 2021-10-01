@@ -1,35 +1,25 @@
 from functools import reduce
-
 from tuprolog import logger
-
-# noinspection PyUnresolvedReferences
-import jpype
 # noinspection PyUnresolvedReferences
 import jpype.imports
-
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.library import Library
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.library import Libraries
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.library import LibraryGroup
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.library import AliasedLibrary
-
-# noinspection PyUnresolvedReferences
 from tuprolog.core.operators import OperatorSet, operator_set
-# noinspection PyUnresolvedReferences
 from tuprolog.theory import Theory, theory
-# noinspection PyUnresolvedReferences
 from tuprolog.solve import Signature
-# noinspection PyUnresolvedReferences
 from tuprolog.solve.primitive import Primitive
-# noinspection PyUnresolvedReferences
 from tuprolog.solve.function import LogicFunction
-from tuprolog.pyutils import iterable_or_varargs
 from tuprolog.jvmutils import jiterable
-
 from typing import Union, Mapping, Iterable
+# noinspection PyUnresolvedReferences
+import it.unibo.tuprolog.solve.library as _library
+
+
+Library = _library.Library
+
+Libraries = _library.Libraries
+
+LibraryGroup = _library.LibraryGroup
+
+AliasedLibrary = _library.AliasedLibrary
 
 
 def library(

@@ -1,27 +1,21 @@
 from tuprolog import logger
-
-# noinspection PyUnresolvedReferences
-import jpype
 # noinspection PyUnresolvedReferences
 import jpype.imports
-
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.primitive import Primitive
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.primitive import Solve
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.primitive import PrimitiveWrapper
-
-# noinspection PyUnresolvedReferences
 from tuprolog.core import Term, Clause, Integer
-# noinspection PyUnresolvedReferences
 from tuprolog.solve import ExecutionContext, Signature, Solution, current_time_instant, MAX_TIMEOUT
-# noinspection PyUnresolvedReferences
 # from tuprolog.solve.sideffcts import SideEffect
 from tuprolog.pyutils import iterable_or_varargs
 from tuprolog.jvmutils import jlist
-
 from typing import List, Iterable, Callable
+# noinspection PyUnresolvedReferences
+import it.unibo.tuprolog.solve.primitive as _primitive
+
+
+Primitive = _primitive.Primitive
+
+Solve = _primitive.Solve
+
+PrimitiveWrapper = _primitive.PrimitiveWrapper
 
 SolveRequest = Solve.Request
 

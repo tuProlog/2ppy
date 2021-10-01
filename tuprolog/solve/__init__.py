@@ -1,21 +1,17 @@
 from tuprolog import logger
-
-# noinspection PyUnresolvedReferences
-import jpype
 # noinspection PyUnresolvedReferences
 import jpype.imports
 
 # noinspection PyUnresolvedReferences
 import it.unibo.tuprolog.solve as _solve
-# noinspection PyUnresolvedReferences
-from java.lang import System
 from tuprolog.core import Indicator, Struct, Term, Substitution, EMPTY_UNIFIER, TermFormatter
 from tuprolog.solve.exception import ResolutionException
-from tuprolog.jvmutils import jlist, jmap
+from tuprolog.jvmutils import jlist, jmap, JavaSystem
 
 from functools import singledispatch
 
 from typing import Iterable, Mapping, Any
+
 
 ExecutionContext = _solve.ExecutionContext
 
@@ -88,7 +84,7 @@ def _halt_solution_from_query(query: Struct, exception: ResolutionException) -> 
 
 
 def current_time_instant() -> int:
-    return System.currentTimeMillis()
+    return JavaSystem.currentTimeMillis()
 
 
 def solution_formatter(term_formatter: TermFormatter = TermFormatter.prettyExpressions()) -> SolutionFormatter:

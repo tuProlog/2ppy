@@ -1,14 +1,11 @@
 # noinspection PyUnresolvedReferences
-import jpype
-# noinspection PyUnresolvedReferences
 import jpype.imports
-
 from tuprolog import logger
 from tuprolog.core import Var
 from tuprolog.solve import ExecutionContext, Signature
-
 # noinspection PyUnresolvedReferences
 import it.unibo.tuprolog.solve.exception.error as errors
+
 
 InstantiationError = errors.InstantiationError
 

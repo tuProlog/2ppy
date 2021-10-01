@@ -1,9 +1,5 @@
 from typing import Iterable, Union
-
 from tuprolog import logger
-
-# noinspection PyUnresolvedReferences
-import jpype
 # noinspection PyUnresolvedReferences
 import jpype.imports
 # noinspection PyUnresolvedReferences

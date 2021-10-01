@@ -1,25 +1,19 @@
 from tuprolog import logger
-
-# noinspection PyUnresolvedReferences
-import jpype
 # noinspection PyUnresolvedReferences
 import jpype.imports
-
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.function import LogicFunction
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.function import Compute
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.function import ArithmeticUtilsKt
-
-# noinspection PyUnresolvedReferences
 from tuprolog.core import Term
-# noinspection PyUnresolvedReferences
 from tuprolog.solve import ExecutionContext, Signature, current_time_instant, MAX_TIMEOUT
-# noinspection PyUnresolvedReferences
 from tuprolog.solve.primitive import SolveRequest
-
+# noinspection PyUnresolvedReferences
+import it.unibo.tuprolog.solve.function as _function
 from typing import List, Callable
+
+
+LogicFunction = _function.LogicFunction
+
+Compute = _function.Compute
+
+ArithmeticUtilsKt = _function.ArithmeticUtilsKt
 
 ComputeRequest = Compute.Request
 

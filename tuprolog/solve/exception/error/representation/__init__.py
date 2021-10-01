@@ -1,11 +1,9 @@
 from typing import Union
-
-import jpype
 # noinspection PyUnresolvedReferences
 import jpype.imports
 
 from tuprolog import logger
-from tuprolog.core import Var, Term
+from tuprolog.core import Term
 from tuprolog.solve import ExecutionContext, Signature
 
 # noinspection PyUnresolvedReferences

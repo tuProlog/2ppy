@@ -1,287 +1,147 @@
 from tuprolog import logger
-
-# noinspection PyUnresolvedReferences
-import jpype
 # noinspection PyUnresolvedReferences
 import jpype.imports
-
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import Abolish
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import Arg
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import ArithmeticEqual
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import ArithmeticGreaterThan
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import ArithmeticGreaterThanOrEqualTo
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import ArithmeticLowerThan
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import ArithmeticLowerThanOrEqualTo
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import ArithmeticNotEqual
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import Assert
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import AssertA
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import AssertZ
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import Atom
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import AtomChars
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import AtomCodes
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import AtomConcat
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import AtomLength
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import Atomic
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import BagOf
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import Between
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import Callable
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import CharCode
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import Clause
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import Compound
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import CopyTerm
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import CurrentFlag
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import CurrentOp
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import EnsureExecutable
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import FindAll
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import Float
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import Functor
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import GetDurable
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import GetEphemeral
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import GetPersistent
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import Ground
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import Halt
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import Halt1
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import Integer
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import Is
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import Natural
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import NewLine
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import NonVar
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import NotUnifiableWith
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import Number
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import NumberChars
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import NumberCodes
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import Op
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import Repeat
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import Retract
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import RetractAll
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import Reverse
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import SetDurable
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import SetEphemeral
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import SetFlag
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import SetOf
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import SetPersistent
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import Sleep
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import SubAtom
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import TermGreaterThan
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import TermGreaterThanOrEqualTo
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import TermIdentical
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import TermLowerThan
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import TermLowerThanOrEqualTo
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import TermNotIdentical
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import TermNotSame
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import TermSame
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import UnifiesWith
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import Univ
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import Var
 # noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.primitive import Write
+import it.unibo.tuprolog.solve.stdlib.primitive as _primitive
 
-Abolish = Abolish.INSTANCE
 
-Arg = Arg.INSTANCE
+Abolish = _primitive.Abolish.INSTANCE
 
-ArithmeticEqual = ArithmeticEqual.INSTANCE
+Arg = _primitive.Arg.INSTANCE
 
-ArithmeticGreaterThan = ArithmeticGreaterThan.INSTANCE
+ArithmeticEqual = _primitive.ArithmeticEqual.INSTANCE
 
-ArithmeticGreaterThanOrEqualTo = ArithmeticGreaterThanOrEqualTo.INSTANCE
+ArithmeticGreaterThan = _primitive.ArithmeticGreaterThan.INSTANCE
 
-ArithmeticLowerThan = ArithmeticLowerThan.INSTANCE
+ArithmeticGreaterThanOrEqualTo = _primitive.ArithmeticGreaterThanOrEqualTo.INSTANCE
 
-ArithmeticLowerThanOrEqualTo = ArithmeticLowerThanOrEqualTo.INSTANCE
+ArithmeticLowerThan = _primitive.ArithmeticLowerThan.INSTANCE
 
-ArithmeticNotEqual = ArithmeticNotEqual.INSTANCE
+ArithmeticLowerThanOrEqualTo = _primitive.ArithmeticLowerThanOrEqualTo.INSTANCE
 
-Assert = Assert.INSTANCE
+ArithmeticNotEqual = _primitive.ArithmeticNotEqual.INSTANCE
 
-AssertA = AssertA.INSTANCE
+Assert = _primitive.Assert.INSTANCE
 
-AssertZ = AssertZ.INSTANCE
+AssertA = _primitive.AssertA.INSTANCE
 
-Atom = Atom.INSTANCE
+AssertZ = _primitive.AssertZ.INSTANCE
 
-AtomChars = AtomChars.INSTANCE
+Atom = _primitive.Atom.INSTANCE
 
-AtomCodes = AtomCodes.INSTANCE
+AtomChars = _primitive.AtomChars.INSTANCE
 
-AtomConcat = AtomConcat.INSTANCE
+AtomCodes = _primitive.AtomCodes.INSTANCE
 
-AtomLength = AtomLength.INSTANCE
+AtomConcat = _primitive.AtomConcat.INSTANCE
 
-Atomic = Atomic.INSTANCE
+AtomLength = _primitive.AtomLength.INSTANCE
 
-BagOf = BagOf.INSTANCE
+Atomic = _primitive.Atomic.INSTANCE
 
-Between = Between.INSTANCE
+BagOf = _primitive.BagOf.INSTANCE
 
-Callable = Callable.INSTANCE
+Between = _primitive.Between.INSTANCE
 
-CharCode = CharCode.INSTANCE
+Callable = _primitive.Callable.INSTANCE
 
-Clause = Clause.INSTANCE
+CharCode = _primitive.CharCode.INSTANCE
 
-Compound = Compound.INSTANCE
+Clause = _primitive.Clause.INSTANCE
 
-CopyTerm = CopyTerm.INSTANCE
+Compound = _primitive.Compound.INSTANCE
 
-CurrentFlag = CurrentFlag.INSTANCE
+CopyTerm = _primitive.CopyTerm.INSTANCE
 
-CurrentOp = CurrentOp.INSTANCE
+CurrentFlag = _primitive.CurrentFlag.INSTANCE
 
-EnsureExecutable = EnsureExecutable.INSTANCE
+CurrentOp = _primitive.CurrentOp.INSTANCE
 
-FindAll = FindAll.INSTANCE
+EnsureExecutable = _primitive.EnsureExecutable.INSTANCE
 
-Float = Float.INSTANCE
+FindAll = _primitive.FindAll.INSTANCE
 
-Functor = Functor.INSTANCE
+Float = _primitive.Float.INSTANCE
 
-GetDurable = GetDurable.INSTANCE
+Functor = _primitive.Functor.INSTANCE
 
-GetEphemeral = GetEphemeral.INSTANCE
+GetDurable = _primitive.GetDurable.INSTANCE
 
-GetPersistent = GetPersistent.INSTANCE
+GetEphemeral = _primitive.GetEphemeral.INSTANCE
 
-Ground = Ground.INSTANCE
+GetPersistent = _primitive.GetPersistent.INSTANCE
 
-Halt = Halt.INSTANCE
+Ground = _primitive.Ground.INSTANCE
 
-Halt1 = Halt1.INSTANCE
+Halt = _primitive.Halt.INSTANCE
 
-Integer = Integer.INSTANCE
+Halt1 = _primitive.Halt1.INSTANCE
 
-Is = Is.INSTANCE
+Integer = _primitive.Integer.INSTANCE
 
-Natural = Natural.INSTANCE
+Is = _primitive.Is.INSTANCE
 
-NewLine = NewLine.INSTANCE
+Natural = _primitive.Natural.INSTANCE
 
-NonVar = NonVar.INSTANCE
+NewLine = _primitive.NewLine.INSTANCE
 
-NotUnifiableWith = NotUnifiableWith.INSTANCE
+NonVar = _primitive.NonVar.INSTANCE
 
-Number = Number.INSTANCE
+NotUnifiableWith = _primitive.NotUnifiableWith.INSTANCE
 
-NumberChars = NumberChars.INSTANCE
+Number = _primitive.Number.INSTANCE
 
-NumberCodes = NumberCodes.INSTANCE
+NumberChars = _primitive.NumberChars.INSTANCE
 
-Op = Op.INSTANCE
+NumberCodes = _primitive.NumberCodes.INSTANCE
 
-Repeat = Repeat.INSTANCE
+Op = _primitive.Op.INSTANCE
 
-Retract = Retract.INSTANCE
+Repeat = _primitive.Repeat.INSTANCE
 
-RetractAll = RetractAll.INSTANCE
+Retract = _primitive.Retract.INSTANCE
 
-Reverse = Reverse.INSTANCE
+RetractAll = _primitive.RetractAll.INSTANCE
 
-SetDurable = SetDurable.INSTANCE
+Reverse = _primitive.Reverse.INSTANCE
 
-SetEphemeral = SetEphemeral.INSTANCE
+SetDurable = _primitive.SetDurable.INSTANCE
 
-SetFlag = SetFlag.INSTANCE
+SetEphemeral = _primitive.SetEphemeral.INSTANCE
 
-SetOf = SetOf.INSTANCE
+SetFlag = _primitive.SetFlag.INSTANCE
 
-SetPersistent = SetPersistent.INSTANCE
+SetOf = _primitive.SetOf.INSTANCE
 
-Sleep = Sleep.INSTANCE
+SetPersistent = _primitive.SetPersistent.INSTANCE
 
-SubAtom = SubAtom.INSTANCE
+Sleep = _primitive.Sleep.INSTANCE
 
-TermGreaterThan = TermGreaterThan.INSTANCE
+SubAtom = _primitive.SubAtom.INSTANCE
 
-TermGreaterThanOrEqualTo = TermGreaterThanOrEqualTo.INSTANCE
+TermGreaterThan = _primitive.TermGreaterThan.INSTANCE
 
-TermIdentical = TermIdentical.INSTANCE
+TermGreaterThanOrEqualTo = _primitive.TermGreaterThanOrEqualTo.INSTANCE
 
-TermLowerThan = TermLowerThan.INSTANCE
+TermIdentical = _primitive.TermIdentical.INSTANCE
 
-TermLowerThanOrEqualTo = TermLowerThanOrEqualTo.INSTANCE
+TermLowerThan = _primitive.TermLowerThan.INSTANCE
 
-TermNotIdentical = TermNotIdentical.INSTANCE
+TermLowerThanOrEqualTo = _primitive.TermLowerThanOrEqualTo.INSTANCE
 
-TermNotSame = TermNotSame.INSTANCE
+TermNotIdentical = _primitive.TermNotIdentical.INSTANCE
 
-TermSame = TermSame.INSTANCE
+TermNotSame = _primitive.TermNotSame.INSTANCE
 
-UnifiesWith = UnifiesWith.INSTANCE
+TermSame = _primitive.TermSame.INSTANCE
 
-Univ = Univ.INSTANCE
+UnifiesWith = _primitive.UnifiesWith.INSTANCE
 
-Var = Var.INSTANCE
+Univ = _primitive.Univ.INSTANCE
 
-Write = Write.INSTANCE
+Var = _primitive.Var.INSTANCE
 
+Write = _primitive.Write.INSTANCE
 
 
 logger.debug("Loaded JVM classes from it.unibo.tuprolog.solve.stdlib.primitive.*")

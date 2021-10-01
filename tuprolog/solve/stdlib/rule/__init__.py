@@ -1,28 +1,26 @@
 from tuprolog import logger
-
-# noinspection PyUnresolvedReferences
-import jpype
 # noinspection PyUnresolvedReferences
 import jpype.imports
-
 # noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.rule import Append as KtAppend
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.rule import Arrow
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.rule import CurrentPrologFlag
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.rule import Member as KtMember
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.rule import Not
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.rule import Once
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.rule import Semicolon as KtSemicolon
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.rule import SetPrologFlag
-
+import it.unibo.tuprolog.solve.stdlib.rule as _rule
 from tuprolog.solve import signature
+
+
+KtAppend = _rule.Append
+
+Arrow = _rule.Arrow
+
+CurrentPrologFlag = _rule.CurrentPrologFlag
+
+KtMember = _rule.Member
+
+Not = _rule.Not
+
+Once = _rule.Once
+
+KtSemicolon = _rule.Semicolon
+
+SetPrologFlag = _rule.SetPrologFlag
 
 
 class Append:

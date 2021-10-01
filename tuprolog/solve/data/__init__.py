@@ -1,19 +1,17 @@
 from tuprolog import logger
-
-# noinspection PyUnresolvedReferences
-import jpype
 # noinspection PyUnresolvedReferences
 import jpype.imports
-
 # noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.data import CustomDataStore
-# noinspection PyUnresolvedReferences
-from java.util import Map as CustomData
-
+import it.unibo.tuprolog.solve.data as _data
+from tuprolog.jvmutils import Map
 from tuprolog.pyutils import dict_or_keyword_args
 from tuprolog.jvmutils import jmap
-
 from typing import Mapping, Any
+
+
+CustomDataStore = _data.CustomDataStore
+
+CustomData = Map
 
 
 def custom_data(data: Mapping[str, Any] = {}, **kwargs) -> CustomData:

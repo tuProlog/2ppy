@@ -1,30 +1,26 @@
 from tuprolog import logger
-
-# noinspection PyUnresolvedReferences
-import jpype
 # noinspection PyUnresolvedReferences
 import jpype.imports
-
 # noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.flags import DoubleQuotes
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.flags import FlagStore
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.flags import LastCallOptimization
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.flags import MaxArity
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.flags import NotableFlag
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.flags import Unknown
-# noinspection PyUnresolvedReferences
-from kotlin import Pair as Flag
-
+import it.unibo.tuprolog.solve.flags as _flags
 from tuprolog.core import Term
-from tuprolog.jvmutils import kpair, jmap, jarray
-
+from tuprolog.jvmutils import kpair, jmap, jarray, Pair
 from typing import Iterable, Union, Mapping
 
+
+DoubleQuotes = _flags.DoubleQuotes
+
+FlagStore = _flags.FlagStore
+
+LastCallOptimization = _flags.LastCallOptimization
+
+MaxArity = _flags.MaxArity
+
+NotableFlag = _flags.NotableFlag
+
+Unknown = _flags.Unknown
+
+Flag = Pair
 
 EMPTY_FLAG_STORE: FlagStore = FlagStore.EMPTY
 

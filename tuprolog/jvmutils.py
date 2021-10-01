@@ -35,6 +35,8 @@ NoSuchElementException = _jutils.NoSuchElementException
 
 Iterable = _jlang.Iterable
 
+JavaSystem = _jlang.System
+
 Object = _jlang.Object
 
 Pair = _kotlin.Pair

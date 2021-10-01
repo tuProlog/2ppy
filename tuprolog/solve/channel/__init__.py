@@ -1,28 +1,27 @@
 from tuprolog import logger
-
-# noinspection PyUnresolvedReferences
-import jpype
 # noinspection PyUnresolvedReferences
 import jpype.imports
-
 # noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.channel import Channel
+import it.unibo.tuprolog.solve.channel as _channel
 # noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.channel import ChannelStore
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.channel import InputChannel
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.channel import InputStore
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.channel import OutputChannel
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.channel import OutputStore
-# noinspection PyUnresolvedReferences
-from kotlin.jvm.functions import Function1 as Listener
-
+import kotlin.jvm.functions as _kfunctions
 from tuprolog.jvmutils import jmap, kfunction
 from typing import Callable, Mapping
 from functools import singledispatch
+
+Channel = _channel.Channel
+
+ChannelStore = _channel.ChannelStore
+
+InputChannel = _channel.InputChannel
+
+InputStore = _channel.InputStore
+
+OutputChannel = _channel.OutputChannel
+
+OutputStore = _channel.OutputStore
+
+Listener = _kfunctions.Function1
 
 
 def std_in() -> InputChannel:

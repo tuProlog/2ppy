@@ -1,17 +1,12 @@
 from typing import Union
-
-import jpype
 # noinspection PyUnresolvedReferences
 import jpype.imports
-
 from tuprolog import logger
 from tuprolog.core import Term
 from tuprolog.solve import ExecutionContext, Signature
-
 # noinspection PyUnresolvedReferences
 import it.unibo.tuprolog.solve.exception.error as errors
 
-from tuprolog.solve.exception import LogicError
 
 TypeError = errors.TypeError
 

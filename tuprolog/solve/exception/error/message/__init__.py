@@ -1,14 +1,11 @@
 # noinspection PyUnresolvedReferences
-import jpype
-# noinspection PyUnresolvedReferences
 import jpype.imports
-
 from tuprolog import logger
 from tuprolog.core import Term
 from tuprolog.solve import ExecutionContext
-
 # noinspection PyUnresolvedReferences
 import it.unibo.tuprolog.solve.exception.error as errors
+
 
 MessageError = errors.MessageError
 

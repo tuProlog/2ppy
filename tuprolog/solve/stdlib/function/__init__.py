@@ -1,125 +1,67 @@
 from tuprolog import logger
-
-# noinspection PyUnresolvedReferences
-import jpype
 # noinspection PyUnresolvedReferences
 import jpype.imports
-
 # noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.function import AbsoluteValue
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.function import Addition
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.function import ArcTangent
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.function import BitwiseAnd
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.function import BitwiseComplement
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.function import BitwiseLeftShift
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.function import BitwiseOr
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.function import BitwiseRightShift
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.function import Ceiling
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.function import Cosine
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.function import Exponential
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.function import Exponentiation
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.function import FloatFractionalPart
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.function import FloatIntegerPart
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.function import FloatingPointDivision
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.function import Floor
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.function import IntegerDivision
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.function import Modulo
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.function import Multiplication
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.function import NaturalLogarithm
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.function import Remainder
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.function import Round
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.function import Sign
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.function import SignReversal
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.function import Sine
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.function import SquareRoot
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.function import Subtraction
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.function import ToFloat
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.stdlib.function import Truncate
+import it.unibo.tuprolog.solve.stdlib.function as _function
 
 
-Addition = Addition.INSTANCE
+AbsoluteValue = _function.AbsoluteValue.INSTANCE
 
-ArcTangent = ArcTangent.INSTANCE
+Addition = _function.Addition.INSTANCE
 
-BitwiseAnd = BitwiseAnd.INSTANCE
+ArcTangent = _function.ArcTangent.INSTANCE
 
-BitwiseComplement = BitwiseComplement.INSTANCE
+BitwiseAnd = _function.BitwiseAnd.INSTANCE
 
-BitwiseLeftShift = BitwiseLeftShift.INSTANCE
+BitwiseComplement = _function.BitwiseComplement.INSTANCE
 
-BitwiseOr = BitwiseOr.INSTANCE
+BitwiseLeftShift = _function.BitwiseLeftShift.INSTANCE
 
-BitwiseRightShift = BitwiseRightShift.INSTANCE
+BitwiseOr = _function.BitwiseOr.INSTANCE
 
-Ceiling = Ceiling.INSTANCE
+BitwiseRightShift = _function.BitwiseRightShift.INSTANCE
 
-Cosine = Cosine.INSTANCE
+Ceiling = _function.Ceiling.INSTANCE
 
-Exponential = Exponential.INSTANCE
+Cosine = _function.Cosine.INSTANCE
 
-Exponentiation = Exponentiation.INSTANCE
+Exponential = _function.Exponential.INSTANCE
 
-FloatFractionalPart = FloatFractionalPart.INSTANCE
+Exponentiation = _function.Exponentiation.INSTANCE
 
-FloatIntegerPart = FloatIntegerPart.INSTANCE
+FloatFractionalPart = _function.FloatFractionalPart.INSTANCE
 
-FloatingPointDivision = FloatingPointDivision.INSTANCE
+FloatIntegerPart = _function.FloatIntegerPart.INSTANCE
 
-Floor = Floor.INSTANCE
+FloatingPointDivision = _function.FloatingPointDivision.INSTANCE
 
-IntegerDivision = IntegerDivision.INSTANCE
+Floor = _function.Floor.INSTANCE
 
-Modulo = Modulo.INSTANCE
+IntegerDivision = _function.IntegerDivision.INSTANCE
 
-Multiplication = Multiplication.INSTANCE
+Modulo = _function.Modulo.INSTANCE
 
-NaturalLogarithm = NaturalLogarithm.INSTANCE
+Multiplication = _function.Multiplication.INSTANCE
 
-Remainder = Remainder.INSTANCE
+NaturalLogarithm = _function.NaturalLogarithm.INSTANCE
 
-Round = Round.INSTANCE
+Remainder = _function.Remainder.INSTANCE
 
-Sign = Sign.INSTANCE
+Round = _function.Round.INSTANCE
 
-SignReversal = SignReversal.INSTANCE
+Sign = _function.Sign.INSTANCE
 
-Sine = Sine.INSTANCE
+SignReversal = _function.SignReversal.INSTANCE
 
-SquareRoot = SquareRoot.INSTANCE
+Sine = _function.Sine.INSTANCE
 
-Subtraction = Subtraction.INSTANCE
+SquareRoot = _function.SquareRoot.INSTANCE
 
-ToFloat = ToFloat.INSTANCE
+Subtraction = _function.Subtraction.INSTANCE
 
-Truncate = Truncate.INSTANCE
+ToFloat = _function.ToFloat.INSTANCE
+
+Truncate = _function.Truncate.INSTANCE
 
 
 logger.debug("Loaded JVM classes from it.unibo.tuprolog.solve.stdlib.function.*")

@@ -1,13 +1,8 @@
 from tuprolog import logger
-
-# noinspection PyUnresolvedReferences
-import jpype
 # noinspection PyUnresolvedReferences
 import jpype.imports
-
 # noinspection PyUnresolvedReferences
 import it.unibo.tuprolog.solve.exception.warning as warnings
-
 from tuprolog.core import Struct
 from tuprolog.solve import ExecutionContext, ResolutionException, Signature
 

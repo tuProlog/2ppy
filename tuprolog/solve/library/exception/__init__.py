@@ -1,16 +1,15 @@
 from tuprolog import logger
-
-# noinspection PyUnresolvedReferences
-import jpype
 # noinspection PyUnresolvedReferences
 import jpype.imports
+# noinspection PyUnresolvedReferences
+import it.unibo.tuprolog.solve.library.exception as _exception
 
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.library.exception import AlreadyLoadedLibraryException
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.library.exception import LibraryException
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.library.exception import NoSuchALibraryException
+
+AlreadyLoadedLibraryException = _exception.AlreadyLoadedLibraryException
+
+LibraryException = _exception.LibraryException
+
+NoSuchALibraryException = _exception.NoSuchALibraryException
 
 
 logger.debug("Loaded JVM classes from it.unibo.tuprolog.solve.library.exception.*")

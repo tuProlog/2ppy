@@ -1,10 +1,6 @@
 from tuprolog import logger
-
-# noinspection PyUnresolvedReferences
-import jpype
 # noinspection PyUnresolvedReferences
 import jpype.imports
-
 # noinspection PyUnresolvedReferences
 import it.unibo.tuprolog.solve.exception as _exceptions
 

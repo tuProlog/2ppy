@@ -1,10 +1,6 @@
-# noinspection PyUnresolvedReferences
 from tuprolog.solve.flags import DEFAULT_FLAG_STORE, FlagStore
-# noinspection PyUnresolvedReferences
 from tuprolog.solve.library import libraries, Libraries
-# noinspection PyUnresolvedReferences
 from tuprolog.solve.channel import InputChannel, OutputChannel, std_out, std_in, std_err, warn
-# noinspection PyUnresolvedReferences
 from tuprolog.theory import theory, mutable_theory, Theory
 from tuprolog.solve import Solver, SolverFactory
 
