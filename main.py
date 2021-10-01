@@ -1,33 +1,92 @@
 from tuprolog.core import *
-from tuprolog.core.operators import *
-from tuprolog.solve import *
-from tuprolog.theory.parsing import *
+from tuprolog.core.parsing import *
+from tuprolog.core.visitors import AbstractTermVisitor
 
-parser = clauses_parser(with_default_operators=True, operators=operator_set(operator('f', XFX, 100)))
+formatter = TermFormatter.prettyExpressions()
 
-theory = parser.parseTheory(
-    """
-    male(james1). male(charles1). male(charles2). male(james2). male(george1).
 
-    female(catherine). female(elizabeth). female(sophia).
+def is_sum(term: Struct):
+    return term.getArity() == 2 and term.getFunctor() == '+'
 
-    parent(charles1, james1). parent(elizabeth, james1). parent(charles2, charles1). parent(catherine, charles1).
-    parent(james2, charles1). parent(sophia, elizabeth). parent(george1, sophia).
 
-    grandparent(X, Y) :- parent(X, Z), parent(Z, Y).
-    """
-)
+def is_mult(term: Struct):
+    return term.getArity() == 2 and term.getFunctor() == '*'
 
-solver = Solver.getClassic().solverWithDefaultBuiltins(theory)
 
-query = struct("grandparent", var("X"), var("Y"))
+def is_negative(term: Term):
+    if isinstance(term, Integer):
+        return term < Integer.ZERO
+    if isinstance(term, Real):
+        return term < Real.ZERO
+    if isinstance(term, Struct) and is_mult(term):
+        return any(map(is_negative, term.getArgs()))
+    return False
 
-solutions = solver.solve(query)
-print(solutions)
-for solution in solutions:
-    print(solution)
 
-variables = query.getVariables()
-print(variables)
-for variable in variables:
-    print(variable)
+def is_zero(term: Term):
+    if isinstance(term, Integer):
+        return term == Integer.ZERO
+    if isinstance(term, Real):
+        return term == Real.ZERO
+    if isinstance(term, Struct) and is_mult(term):
+        return any(map(is_zero, term.getArgs()))
+    return False
+
+
+def absolute(term: Term):
+    if is_negative(term):
+        if isinstance(term, Numeric):
+            return numeric(term.getValue().unaryMinus())
+        return struct(term.getFunctor(), map(absolute, term.getArgs()))
+    return term
+
+
+def is_sum(term: Struct):
+    return term.getArity() == 2 and term.getFunctor() == '+'
+
+
+def foldr(accumulator, iterable, default=None):
+    items = list(iterable)
+    if len(items) == 0:
+        return default
+    current = items[-1]
+    items.pop(-1)
+    while len(items) > 0:
+        current = accumulator(items[-1], current)
+        items.pop(-1)
+    return current
+
+
+class Simplifier(AbstractTermVisitor):
+    def defaultValue(self, term):
+        return term
+
+    def visitStruct(self, term):
+        args = term.getArgs()
+        if is_sum(term):
+            left, right = args
+            if is_mult(right):
+                if is_negative(right):
+                    return struct('-', map(absolute, args))
+            right_left, right_right = right
+            if is_sum(right) and is_negative(right_left):
+                return struct(
+                    '-',
+                    left,
+                    struct(right.getFunctor(), absolute(right_left), right_right).accept(self)
+                )
+        return struct(term.getFunctor(), [a.accept(self) for a in args])
+
+
+features = map(var, ["A", 'B', 'C', 'D', 'E', 'F'])
+weights = map(real, [2.5, -3.4, -0.09, 0.2, 0.0, -2.0])
+
+
+x = zip(features, weights)
+x = filter(lambda fw: not is_zero(fw[1]), x)
+x = map(lambda fw: struct('*', fw[1], fw[0]), x)
+x = foldr(lambda a, b: struct('+', a, b), x)
+x = struct('is', var('Y'), x)
+
+print(formatter.format(x))
+print(formatter.format(x.accept(Simplifier())))
