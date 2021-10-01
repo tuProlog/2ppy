@@ -2,11 +2,12 @@ from tuprolog import logger
 import jpype
 import jpype.imports
 from ._ktadapt import *
+# noinspection PyUnresolvedReferences
 import it.unibo.tuprolog.core as _core
 from tuprolog.pyutils import iterable_or_varargs
 from tuprolog.jvmutils import jiterable, jmap
 from typing import Iterable, Union, Dict
-
+from ._ktmath import *
 
 Atom = _core.Atom
 
@@ -115,18 +116,38 @@ def indicator(name: Union[str, Term], arity: Union[int, Term]) -> Indicator:
     return Indicator.of(name, arity)
 
 
-def integer(value: Union[int, str]) -> Integer:
+def numeric(value: Union[int, BigInteger, BigDecimal, str, float]) -> Numeric:
+    if isinstance(value, str):
+        return Numeric.of(jpype.JString @ value)
+    if isinstance(value, BigInteger):
+        return Integer.of(BigInteger @ value)
+    if isinstance(value, BigDecimal):
+        return Real.of(BigDecimal @ value)
+    if isinstance(value, int):
+        return Integer.of(jpype.JLong @ value)
+    if isinstance(value, float):
+        return Real.of(jpype.JDouble @ value)
+    return Numeric.of(value)
+
+
+def integer(value: Union[int, BigInteger, str]) -> Integer:
     if isinstance(value, str):
         return Integer.of(jpype.JString @ value)
-    else:
+    if isinstance(value, BigInteger):
+        return Integer.of(BigInteger @ value)
+    if isinstance(value, int):
         return Integer.of(jpype.JLong @ value)
+    return Integer.of(value)
 
 
-def real(value: Union[float, str]) -> Real:
+def real(value: Union[float, BigDecimal, str]) -> Real:
     if isinstance(value, str):
         return Real.of(jpype.JString @ value)
-    else:
+    if isinstance(value, BigDecimal):
+        return Real.of(BigDecimal @ value)
+    if isinstance(value, float):
         return Real.of(jpype.JDouble @ value)
+    return Real.of(value)
 
 
 def rule(head: Struct, *body: Union[Term, Iterable[Term]]) -> Rule:
