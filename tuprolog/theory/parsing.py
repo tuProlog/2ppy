@@ -1,27 +1,20 @@
 from tuprolog import logger
-
 # noinspection PyUnresolvedReferences
 import jpype
-
 # noinspection PyUnresolvedReferences
 import jpype.imports
-
 # noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.theory.parsing import ClausesParser
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.theory.parsing import ClausesReader
-
-# noinspection PyUnresolvedReferences
+import it.unibo.tuprolog.theory.parsing as _parsing
 from tuprolog.core import Clause
-# noinspection PyUnresolvedReferences
 from tuprolog.theory import Theory
-# noinspection PyUnresolvedReferences
-from tuprolog.jvmutils import open_file, InputStream, ensure_input_steam
-
-# noinspection PyUnresolvedReferences
-from tuprolog.core.operators import Operator, OperatorSet, DEFAULT_OPERATORS, EMPTY_OPERATORS
-
+from tuprolog.jvmutils import InputStream, ensure_input_steam
+from tuprolog.core.operators import OperatorSet, DEFAULT_OPERATORS
 from typing import Union, Iterable
+
+
+ClausesParser = _parsing.ClausesParser
+
+ClausesReader = _parsing.ClausesReader
 
 
 def clauses_parser(with_default_operators: bool = True, operators: OperatorSet = None) -> ClausesParser:
