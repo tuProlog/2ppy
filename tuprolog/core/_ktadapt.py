@@ -7,8 +7,8 @@ from tuprolog.jvmutils import pythonize_properties
 
 @jpype.JImplementationFor("it.unibo.tuprolog.core.Term")
 class _KtTerm:
-    def __jclass_init__(self):
-        pythonize_properties(self)
+    def __jclass_init__(cls):
+        pythonize_properties(cls)
 
     def __getitem__(self, item, *items):
         return self.get(item, *items)

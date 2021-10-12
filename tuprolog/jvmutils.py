@@ -176,10 +176,13 @@ class JvmProperty:
 
 
 def pythonize_properties(cls):
-    properties = JvmProperty.from_class(cls)
-    for p in properties:
-        cls[p.python_name] = p.property
-
+    logger.debug(f"Pythonising properties of {cls}, {hasattr(cls, '__getattribute__')}")
+    properties = {p.python_name: p.property for p in JvmProperty.from_class(cls)}
+    if hasattr(cls, '_properties'):
+        cls._properties = cls._properties | properties
+    else:
+        cls._properties = properties
+        cls.__getattribute__ = lambda self, item: self.__class__['_properties'][item]
 
 @jpype.JImplements("java.util.Iterator", deferred=True)
 class _IteratorAdapter(object):
