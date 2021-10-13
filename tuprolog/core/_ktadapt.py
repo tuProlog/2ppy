@@ -2,12 +2,15 @@ from tuprolog import logger
 
 import jpype
 
+from typing import Sized
+
+from tuprolog.jvmutils import jiterable
 from tuprolog.pyutils import iterable_or_varargs
 
 
 @jpype.JImplementationFor("it.unibo.tuprolog.core.Term")
 class _KtTerm:
-    def __jclass_init__(self):
+    def __jclass_init__(cls):
         pass
 
     def __getitem__(self, item, *items):
@@ -121,7 +124,7 @@ class _KtTerm:
 
 @jpype.JImplementationFor("it.unibo.tuprolog.core.operators.Operator")
 class _KtOperator:
-    def __jclass_init__(self):
+    def __jclass_init__(cls):
         pass
 
     @property
@@ -139,7 +142,7 @@ class _KtOperator:
 
 @jpype.JImplementationFor("it.unibo.tuprolog.core.Struct")
 class _KtStruct:
-    def __jclass_init__(self):
+    def __jclass_init__(cls):
         pass
 
     @property
@@ -182,12 +185,12 @@ class _KtStruct:
         return self.setFunctor(functor)
 
     def set_args(self, *args):
-        return iterable_or_varargs(args, lambda xs: self.setArgs(args))
+        return iterable_or_varargs(args, lambda xs: self.setArgs(jiterable(args)))
 
 
 @jpype.JImplementationFor("it.unibo.tuprolog.core.Var")
-class _KtConstant:
-    def __jclass_init__(self):
+class _KtVar:
+    def __jclass_init__(cls):
         pass
 
     @property
@@ -213,7 +216,7 @@ class _KtConstant:
 
 @jpype.JImplementationFor("it.unibo.tuprolog.core.Constant")
 class _KtConstant:
-    def __jclass_init__(self):
+    def __jclass_init__(cls):
         pass
 
     @property
@@ -223,7 +226,7 @@ class _KtConstant:
 
 @jpype.JImplementationFor("it.unibo.tuprolog.core.Numeric")
 class _KtNumeric:
-    def __jclass_init__(self):
+    def __jclass_init__(cls):
         pass
 
     @property
@@ -235,9 +238,33 @@ class _KtNumeric:
         return self.getDecimalValue()
 
 
+@jpype.JImplementationFor("it.unibo.tuprolog.core.Recursive")
+class _KtRecursive:
+    def __jclass_init__(cls):
+        Sized.register(cls)
+
+    @property
+    def lazily_unfolded(self):
+        return self.getUnfoldedSequence()
+
+    @property
+    def unfolded(self):
+        return self.getUnfoldedList()
+
+    @property
+    def __len__(self):
+        return self.getSize()
+
+    def to_iterable(self):
+        return self.toSequence()
+
+    def to_list(self):
+        return self.toList()
+
+
 @jpype.JImplementationFor("it.unibo.tuprolog.core.Clause")
 class _KtClause:
-    def __jclass_init__(self):
+    def __jclass_init__(cls):
         pass
 
     @property
@@ -251,6 +278,73 @@ class _KtClause:
     @property
     def is_well_formed(self):
         return self.isWellFormed()
+
+    @property
+    def body_items(self):
+        return self.getBodyItems()
+
+    @property
+    def body_size(self):
+        return self.getBodySize()
+
+    def get_body_item(self, index):
+        return self.getBodyItem(index)
+
+    def set_head(self, head):
+        return self.setHead(head)
+
+    def set_body(self, term):
+        return self.setBody(term)
+
+    def set_head_functor(self, functor):
+        return self.setHeadFunctor(functor)
+
+    def set_head_args(self, *args):
+        return iterable_or_varargs(args, lambda xs: self.setHeadArgs(jiterable(args)))
+
+    def insert_head_arg(self, index, argument):
+        return self.setHeadArg(index, argument)
+
+    def add_first_head_arg(self, argument):
+        return self.addFirstHeadArg(argument)
+
+    def add_last_head_arg(self, argument):
+        return self.addLastHeadArg(argument)
+
+    def append_head_arg(self, argument):
+        return self.appendHeadArg(argument)
+
+    def set_body_items(self, *args):
+        return iterable_or_varargs(args, lambda xs: self.setBodyItems(jiterable(args)))
+
+    def insert_body_item(self, index, item):
+        return self.insertBodyItem(index, item)
+
+    def add_first_body_item(self, item):
+        return self.addFirstBodyItem(item)
+
+    def add_last_body_item(self, item):
+        return self.addLastBodyItem(item)
+
+    def append_body_item(self, item):
+        return self.appendBodyItem(item)
+
+
+@jpype.JImplementationFor("it.unibo.tuprolog.core.Rule")
+class _KtRule:
+    def __jclass_init__(cls):
+        pass
+
+    @property
+    def head_args(self):
+        return self.getHeadArgs()
+
+    @property
+    def head_arity(self):
+        return self.getHeadArity()
+
+    def get_head_arg(self, index):
+        return self.getHeadArg(index)
 
 
 logger.debug("Configure Kotlin adapters for types in it.unibo.tuprolog.core.*")
