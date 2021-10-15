@@ -1,11 +1,10 @@
 from tuprolog import logger
-
 import jpype
-
-from typing import Sized
-
+from tuprolog.utils import *
+from typing import Sized, Callable
 from tuprolog.jvmutils import jiterable
 from tuprolog.pyutils import iterable_or_varargs
+from tuprolog.jvmutils import kfunction
 
 
 @jpype.JImplementationFor("it.unibo.tuprolog.core.Term")
@@ -120,24 +119,6 @@ class _KtTerm:
             return self.freshCopy()
         else:
             return self.freshCopy(scope)
-
-
-@jpype.JImplementationFor("it.unibo.tuprolog.core.operators.Operator")
-class _KtOperator:
-    def __jclass_init__(cls):
-        pass
-
-    @property
-    def functor(self):
-        return self.getFunctor()
-
-    @property
-    def specifier(self):
-        return self.getSpecifier()
-
-    @property
-    def priority(self):
-        return self.getPriority()
 
 
 @jpype.JImplementationFor("it.unibo.tuprolog.core.Struct")
@@ -261,6 +242,54 @@ class _KtRecursive:
     def to_list(self):
         return self.toList()
 
+    def to_array(self):
+        return self.toArray()
+
+
+@jpype.JImplementationFor("it.unibo.tuprolog.core.List")
+class _KtList:
+    def __jclass_init__(cls):
+        pass
+
+    @property
+    def is_well_formed(self):
+        return self.isWellFormed()
+
+    @property
+    def last(self):
+        return self.getLast()
+
+    def estimated_length(self):
+        return self.getEstimatedLength()
+
+
+@jpype.JImplementationFor("it.unibo.tuprolog.core.Cons")
+class _KtCons:
+    def __jclass_init__(cls):
+        pass
+
+    @property
+    def head(self):
+        return self.getHead()
+
+    @property
+    def tail(self):
+        return self.getTail()
+
+
+@jpype.JImplementationFor("it.unibo.tuprolog.core.Tuple")
+class _KtTuple:
+    def __jclass_init__(cls):
+        pass
+
+    @property
+    def left(self):
+        return self.getLeft()
+
+    @property
+    def right(self):
+        return self.getRight()
+
 
 @jpype.JImplementationFor("it.unibo.tuprolog.core.Clause")
 class _KtClause:
@@ -345,6 +374,51 @@ class _KtRule:
 
     def get_head_arg(self, index):
         return self.getHeadArg(index)
+
+
+@jpype.JImplementationFor("it.unibo.tuprolog.core.TermConvertible")
+class _KtTermConvertible:
+    def __jclass_init__(cls):
+        pass
+
+    def to_term(self):
+        return self.toTerm()
+
+
+@jpype.JImplementationFor("it.unibo.tuprolog.core.Substitution")
+class _KtSubstitution:
+    def __jclass_init__(cls):
+        pass
+
+    @property
+    def is_success(self):
+        return self.isSuccess()
+
+    @property
+    def is_failed(self):
+        return self.isFailed()
+
+    def apply_to(self, term):
+        return self.applyTo(term)
+
+    def get_original(self, variable):
+        return self.getOriginal(variable)
+
+    def get_by_name(self, name):
+        return self.getByName(name)
+
+    def __add__(self, other):
+        return self.plus(other)
+
+    def __sub__(self, other):
+        return self.minus(other)
+
+    @jpype.JOverride
+    def filter(self, filter):
+        if isinstance(filter, Callable):
+            return self.filter_(kfunction(1)(filter))
+        else:
+            return self.filter_(filter)
 
 
 logger.debug("Configure Kotlin adapters for types in it.unibo.tuprolog.core.*")

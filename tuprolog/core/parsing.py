@@ -14,7 +14,6 @@ ParseException = _parsing.ParseException
 
 InvalidTermTypeException = _parsing.InvalidTermTypeException
 
-# noinspection PyUnresolvedReferences
 from tuprolog.core.operators import Operator, OperatorSet, DEFAULT_OPERATORS, EMPTY_OPERATORS
 
 from typing import Union, Iterable
