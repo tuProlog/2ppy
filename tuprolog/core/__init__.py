@@ -9,6 +9,7 @@ from tuprolog.jvmutils import jiterable, jmap
 from typing import Iterable, Union, Dict
 from ._ktmath import *
 
+
 Atom = _core.Atom
 
 Block = _core.Block
