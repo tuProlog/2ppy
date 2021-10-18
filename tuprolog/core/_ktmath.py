@@ -6,6 +6,7 @@ import jpype.imports
 import org.gciatto.kt.math as _ktmath
 # noinspection PyUnresolvedReferences
 import java.lang as _java_lang
+from math import ceil
 
 BigInteger = _ktmath.BigInteger
 
@@ -17,6 +18,30 @@ RoundingMode = _ktmath.RoundingMode
 
 _MAX_LONG = _java_lang.Long.MAX_VALUE
 
+_MIN_LONG = _java_lang.Long.MIN_VALUE
+
+BIG_INTEGER_MAX_LONG = BigInteger.of(_MAX_LONG)
+
+BIG_INTEGER_MIN_LONG = BigInteger.of(_MIN_LONG)
+
+BIG_INTEGER_ZERO = BigInteger.ZERO
+
+BIG_INTEGER_TEN = BigInteger.TEN
+
+BIG_INTEGER_ONE = BigInteger.ONE
+
+BIG_INTEGER_NEGATIVE_ONE = BigInteger.NEGATIVE_ONE
+
+BIG_INTEGER_TWO = BigInteger.TWO
+
+
+def _size_of(n: int) -> int:
+    return max(ceil(n.bit_length() / 8), 1)
+
+
+def _int_to_bytes(n: int) -> bytes:
+    return n.to_bytes(_size_of(n), 'big', signed=True)
+
 
 def big_integer(value: Union[str, int], radix: int = None) -> BigInteger:
     if radix is not None:
@@ -25,9 +50,12 @@ def big_integer(value: Union[str, int], radix: int = None) -> BigInteger:
     if isinstance(value, str):
         return BigInteger.of(jpype.JString @ value)
     assert isinstance(value, int)
-    if value > _MAX_LONG:
-        return BigInteger.of(jpype.JString @ str(value))
-    return BigInteger.of(jpype.JInt @ value)
+    bs = _int_to_bytes(value)
+    return BigInteger(jpype.JArray(jpype.JByte) @ bs, 0, len(bs))
+
+
+def python_integer(value: BigInteger) -> int:
+    return int.from_bytes(value.toByteArray(), byteorder='big', signed=True)
 
 
 def jvm_rounding_mode(mode):
@@ -69,3 +97,7 @@ def big_decimal(value: Union[str, int, float, decimal.Decimal], precision=None, 
         return BigDecimal.of(big_integer(value), context)
     assert isinstance(value, float)
     return BigDecimal.of(jpype.JDouble @ value, context)
+
+
+def python_decimal(value: BigDecimal) -> decimal.Decimal:
+    return decimal.Decimal(str(value))
