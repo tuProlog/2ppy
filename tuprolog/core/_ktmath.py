@@ -8,6 +8,8 @@ import org.gciatto.kt.math as _ktmath
 import java.lang as _java_lang
 from math import ceil
 
+from tuprolog.pyutils import and_then
+
 BigInteger = _ktmath.BigInteger
 
 BigDecimal = _ktmath.BigDecimal
@@ -34,6 +36,18 @@ BIG_INTEGER_NEGATIVE_ONE = BigInteger.NEGATIVE_ONE
 
 BIG_INTEGER_TWO = BigInteger.TWO
 
+BIG_DECIMAL_ZERO = BigDecimal.ZERO
+
+BIG_DECIMAL_ONE = BigDecimal.ONE
+
+BIG_DECIMAL_ONE_HALF = BigDecimal.ONE_HALF
+
+BIG_DECIMAL_ONE_TENTH = BigDecimal.ONE_TENTH
+
+BIG_DECIMAL_E = BigDecimal.E
+
+BIG_DECIMAL_PI = BigDecimal.PI
+
 
 def _size_of(n: int) -> int:
     return max(ceil(n.bit_length() / 8), 1)
@@ -58,6 +72,10 @@ def python_integer(value: BigInteger) -> int:
     return int.from_bytes(value.toByteArray(), byteorder='big', signed=True)
 
 
+_python_rounding_modes = {decimal.ROUND_DOWN, decimal.ROUND_HALF_UP, decimal.ROUND_HALF_EVEN, decimal.ROUND_CEILING,
+                          decimal.ROUND_FLOOR, decimal.ROUND_UP, decimal.ROUND_HALF_DOWN, decimal.ROUND_05UP}
+
+
 def jvm_rounding_mode(mode):
     if mode == decimal.ROUND_DOWN:
         return RoundingMode.DOWN
@@ -79,16 +97,20 @@ def jvm_rounding_mode(mode):
         raise ValueError(f"Not a rounding mode {mode}")
 
 
-def big_decimal(value: Union[str, int, float, decimal.Decimal], precision=None, rounding=None) -> BigDecimal:
+@and_then(lambda bd: bd.stripTrailingZeros())
+def big_decimal(value: Union[str, int, float, decimal.Decimal], precision=0,
+                rounding=RoundingMode.HALF_UP) -> BigDecimal:
     if precision is None:
         precision = decimal.getcontext().prec
     assert isinstance(precision, int)
     if rounding is None:
         rounding = jvm_rounding_mode(decimal.getcontext().rounding)
-    elif rounding in decimal:
+    elif rounding in _python_rounding_modes:
         rounding = jvm_rounding_mode(rounding)
     assert isinstance(rounding, RoundingMode)
     context = MathContext(precision, rounding)
+    if isinstance(value, str):
+        return BigDecimal.of(value, context)
     if isinstance(value, decimal.Decimal):
         return BigDecimal.of(jpype.JString @ str(value), context)
     if isinstance(value, BigInteger):

@@ -30,3 +30,22 @@ def dict_or_keyword_args(
     for k in kwargs:
         all_data[k] = kwargs[k]
     return dispatch(all_data)
+
+
+def and_then(continuation):
+    def call_and_then_continue(function):
+        def wrapper(*args, **kwargs):
+            result = function(*args, **kwargs)
+            return continuation(result)
+        return wrapper
+    return call_and_then_continue
+
+
+def apply_to_result(consumer):
+    def call_and_then_apply(function):
+        def wrapper(*args, **kwargs):
+            result = function(*args, **kwargs)
+            consumer(result)
+            return result
+        return wrapper
+    return call_and_then_apply
