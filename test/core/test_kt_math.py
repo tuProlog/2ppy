@@ -30,23 +30,23 @@ class TestBigInteger(TestKtMath):
         self.assertSameStringRepresentation(-0x16, big_integer("-16", 16))
 
     def test_java_to_python(self):
-        self.assertEquals(0, python_integer(big_integer("0")))
-        self.assertEquals(0, python_integer(big_integer(0)))
-        self.assertEquals(1, python_integer(big_integer("1")))
-        self.assertEquals(1, python_integer(big_integer(1)))
-        self.assertEquals(self.large_int, python_integer(big_integer(self.large_int)))
-        self.assertEquals(-1, python_integer(big_integer("-1")))
-        self.assertEquals(-1, python_integer(big_integer(-1)))
-        self.assertEquals(-self.large_int, python_integer(big_integer(-self.large_int)))
-        self.assertEquals(0x16, python_integer(big_integer("16", 16)))
-        self.assertEquals(-0x16, python_integer(big_integer("-16", 16)))
+        self.assertEqual(0, python_integer(big_integer("0")))
+        self.assertEqual(0, python_integer(big_integer(0)))
+        self.assertEqual(1, python_integer(big_integer("1")))
+        self.assertEqual(1, python_integer(big_integer(1)))
+        self.assertEqual(self.large_int, python_integer(big_integer(self.large_int)))
+        self.assertEqual(-1, python_integer(big_integer("-1")))
+        self.assertEqual(-1, python_integer(big_integer(-1)))
+        self.assertEqual(-self.large_int, python_integer(big_integer(-self.large_int)))
+        self.assertEqual(0x16, python_integer(big_integer("16", 16)))
+        self.assertEqual(-0x16, python_integer(big_integer("-16", 16)))
 
     def test_constants(self):
-        self.assertEquals(big_integer(0), BIG_INTEGER_ZERO)
-        self.assertEquals(big_integer(10), BIG_INTEGER_TEN)
-        self.assertEquals(big_integer(1), BIG_INTEGER_ONE)
-        self.assertEquals(big_integer(-1), BIG_INTEGER_NEGATIVE_ONE)
-        self.assertEquals(big_integer(2), BIG_INTEGER_TWO)
+        self.assertEqual(big_integer(0), BIG_INTEGER_ZERO)
+        self.assertEqual(big_integer(10), BIG_INTEGER_TEN)
+        self.assertEqual(big_integer(1), BIG_INTEGER_ONE)
+        self.assertEqual(big_integer(-1), BIG_INTEGER_NEGATIVE_ONE)
+        self.assertEqual(big_integer(2), BIG_INTEGER_TWO)
 
 
 class TestBigDecimal(TestKtMath):
