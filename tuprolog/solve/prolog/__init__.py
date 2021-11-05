@@ -1,5 +1,37 @@
-from tuprolog.solve.classic import classic_solver, classic_solver_factory
+from tuprolog import logger
+from tuprolog.solve.flags import DEFAULT_FLAG_STORE, FlagStore
+from tuprolog.solve.library import libraries, Libraries
+from tuprolog.solve.channel import InputChannel, OutputChannel, std_out, std_in, std_err, warn
+from tuprolog.theory import theory, mutable_theory, Theory
+from tuprolog.solve import Solver, SolverFactory
 
-prolog_solver = classic_solver
 
-prolog_solver_factory = classic_solver_factory
+_PROLOG_SOLVER_FACTORY = Solver.getProlog()
+
+
+def prolog_solver(
+        libraries: Libraries = libraries(),
+        flags: FlagStore = DEFAULT_FLAG_STORE,
+        static_kb: Theory = theory(),
+        dynamic_kb: Theory = mutable_theory(),
+        std_in: InputChannel = std_in(),
+        std_out: OutputChannel = std_out(),
+        std_err: OutputChannel = std_err(),
+        warning: OutputChannel = warn(),
+        mutable: bool = True
+) -> Solver:
+    if mutable:
+        return _PROLOG_SOLVER_FACTORY.mutableSolverWithDefaultBuiltins(
+            libraries, flags, static_kb, dynamic_kb, std_in, std_out, std_err, warning
+        )
+    else:
+        return _PROLOG_SOLVER_FACTORY.solverWithDefaultBuiltins(
+            libraries, flags, static_kb, dynamic_kb, std_in, std_out, std_err, warning
+        )
+
+
+def prolog_solver_factory() -> SolverFactory:
+    return _PROLOG_SOLVER_FACTORY
+
+
+logger.debug("Loaded JVM classes from it.unibo.tuprolog.solve.prolog.*")

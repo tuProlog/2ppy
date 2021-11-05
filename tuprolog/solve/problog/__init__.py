@@ -6,10 +6,10 @@ from tuprolog.theory import theory, mutable_theory, Theory
 from tuprolog.solve import Solver, SolverFactory
 
 
-_CLASSIC_SOLVER_FACTORY = Solver.getClassic()
+_PROBLOG_SOLVER_FACTORY = Solver.getProblog()
 
 
-def classic_solver(
+def problog_solver(
         libraries: Libraries = libraries(),
         flags: FlagStore = DEFAULT_FLAG_STORE,
         static_kb: Theory = theory(),
@@ -21,16 +21,17 @@ def classic_solver(
         mutable: bool = True
 ) -> Solver:
     if mutable:
-        return _CLASSIC_SOLVER_FACTORY.mutableSolverWithDefaultBuiltins(
+        return _PROBLOG_SOLVER_FACTORY.mutableSolverWithDefaultBuiltins(
             libraries, flags, static_kb, dynamic_kb, std_in, std_out, std_err, warning
         )
     else:
-        return _CLASSIC_SOLVER_FACTORY.solverWithDefaultBuiltins(
+        return _PROBLOG_SOLVER_FACTORY.solverWithDefaultBuiltins(
             libraries, flags, static_kb, dynamic_kb, std_in, std_out, std_err, warning
         )
 
 
-def classic_solver_factory() -> SolverFactory:
-    return _CLASSIC_SOLVER_FACTORY
+def problog_solver_factory() -> SolverFactory:
+    return _PROBLOG_SOLVER_FACTORY
 
-logger.debug("Loaded JVM classes from it.unibo.tuprolog.solve.classic.*")
+
+logger.debug("Loaded JVM classes from it.unibo.tuprolog.solve.problog.*")

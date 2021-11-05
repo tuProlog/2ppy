@@ -27,6 +27,9 @@ from tuprolog.solve.stdlib.rule import *
 from tuprolog.solve.stdlib.function import *
 from tuprolog.solve.classic import *
 from tuprolog.solve.prolog import *
+from tuprolog.solve.plp import *
+from tuprolog.solve.problog import *
+from tuprolog.solve.problog.operators import *
 
 import code
 
