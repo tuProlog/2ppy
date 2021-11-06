@@ -2,13 +2,12 @@
 from setuptools import setup, find_packages
 import pathlib
 import subprocess
+import distutils.cmd
 
 # current directory
 here = pathlib.Path(__file__).parent.resolve()
 
 version_file = here / 'VERSION'
-
-print(f"Executing setup.py from {here}")
 
 # Get the long description from the README file
 long_description = (here / 'README.md').read_text(encoding='utf-8')
@@ -41,8 +40,20 @@ version = get_version_from_git()
 
 print(f"Detected version {version} from git describe")
 
-# Arguments marked as "Required" below must be included for upload to PyPI.
-# Fields marked as "Optional" may be commented out.
+class GetVersionCommand(distutils.cmd.Command):
+  """A custom command to get the current project version inferred from git describe."""
+
+  description = 'gets the project version from git describe'
+  user_options = []
+
+  def initialize_options(self):
+    pass
+
+  def finalize_options(self):
+    pass
+
+  def run(self):
+    print(version)
 
 setup(
     name='2ppy',  # Required
@@ -82,5 +93,8 @@ setup(
         # 'Funding': 'https://donate.pypi.org',
         # 'Say Thanks!': 'http://saythanks.io/to/example',
         'Source': 'https://github.com/tuProlog/2ppy',
+    },
+    cmdclass={
+        'get_project_version': GetVersionCommand,
     },
 )

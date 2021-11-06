@@ -1,8 +1,6 @@
 name: deploy
 on:
   push:
-#    tags:
-#      - '[0-9]+.[0-9]+.[0-9]+'
     branches:
       - develop
       - master
@@ -55,3 +53,21 @@ jobs:
         env:
           TWINE_USERNAME: ${{ secrets.PYPI_USERANAME }}
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+
+      - name: Get Version
+        id: get-version
+        run: echo ::set-output name=version::$(python setup.py get_project_version | tail -n 1)
+
+      - name: Release Assets
+        id: upload-release-assets
+        run: |
+          set -x
+          ASSETS=()
+          for A in dist/*; do
+            ASSETS+=("-a" "$A")
+            echo "Releasing $A"
+          done
+          RELEASE_TAG='${{ steps.get-version.outputs.version }}'
+          hub release create "${ASSETS[@]}" -m "$RELEASE_TAG" "$RELEASE_TAG"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
