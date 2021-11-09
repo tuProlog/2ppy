@@ -1,5 +1,9 @@
+from decimal import Decimal
+
 from tuprolog import logger
 import jpype
+
+from ._ktmath import big_integer, big_decimal, BigInteger, BigDecimal
 from tuprolog.utils import *
 from typing import Sized, Callable
 from tuprolog.jvmutils import jiterable
@@ -419,6 +423,100 @@ class _KtSubstitution:
             return self.filter_(kfunction(1)(filter))
         else:
             return self.filter_(filter)
+
+
+@jpype.JImplementationFor("it.unibo.tuprolog.core.Scope")
+class _KtScope:
+    def __jclass_init__(cls):
+        pass
+
+    def __contains__(self, item):
+        return self.contains(item)
+
+    def __getitem__(self, item):
+        return self.get(item)
+
+    @property
+    def variables(self):
+        return self.getVariables()
+
+    @property
+    def fail(self):
+        return self.getFail()
+
+    @property
+    def empty_list(self):
+        return self.getEmptyList()
+
+    @property
+    def empty_block(self):
+        return self.getEmptyBlock()
+
+    def atom(self, string):
+        return self.atomOf(string)
+
+    def block(self, *terms):
+        return iterable_or_varargs(terms, lambda ts: self.blockOf(jiterable(ts)))
+
+    def clause(self, head=None, *body):
+        return iterable_or_varargs(body, lambda bs: self.clauseOf(head, jiterable(bs)))
+
+    def cons(self, head, tail=None):
+        if tail is None:
+            return self.listOf(head)
+        else:
+            return self.consOf(head, tail)
+
+    def directive(self, *goals):
+        return iterable_or_varargs(goals, lambda gs: self.directiveOf(jiterable(gs)))
+
+    def fact(self, head):
+        return self.factOf(head)
+
+    def indicator(self, name, arity):
+        return self.indicatorOf(name, arity)
+
+    def integer(self, value):
+        return self.intOf(big_integer(value))
+
+    def real(self, value):
+        return self.intOf(big_integer(value))
+
+    def numeric(self, value):
+        if isinstance(value, str):
+            return self.numOf(value)
+        if isinstance(value, int) or isinstance(value, BigInteger):
+            return self.intOf(value)
+        return self.realOf(value)
+
+    def rule(self, head, *body):
+        return iterable_or_varargs(body, lambda bs: self.ruleOf(head, jiterable(bs)))
+
+    def struct(self, functor, *args):
+        return iterable_or_varargs(args, lambda xs: self.structOf(functor, jiterable(xs)))
+
+    def truth(self, value):
+        return self.truthOf(value)
+
+    def var(self, name):
+        return self.varOf(name)
+
+    def list(self, *items):
+        return iterable_or_varargs(items, lambda xs: self.listOf(jiterable(xs)))
+
+    def list_from(self, items, last=None):
+        return self.listFrom(jiterable(items), last)
+
+    def tuple(self, first, second, *others):
+        return iterable_or_varargs(others, lambda os: self.tupleOf(jiterable([first, second] + list(os))))
+
+    @property
+    def anonymous(self):
+        return self.getAnonymous()
+
+    @property
+    def whatever(self):
+        return self.getWhatever()
 
 
 logger.debug("Configure Kotlin adapters for types in it.unibo.tuprolog.core.*")
