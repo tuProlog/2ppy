@@ -1,5 +1,5 @@
 import unittest
-from tuprolog.core import scope, var, Scope
+from tuprolog.core import scope, var, Scope, variables, struct
 
 
 class TestScope(unittest.TestCase):
@@ -17,6 +17,14 @@ class TestScope(unittest.TestCase):
         self.assertEqual(2, len(full_scope.variables))
         for v in full_scope.variables:
             self.assertIn(v, {'A', 'B'})
+
+    def test_variables_reuse(self):
+        A, B = variables('A', 'B')
+        s = scope(A, B)
+        self.assertEqual(A, s['A'])
+        self.assertEqual(B, s['B'])
+        fAB = s.struct('f', s.var('A'), s.var('B'))
+        self.assertEqual(struct('f', A, B), fAB)
 
 
 if __name__ == '__main__':

@@ -3,7 +3,7 @@ import unittest
 
 from tuprolog.core import big_integer, python_integer, big_decimal, python_decimal, BIG_INTEGER_ZERO, BIG_INTEGER_TEN, \
     BIG_INTEGER_ONE, BIG_INTEGER_NEGATIVE_ONE, BIG_INTEGER_TWO, BIG_DECIMAL_PI, BIG_DECIMAL_E, BIG_DECIMAL_ONE_TENTH, \
-    BIG_DECIMAL_ONE_HALF, BIG_DECIMAL_ONE, BIG_DECIMAL_ZERO
+    BIG_DECIMAL_ONE_HALF, BIG_DECIMAL_ONE, BIG_DECIMAL_ZERO, BigInteger
 
 
 class TestKtMath(unittest.TestCase):
@@ -47,6 +47,14 @@ class TestBigInteger(TestKtMath):
         self.assertEqual(big_integer(1), BIG_INTEGER_ONE)
         self.assertEqual(big_integer(-1), BIG_INTEGER_NEGATIVE_ONE)
         self.assertEqual(big_integer(2), BIG_INTEGER_TWO)
+
+    def test_integers(self):
+        for i in range(-512, 513):
+            self.assertEqual(BigInteger.of(i), big_integer(i))
+        for t in [8, 16, 32, 64, 128]:
+            for i in [1 << t - 1, 1 << t]:
+                self.assertEqual(BigInteger.of(str(i)), big_integer(i))
+                self.assertEqual(BigInteger.of(str(-i)), big_integer(-i))
 
 
 class TestBigDecimal(TestKtMath):

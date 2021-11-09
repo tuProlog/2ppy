@@ -8,7 +8,7 @@ from ._ktadapt import *
 import it.unibo.tuprolog.core as _core
 from tuprolog.pyutils import iterable_or_varargs
 from tuprolog.jvmutils import jiterable, jmap
-from typing import Iterable, Union, Dict
+from typing import Iterable, Dict, Tuple as PyTuple
 from ._ktmath import *
 
 Atom = _core.Atom
@@ -191,6 +191,11 @@ def scope(*variables: Union[Var, str]) -> Scope:
         return Scope.empty()
     vars = [var(v) if isinstance(v, str) else v for v in variables]
     return Scope.of(jpype.JArray(Var) @ vars)
+
+
+def variables(*names: str) -> PyTuple[Var]:
+    assert len(names) > 0
+    return tuple((var(n) for n in names))
 
 
 logger.debug("Loaded JVM classes from it.unibo.tuprolog.core.*")

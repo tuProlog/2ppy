@@ -49,12 +49,13 @@ BIG_DECIMAL_E = BigDecimal.E
 BIG_DECIMAL_PI = BigDecimal.PI
 
 
-def _size_of(n: int) -> int:
-    return max(ceil(n.bit_length() / 8), 1)
-
-
 def _int_to_bytes(n: int) -> bytes:
-    return n.to_bytes(_size_of(n), 'big', signed=True)
+    try:
+        size = n.bit_length() // 8 + 1
+        return n.to_bytes(size, 'big', signed=True)
+    except OverflowError as e:
+        e.args = ["%s: %d, whose size is %d" % (e.args[0], n, size)]
+        raise e
 
 
 def big_integer(value: Union[str, int], radix: int = None) -> BigInteger:
