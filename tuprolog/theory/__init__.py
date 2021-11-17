@@ -7,6 +7,7 @@ from typing import Iterable, Union
 from tuprolog.core import Clause
 from tuprolog.pyutils import iterable_or_varargs
 from tuprolog.jvmutils import jiterable
+from ._ktadapt import *
 
 Theory = _theory.Theory
 
