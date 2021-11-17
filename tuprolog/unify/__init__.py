@@ -4,6 +4,7 @@ import jpype.imports
 # noinspection PyUnresolvedReferences
 import it.unibo.tuprolog.unify as _unify
 from tuprolog.core import Term, Substitution
+from ._ktadapt import *
 
 
 Unificator = _unify.Unificator
