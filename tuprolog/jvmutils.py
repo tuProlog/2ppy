@@ -209,6 +209,24 @@ class _JvmComparable:
         return self.compareTo(other) >= 0
 
 
+@jpype.JImplementationFor("java.lang.Throwable")
+class _JvmThrowable:
+    def __jclass_init__(self):
+        pass
+
+    @property
+    def message(self):
+        return self.getMessage()
+
+    @property
+    def localized_message(self):
+        return self.getLocalizedMessage()
+
+    @property
+    def cause(self):
+        return self.getCause()
+
+
 class _KtFunction(Callable):
     def __init__(self, arity: int, function: Callable):
         self._function = function
