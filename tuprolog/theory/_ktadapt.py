@@ -1,8 +1,7 @@
 from tuprolog import logger
 import jpype
-
 from tuprolog.core import indicator as new_indicator
-from tuprolog.jvmutils import jiterable
+from tuprolog.jvmutils import jiterable, protect_iterable
 from tuprolog.pyutils import iterable_or_varargs
 from typing import Sized
 
@@ -22,13 +21,25 @@ class _KtTheory:
     def to_immutable_theory(self):
         return self.toImmutableTheory()
 
+    @jpype.JOverride
+    def getClauses(self):
+        return protect_iterable(self.getClauses_())
+
     @property
     def clauses(self):
         return self.getClauses()
 
+    @jpype.JOverride
+    def getRules(self):
+        return protect_iterable(self.getRules_())
+
     @property
     def rules(self):
         return self.getRules()
+
+    @jpype.JOverride
+    def getDirectives(self):
+        return protect_iterable(self.getDirectives_())
 
     @property
     def directives(self):
@@ -86,6 +97,32 @@ class _KtTheory:
 
     def to_string(self, as_prolog_text=False):
         return self.toString(as_prolog_text)
+
+
+@jpype.JImplementationFor("it.unibo.tuprolog.theory.RetractResult")
+class _KtRetractResult:
+    def __jclass_init__(cls):
+        pass
+
+    @property
+    def is_success(self):
+        return self.isSuccess()
+
+    @property
+    def is_failure(self):
+        return self.isFailure()
+
+    @property
+    def theory(self):
+        return self.getTheory()
+
+    @property
+    def clauses(self):
+        return self.getClauses()
+
+    @property
+    def first_clause(self):
+        return self.getFirstClause()
 
 
 logger.debug("Configure Kotlin adapters for types in it.unibo.tuprolog.theory.*")
