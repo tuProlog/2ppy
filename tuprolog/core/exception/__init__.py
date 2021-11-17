@@ -1,10 +1,9 @@
 from tuprolog import logger
-
 # noinspection PyUnresolvedReferences
 import jpype.imports
-
 # noinspection PyUnresolvedReferences
 import it.unibo.tuprolog.core.exception as _exceptions
+from ._ktadapt import *
 
 TuPrologException = _exceptions.TuPrologException
 

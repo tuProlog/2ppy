@@ -7,6 +7,7 @@ from tuprolog.core.operators import *
 from tuprolog.core.visitors import *
 from tuprolog.core.parsing import *
 from tuprolog.unify import *
+from tuprolog.unify.exception import *
 from tuprolog.theory import *
 from tuprolog.theory.parsing import *
 from tuprolog.solve import *

@@ -14,7 +14,9 @@ jars = [str(j.resolve()) for j in CLASSPATH.glob('*.jar')]
 jpype.startJVM(classpath=jars)
 
 # noinspection PyUnresolvedReferences
-from it.unibo.tuprolog import Info
+from it.unibo import tuprolog as _tuprolog
+
+Info = _tuprolog.Info
 
 JVM_VERSION = '.'.join(map(str, jpype.getJVMVersion()))
 

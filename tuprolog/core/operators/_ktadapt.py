@@ -1,3 +1,4 @@
+from tuprolog import logger
 import jpype
 
 
@@ -29,3 +30,6 @@ class _KtOperatorSet:
 
     def __sub__(self, other):
         return self.minus(other)
+
+
+logger.debug("Configure Kotlin adapters for types in it.unibo.tuprolog.core.operators.*")
