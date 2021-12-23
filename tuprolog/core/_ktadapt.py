@@ -64,7 +64,7 @@ class _KtTerm:
 
     @property
     def is_integer(self):
-        return self.is_integer()
+        return self.isInteger()
 
     @property
     def is_real(self):
