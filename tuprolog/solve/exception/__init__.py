@@ -3,6 +3,7 @@ from tuprolog import logger
 import jpype.imports
 # noinspection PyUnresolvedReferences
 import it.unibo.tuprolog.solve.exception as _exceptions
+from ._ktadapt import *
 
 HaltException = _exceptions.HaltException
 

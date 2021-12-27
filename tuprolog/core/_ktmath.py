@@ -6,8 +6,6 @@ import jpype.imports
 import org.gciatto.kt.math as _ktmath
 # noinspection PyUnresolvedReferences
 import java.lang as _java_lang
-from math import ceil
-
 from tuprolog.pyutils import and_then
 
 BigInteger = _ktmath.BigInteger
