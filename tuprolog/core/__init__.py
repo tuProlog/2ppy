@@ -9,7 +9,7 @@ import it.unibo.tuprolog.core as _core
 from tuprolog.pyutils import iterable_or_varargs
 from tuprolog.jvmutils import jiterable, jmap
 from typing import Iterable, Dict, Tuple as PyTuple
-from ._ktmath import *
+
 
 Atom = _core.Atom
 
