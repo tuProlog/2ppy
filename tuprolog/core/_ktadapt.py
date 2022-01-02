@@ -1,14 +1,13 @@
 from decimal import Decimal
-
 from tuprolog import logger
 import jpype
-
 from ._ktmath import big_integer, big_decimal, BigInteger, BigDecimal
 from tuprolog.utils import *
 from typing import Sized, Callable
 from tuprolog.jvmutils import jiterable
 from tuprolog.pyutils import iterable_or_varargs
 from tuprolog.jvmutils import kfunction
+from ._ktmath import *
 
 
 @jpype.JImplementationFor("it.unibo.tuprolog.core.Term")
@@ -216,11 +215,37 @@ class _KtNumeric:
 
     @property
     def int_value(self):
-        return self.getIntValue()
+        return python_integer(self.getIntValue())
 
     @property
     def decimal_value(self):
-        return self.getDecimalValue()
+        return python_decimal(self.getDecimalValue())
+
+    def to_int(self):
+        return self.int_value
+
+    def to_float(self):
+        return float(self.decimal_value)
+
+
+@jpype.JImplementationFor("it.unibo.tuprolog.core.Integer")
+class _KtInteger:
+    def __jclass_init__(cls):
+        pass
+
+    @property
+    def value(self):
+        return self.int_value
+
+
+@jpype.JImplementationFor("it.unibo.tuprolog.core.Real")
+class _KtReal:
+    def __jclass_init__(cls):
+        pass
+
+    @property
+    def value(self):
+        return self.decimal_value
 
 
 @jpype.JImplementationFor("it.unibo.tuprolog.core.Recursive")
