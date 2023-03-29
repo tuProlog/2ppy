@@ -1,0 +1,11 @@
+version: 2
+
+updates:
+  - directory: /
+    package-ecosystem: pip
+    schedule:
+      interval: daily
+  - directory: /
+    package-ecosystem: maven
+    schedule:
+      interval: daily

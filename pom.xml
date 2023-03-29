@@ -1,0 +1,14 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.mycompany.app</groupId>
+  <artifactId>my-app</artifactId>
+  <version>1</version>
+  <dependencies>
+    <dependency>
+        <groupId>it.unibo.tuprolog</groupId>
+        <artifactId>repl-jvm</artifactId>
+        <version>0.31.1-dev02+0cd8a1ae6</version>
+    </dependency>
+  </dependencies>
+</project>
