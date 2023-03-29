@@ -1,3 +1,5 @@
 from pathlib import Path
 
-CLASSPATH = Path(__file__).parents[0]
+JAVA_HOME = Path(__file__).parent / 'java'
+
+CLASSPATH = Path(__file__).parent
