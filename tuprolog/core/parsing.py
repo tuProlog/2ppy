@@ -4,7 +4,7 @@ import jpype.imports
 # noinspection PyUnresolvedReferences
 import it.unibo.tuprolog.core.parsing as _parsing
 from tuprolog.core import Term, Struct, Constant, Var, Atom, Numeric, Integer, Real, Clause
-from tuprolog.jvmutils import InputStream
+from tuprolog.jvmutils import InputStream, ensure_input_steam
 
 TermParser = _parsing.TermParser
 
