@@ -8,17 +8,17 @@ from setuptools.command.build_py import build_py
 
 JAR_FOLDER = Path('tuprolog', 'libs')
 JAVA_FOLDER = JAR_FOLDER / 'java'
-
+MAVEN_EXECUTABLE = ['mvn', '--batch-mode']
 
 def download_jars():
-    proc = subprocess.Popen(['mvn.cmd' , '-version'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    proc = subprocess.Popen(MAVEN_EXECUTABLE + ['-version'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     stdout, stderr = proc.communicate()
     if proc.returncode != 0:
         raise RuntimeError(f'Could not run mvn.cmd: {stderr}')
     if 'Apache Maven' not in stdout:
         raise RuntimeError(f'Could not find Apache Maven in {stdout}')
     print('Downloading JARs...')
-    proc = subprocess.Popen(['mvn.cmd', 'dependency:copy-dependencies', f'-DoutputDirectory="{JAR_FOLDER}"'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    proc = subprocess.Popen(MAVEN_EXECUTABLE + ['dependency:copy-dependencies', f'-DoutputDirectory="{JAR_FOLDER}"'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     stdout, stderr = proc.communicate()
     if proc.returncode != 0:
         raise RuntimeError(f'Error while downloading JARs: {stdout} {stderr}')
