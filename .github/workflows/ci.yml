@@ -11,6 +11,10 @@ on:
 env:
   project-name: 2PPy
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   build:
     strategy:
