@@ -6,7 +6,7 @@ from setuptools import setup
 from setuptools.command.build_py import build_py
 
 
-JAR_FOLDER = Path(__file__).parent / 'tuprolog' / 'libs'
+JAR_FOLDER = Path('tuprolog', 'libs')
 JAVA_FOLDER = JAR_FOLDER / 'java'
 MAVEN_EXECUTABLE = ['mvn', '--batch-mode']
 
@@ -66,9 +66,9 @@ def install_java():
     java_version = os.getenv('JAVA_VERSION', '11')
     destination_folder = str(JAR_FOLDER.resolve())
     print(f'Downloading Java {java_version} in {destination_folder}...')
-    installation_path = Path(jdk.install(java_version), jre=True, path=destination_folder)
-    destination_folder = str(JAVA_FOLDER.resolve())
-    print(f'Installing Java {java_version} in {destination_folder}...')
+    installation_path = Path(jdk.install(java_version, jre=True, path=destination_folder))
+    destination_folder = JAVA_FOLDER
+    print(f'Installing Java in {destination_folder}...')
     installation_path = installation_path.rename(destination_folder)
     print(f'Installed Java in {installation_path}')
 
