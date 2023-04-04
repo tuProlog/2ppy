@@ -21,7 +21,7 @@ jobs:
       matrix:
         os: [ubuntu, windows, macos]
         python-version: ['3.9', '3.10', '3.11']
-        java-version: ['11', '18']
+        java-version: ['11', '17']
       fail-fast: false
     runs-on: ${{ matrix.os }}-latest
     steps:
@@ -85,7 +85,7 @@ jobs:
       - name: Download Artifacts
         uses: actions/download-artifact@v3
         with:
-          name: ${{ env.project-name }}-3.11-ubuntu-java18
+          name: ${{ env.project-name }}-3.11-ubuntu-java11
       - name: List files
         run: |
           ls -lah
