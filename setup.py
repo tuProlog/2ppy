@@ -65,8 +65,8 @@ def install_java():
         return
     java_version = os.getenv('JAVA_VERSION', '11')
     print(f'Installing Java {java_version}...')
-    installation_path = Path(jdk.install(java_version), jre=True, path=str(JAR_FOLDER))
-    installation_path = installation_path.rename(JAVA_FOLDER.resolve())
+    installation_path = Path(jdk.install(java_version), jre=True, path=str(JAR_FOLDER.resolve()))
+    installation_path = installation_path.rename(JAVA_FOLDER)
     print(f'Installed Java in {installation_path}')
 
 
