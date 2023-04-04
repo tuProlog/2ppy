@@ -4,11 +4,22 @@
   <groupId>com.mycompany.app</groupId>
   <artifactId>my-app</artifactId>
   <version>1</version>
+  <parent>
+    <groupId>org.jetbrains.kotlin</groupId>
+    <artifactId>kotlin-bom</artifactId>
+    <version>1.8.10</version>
+  </parent>
   <dependencies>
     <dependency>
         <groupId>it.unibo.tuprolog</groupId>
         <artifactId>repl-jvm</artifactId>
         <version>0.31.1-dev02+0cd8a1ae6</version>
+        <exclusions>
+          <exclusion>
+              <groupId>org.jetbrains.kotlin</groupId>
+              <artifactId>kotlin-bom</artifactId>
+          </exclusion>
+        </exclusions>
     </dependency>
   </dependencies>
 </project>

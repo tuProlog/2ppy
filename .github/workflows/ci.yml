@@ -85,7 +85,7 @@ jobs:
       - name: Download Artifacts
         uses: actions/download-artifact@v3
         with:
-          path: ${{ env.project-name }}-3.11-ubuntu-java18
+          name: ${{ env.project-name }}-3.11-ubuntu-java18
       - name: List files
         run: |
           ls -lah
