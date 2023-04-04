@@ -44,6 +44,9 @@ jobs:
           JAVA_VERSION: ${{ matrix.java-version }}
         run: |
           python -m build --sdist --wheel
+      - name: Install
+        run: |
+          pip install dist/*.whl
       - name: Test
         run: |
           python -m pytest
