@@ -15,49 +15,44 @@ import it.unibo.tuprolog.solve.library as _library
 
 Library = _library.Library
 
-Libraries = _library.Libraries
-
-LibraryGroup = _library.LibraryGroup
-
-AliasedLibrary = _library.AliasedLibrary
+Pluggable = _library.Pluggable
 
 
 def library(
-        alias: str = None,
-        primitives: Mapping[Signature, Primitive] = dict(),
-        theory: Theory = theory(),
-        operators: OperatorSet = operator_set(),
-        functions: Mapping[Signature, LogicFunction] = dict(),
-) -> Union[Library, AliasedLibrary]:
+    alias: str = None,
+    primitives: Mapping[Signature, Primitive] = dict(),
+    theory: Theory = theory(),
+    operators: OperatorSet = operator_set(),
+    functions: Mapping[Signature, LogicFunction] = dict(),
+) -> Union[Library, Pluggable]:
     if alias is None:
-        return Library.unaliased(primitives, theory, operators, functions)
+        return Library.of(primitives, theory.clauses, operators, functions)
     else:
-        return Library.aliased(alias, primitives, theory, operators, functions)
+        return Library.of(alias, primitives, theory.clauses, operators, functions)
 
 
-def aliased(alias: str, library: Library) -> AliasedLibrary:
+def aliased(alias: str, library: Library) -> Library:
     return Library.of(alias, library)
 
 
 def libraries(
-        *libs: Union[Libraries, AliasedLibrary, Iterable[Union[Libraries, AliasedLibrary]]],
+        *libs: Union[Library, Iterable[Library]],
         **kwargs: Library
-) -> Libraries:
+) -> Library:
     all_libraries = []
-    aliased_libs = []
     queue = list(libs)
     while len(queue) > 0:
         current = queue.pop()
-        if isinstance(current, Libraries):
+        if isinstance(current, Library):
             all_libraries.append(current)
-        elif isinstance(current, AliasedLibrary):
-            aliased_libs.append(current)
-        else:
+        elif isinstance(current, Iterable):
             queue.extend(current)
-    for alias in kwargs:
-        aliased_libs.append(aliased(alias, kwargs[alias]))
-    first = Libraries.of(jiterable(aliased_libs))
-    return reduce(lambda a, b: a.plus(b), all_libraries, first)
+        else:
+            raise TypeError(f'Expected Library or Iterable[Library], got {type(current)}')
+    for alias, library in kwargs.items():
+        if isinstance(library, Library):
+            all_libraries.append(aliased(alias, kwargs[alias]))
+    return reduce(lambda a, b: a.plus(b), all_libraries, Library.of({}, [], operator_set(), {}))
 
 
 logger.debug("Loaded JVM classes from it.unibo.tuprolog.solve.library.*")

@@ -23,9 +23,9 @@ from typing import Union, Iterable
 def term_parser(with_default_operators: bool=True, operators: OperatorSet=None) -> TermParser:
     if operators is None:
         if with_default_operators:
-            return TermParser.getWithDefaultOperators()
+            return TermParser.withDefaultOperators()
         else:
-            return TermParser.getWithNoOperator()
+            return TermParser.withNoOperator()
     else:
         if with_default_operators:
             return TermParser.withOperators(DEFAULT_OPERATORS.plus(operators))
@@ -36,9 +36,9 @@ def term_parser(with_default_operators: bool=True, operators: OperatorSet=None) 
 def term_reader(with_default_operators: bool=True, operators: OperatorSet=None) -> TermParser:
     if operators is None:
         if with_default_operators:
-            return TermReader.getWithDefaultOperators()
+            return TermReader.withDefaultOperators()
         else:
-            return TermReader.getWithNoOperator()
+            return TermReader.withNoOperator()
     else:
         if with_default_operators:
             return TermReader.withOperators(DEFAULT_OPERATORS.plus(operators))

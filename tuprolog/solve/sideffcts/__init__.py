@@ -19,7 +19,7 @@ from tuprolog.core import Clause, Term
 # noinspection PyUnresolvedReferences
 from tuprolog.core.operators import Operator, OperatorSet
 # noinspection PyUnresolvedReferences
-from tuprolog.solve.library import Library, AliasedLibrary, Libraries, libraries as new_libraries
+from tuprolog.solve.library import Library, libraries as new_libraries
 # noinspection PyUnresolvedReferences
 from tuprolog.solve.channel import InputChannel, OutputChannel
 from tuprolog.pyutils import iterable_or_varargs, dict_or_keyword_args
@@ -84,12 +84,12 @@ def update_library(alias: str, library: Library) -> SideEffect.UpdateLibrary:
     return SideEffect.UpdateLibrary(alias, library)
 
 
-def add_libraries(*libraries: Union[Libraries, AliasedLibrary]) -> SideEffect.AddLibraries:
+def add_libraries(*libraries: Library) -> SideEffect.AddLibraries:
     return SideEffect.AddLibraries(new_libraries(libraries))
 
 
-def reset_libraries(*libraries: Union[Libraries, AliasedLibrary]) -> SideEffect.ResetLibraries:
-    return SideEffect.ResetLibraries(new_libraries(libraries))
+def reset_libraries(*libraries: Library) -> SideEffect.ResetRuntime:
+    return SideEffect.ResetRuntime(new_libraries(libraries))
 
 
 def set_operators(*operators: Union[Operator, Iterable[Operator]]) -> SideEffect.SetOperators:

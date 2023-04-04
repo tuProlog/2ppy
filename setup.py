@@ -10,6 +10,31 @@ JAR_FOLDER = Path('tuprolog', 'libs')
 JAVA_FOLDER = JAR_FOLDER / 'java'
 MAVEN_EXECUTABLE = ['mvn', '--batch-mode']
 
+
+def fallback_download_jars():
+    print('Downloading JARs from GitHub...')
+    def java_dependencies() -> list[tuple[str, str, str]]:
+        from xml.etree import ElementTree
+        namespaces = {'xmlns' : 'http://maven.apache.org/POM/4.0.0'}
+        tree = ElementTree.parse('pom.xml')
+        root = tree.getroot()
+        deps = root.find('xmlns:dependencies', namespaces)
+        return [
+            (dep.find('xmlns:groupId', namespaces).text,
+                dep.find('xmlns:artifactId', namespaces).text,
+                dep.find('xmlns:version', namespaces).text)
+            for dep in deps
+        ]
+    from urllib.parse import quote
+    _, _, version = java_dependencies()[0]
+    all_in_one_jar = f'https://github.com/tuProlog/2p-kt/releases/download/{quote(version)}/2p-{version}-full.jar'
+    print(f'Downloading {all_in_one_jar}')
+    proc = subprocess.Popen(['curl', '--silent', '-L', all_in_one_jar, '--output', str(JAR_FOLDER / f'2p-{version}-full.jar')], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    stdout, stderr = proc.communicate()
+    if proc.returncode != 0:
+        raise RuntimeError(f'Error while downloading JARs from GitHub: {stdout} {stderr}')
+
+
 def download_jars():
     proc = subprocess.Popen(MAVEN_EXECUTABLE + ['-version'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     stdout, stderr = proc.communicate()
@@ -26,7 +51,11 @@ def download_jars():
 
 class BuildPyCommand(build_py):
     def run(self):
-        download_jars()
+        try:
+            download_jars()
+        except:
+            print('Could not download JARs using Maven, falling back to GitHub')
+            fallback_download_jars()
         super().run()
 
 
