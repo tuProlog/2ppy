@@ -13,7 +13,7 @@ MAVEN_EXECUTABLE = ['mvn', '--batch-mode']
 
 def download_jars():
     print('Checking Maven...')
-    proc = subprocess.Popen(MAVEN_EXECUTABLE + ['-version'], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    proc = subprocess.Popen(MAVEN_EXECUTABLE + ['-v'], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     stdout, stderr = proc.communicate()
     if proc.returncode != 0:
         raise RuntimeError(f'Could not run mvn:\n{stdout}\n{stderr}')
