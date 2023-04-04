@@ -1,4 +1,5 @@
 import os
+import platform
 import jdk
 import subprocess
 from pathlib import Path
@@ -11,16 +12,20 @@ JAVA_FOLDER = JAR_FOLDER / 'java'
 MAVEN_EXECUTABLE = ['mvn', '--batch-mode']
 
 
+def is_windows():
+    return platform.system() == 'Windows'
+
+
 def download_jars():
     print('Checking Maven...')
-    proc = subprocess.Popen(args=MAVEN_EXECUTABLE + ['-v', 'help:help'], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    proc = subprocess.Popen(MAVEN_EXECUTABLE + ['-v'], shell=is_windows(), stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     stdout, stderr = proc.communicate()
     if proc.returncode != 0:
         raise RuntimeError(f'Could not run mvn:\n{stdout}\n{stderr}')
     if 'Apache Maven' not in stdout:
         raise RuntimeError(f'Could not find Apache Maven in {stdout}')
     print('Downloading JARs...')
-    proc = subprocess.Popen(args=MAVEN_EXECUTABLE + ['dependency:copy-dependencies', f'-DoutputDirectory={JAR_FOLDER}'], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, cwd=Path(__file__).parent)
+    proc = subprocess.Popen(MAVEN_EXECUTABLE + ['dependency:copy-dependencies', f'-DoutputDirectory={JAR_FOLDER}'], shell=is_windows(), stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, cwd=Path(__file__).parent)
     stdout, stderr = proc.communicate()
     if proc.returncode != 0:
         raise RuntimeError(f'Error while downloading JARs:\n{stdout}\n{stderr}')
