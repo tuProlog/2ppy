@@ -13,14 +13,14 @@ MAVEN_EXECUTABLE = ['mvn', '--batch-mode']
 
 def download_jars():
     print('Checking Maven...')
-    proc = subprocess.Popen(MAVEN_EXECUTABLE + ['-v'], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    proc = subprocess.Popen(args=MAVEN_EXECUTABLE + ['-v', 'help:help'], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     stdout, stderr = proc.communicate()
     if proc.returncode != 0:
         raise RuntimeError(f'Could not run mvn:\n{stdout}\n{stderr}')
     if 'Apache Maven' not in stdout:
         raise RuntimeError(f'Could not find Apache Maven in {stdout}')
     print('Downloading JARs...')
-    proc = subprocess.Popen(MAVEN_EXECUTABLE + ['dependency:copy-dependencies', f'-DoutputDirectory={JAR_FOLDER}'], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, cwd=Path(__file__).parent)
+    proc = subprocess.Popen(args=MAVEN_EXECUTABLE + ['dependency:copy-dependencies', f'-DoutputDirectory={JAR_FOLDER}'], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, cwd=Path(__file__).parent)
     stdout, stderr = proc.communicate()
     if proc.returncode != 0:
         raise RuntimeError(f'Error while downloading JARs:\n{stdout}\n{stderr}')
