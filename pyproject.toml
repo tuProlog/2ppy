@@ -13,7 +13,7 @@ authors = [
 ]
 description = "Python-based implementation of tuProlog -- the open ecosystem for symbolic AI --, based on 2P-Kt"
 readme = "README.md"
-requires-python = ">=3.6, <4"
+requires-python = ">=3.9, <4"
 classifiers=[
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -39,5 +39,4 @@ dependencies = [
 
 [project.urls]
 "Homepage" = "https://github.com/tuProlog/2ppy"
-"Bug Reports" = "https://github.com/tuProlog/2ppy/issues"
-"Source" = "https://github.com/tuProlog/2ppy"
+"Bug" = "https://github.com/tuProlog/2ppy/issues"
