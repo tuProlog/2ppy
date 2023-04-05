@@ -61,6 +61,7 @@ jobs:
           path: |
             dist/*.whl
             dist/*.tar.gz
+            LICENSE
 
   lint:
     runs-on: ubuntu-latest
