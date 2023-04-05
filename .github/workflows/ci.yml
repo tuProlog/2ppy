@@ -49,10 +49,9 @@ jobs:
           distribution: 'adopt'
           architecture: 'x64'
           cache: maven
-      - name: Install dependencies
+      - name: Install build tool
         run: |
-          python -m pip install --upgrade pip setuptools wheel build
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          python -m pip install --upgrade pip build
       - name: Build
         env:
           JAVA_VERSION: ${{ matrix.java-version }}
@@ -61,6 +60,9 @@ jobs:
       - name: Install
         run: |
           pip install dist/*.whl
+      - name: Install CI dependencies
+        run: |
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Test
         run: |
           python -m pytest
@@ -70,7 +72,7 @@ jobs:
         run: |
           cp LICENSE dist/
           echo 'artifact-name=${{ env.project-name }}-${{ matrix.python-version }}-${{ matrix.os }}-java${{ matrix.java-version }}' >> "$GITHUB_OUTPUT"
-          VERSION=$(python setup.py --version)
+          VERSION=$(python -m setuptools_git_versioning)
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
       - name: Upload artifacts
         if: ${{ matrix.package }}
