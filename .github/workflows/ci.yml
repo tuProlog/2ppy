@@ -56,6 +56,9 @@ jobs:
       - name: Test
         run: |
           python -m pytest
+      - name: Prepare artifacts
+        run: |
+          cp LICENSE dist/
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -63,7 +66,7 @@ jobs:
           path: |
             dist/*.whl
             dist/*.tar.gz
-            LICENSE
+            dist/LICENSE
 
   lint:
     runs-on: ubuntu-latest
