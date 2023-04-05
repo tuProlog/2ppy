@@ -7,6 +7,7 @@ from tuprolog.core.operators import *
 from tuprolog.core.visitors import *
 from tuprolog.core.parsing import *
 from tuprolog.unify import *
+from tuprolog.unify.exception import *
 from tuprolog.theory import *
 from tuprolog.theory.parsing import *
 from tuprolog.solve import *
@@ -27,6 +28,9 @@ from tuprolog.solve.stdlib.rule import *
 from tuprolog.solve.stdlib.function import *
 from tuprolog.solve.classic import *
 from tuprolog.solve.prolog import *
+from tuprolog.solve.plp import *
+from tuprolog.solve.problog import *
+from tuprolog.solve.problog.operators import *
 
 import code
 

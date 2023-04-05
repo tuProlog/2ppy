@@ -50,6 +50,10 @@ SequencesKt = _ksequences.SequencesKt
 PyUtils = _tuprolog_utils.PyUtils
 
 
+def protect_iterable(iterable: Iterable) -> Iterable:
+    return PyUtils.iterable(iterable)
+
+
 @jpype.JImplements("java.util.Iterator", deferred=True)
 class _IteratorAdapter(object):
     def __init__(self, iterator):
@@ -170,7 +174,7 @@ class _KtSequence:
         PyIterable.register(self)
 
     def __iter__(self):
-        return PyUtils.iterable(self).iterator()
+        return protect_iterable(self).iterator()
 
 
 def ksequence(iterable: PyIterable) -> Sequence:
@@ -207,6 +211,24 @@ class _JvmComparable:
 
     def __ge__(self, other):
         return self.compareTo(other) >= 0
+
+
+@jpype.JImplementationFor("java.lang.Throwable")
+class _JvmThrowable:
+    def __jclass_init__(self):
+        pass
+
+    @property
+    def message(self):
+        return self.getMessage()
+
+    @property
+    def localized_message(self):
+        return self.getLocalizedMessage()
+
+    @property
+    def cause(self):
+        return self.getCause()
 
 
 class _KtFunction(Callable):

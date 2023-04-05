@@ -1,4 +1,5 @@
 from tuprolog import logger
+from ._ktadapt import *
 # noinspection PyUnresolvedReferences
 import jpype
 # noinspection PyUnresolvedReferences
@@ -66,9 +67,6 @@ XFX: Specifier = Specifier.XFX
 XFY: Specifier = Specifier.XFY
 
 YFX: Specifier = Specifier.YFX
-
-OperatorSet.__add__ = lambda this, other: this.plus(other)
-OperatorSet.__sub__ = lambda this, other: this.minus(other)
 
 
 logger.debug("Loaded JVM classes from it.unibo.tuprolog.core.operators.*")

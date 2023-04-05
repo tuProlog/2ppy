@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from tuprolog import logger
 import jpype
 import jpype.imports
@@ -6,8 +8,8 @@ from ._ktadapt import *
 import it.unibo.tuprolog.core as _core
 from tuprolog.pyutils import iterable_or_varargs
 from tuprolog.jvmutils import jiterable, jmap
-from typing import Iterable, Union, Dict
-from ._ktmath import *
+from typing import Iterable, Dict, Tuple as PyTuple
+
 
 Atom = _core.Atom
 
@@ -85,7 +87,7 @@ def block(*terms: Union[Term, Iterable[Term]]) -> Block:
     return iterable_or_varargs(terms, lambda ts: Block.of(jiterable(ts)))
 
 
-def clause(head: Term=None, *body: Union[Term, Iterable[Term]]):
+def clause(head: Term = None, *body: Union[Term, Iterable[Term]]):
     return iterable_or_varargs(body, lambda bs: Clause.of(head, jiterable(bs)))
 
 
@@ -93,10 +95,10 @@ def empty_logic_list() -> EmptyList:
     return EmptyList.getInstance()
 
 
-def cons(head: Term, tail: Term=None) -> Cons:
+def cons(head: Term, tail: Term = None) -> Cons:
     if tail is None:
         return Cons.singleton(head)
-    else: 
+    else:
         return Cons.of(head, tail)
 
 
@@ -116,38 +118,20 @@ def indicator(name: Union[str, Term], arity: Union[int, Term]) -> Indicator:
     return Indicator.of(name, arity)
 
 
-def numeric(value: Union[int, BigInteger, BigDecimal, str, float]) -> Numeric:
+def integer(value: Union[int, BigInteger, str]) -> Integer:
+    return Integer.of(big_integer(value))
+
+
+def real(value: Union[float, BigDecimal, str, Decimal]) -> Real:
+    return Real.of(big_decimal(value))
+
+
+def numeric(value: Union[int, BigInteger, BigDecimal, str, float, Decimal]) -> Numeric:
     if isinstance(value, str):
         return Numeric.of(jpype.JString @ value)
-    if isinstance(value, BigInteger):
-        return Integer.of(BigInteger @ value)
-    if isinstance(value, BigDecimal):
-        return Real.of(BigDecimal @ value)
-    if isinstance(value, int):
-        return Integer.of(jpype.JLong @ value)
-    if isinstance(value, float):
-        return Real.of(jpype.JDouble @ value)
-    return Numeric.of(value)
-
-
-def integer(value: Union[int, BigInteger, str]) -> Integer:
-    if isinstance(value, str):
-        return Integer.of(jpype.JString @ value)
-    if isinstance(value, BigInteger):
-        return Integer.of(BigInteger @ value)
-    if isinstance(value, int):
-        return Integer.of(jpype.JLong @ value)
-    return Integer.of(value)
-
-
-def real(value: Union[float, BigDecimal, str]) -> Real:
-    if isinstance(value, str):
-        return Real.of(jpype.JString @ value)
-    if isinstance(value, BigDecimal):
-        return Real.of(BigDecimal @ value)
-    if isinstance(value, float):
-        return Real.of(jpype.JDouble @ value)
-    return Real.of(value)
+    if isinstance(value, int) or isinstance(value, BigInteger):
+        return integer(value)
+    return real(value)
 
 
 def rule(head: Struct, *body: Union[Term, Iterable[Term]]) -> Rule:
@@ -164,15 +148,17 @@ def truth(boolean: bool) -> Truth:
 
 TRUE = Truth.TRUE
 
-
 FALSE = Truth.FALSE
-
 
 FAIL = Truth.FAIL
 
 
-def logic_list(*items: Union[Term, Iterable[Term]]) -> Tuple:
+def logic_list(*items: Union[Term, Iterable[Term]]) -> List:
     return iterable_or_varargs(items, lambda xs: List.of(jiterable(xs)))
+
+
+def logic_list_from(items: Iterable[Term], last: Term = None) -> List:
+    return List.from_(jiterable(items), last)
 
 
 def logic_tuple(first: Term, second: Term, *others: Union[Term, Iterable[Term]]) -> Tuple:
@@ -183,11 +169,11 @@ def var(name: str) -> Var:
     return Var.of(name)
 
 
-def unifier(assignments: Dict[Var, Term]={}) -> Substitution.Unifier:
+def unifier(assignments: Dict[Var, Term] = {}) -> Substitution.Unifier:
     return Substitution.unifier(jmap(assignments))
 
 
-def substitution(assignments: Dict[Var, Term]={}) -> Substitution:
+def substitution(assignments: Dict[Var, Term] = {}) -> Substitution:
     return Substitution.of(jmap(assignments))
 
 
@@ -198,6 +184,18 @@ def failed() -> Substitution.Fail:
 EMPTY_UNIFIER: Substitution.Unifier = substitution()
 
 FAILED_SUBSTITUTION: Substitution.Fail = failed()
+
+
+def scope(*variables: Union[Var, str]) -> Scope:
+    if len(variables) == 0:
+        return Scope.empty()
+    vars = [var(v) if isinstance(v, str) else v for v in variables]
+    return Scope.of(jpype.JArray(Var) @ vars)
+
+
+def variables(*names: str) -> PyTuple[Var]:
+    assert len(names) > 0
+    return tuple((var(n) for n in names))
 
 
 logger.debug("Loaded JVM classes from it.unibo.tuprolog.core.*")
