@@ -136,4 +136,3 @@ jobs:
         with:
           password: ${{ secrets.TEST_PYPI_TOKEN }}
           repository-url: https://test.pypi.org/legacy/
-          packages-dir: dist
