@@ -69,7 +69,7 @@ jobs:
         if: ${{ matrix.package }}
         run: |
           cp LICENSE dist/
-          echo 'artifact-name=${{ env.project-name }}-${{ matrix.python-version }}-${{ matrix.os }}-java${{ matrix.java-version }}' >> "$GITHUB_OUTPUT"'
+          echo 'artifact-name=${{ env.project-name }}-${{ matrix.python-version }}-${{ matrix.os }}-java${{ matrix.java-version }}' >> "$GITHUB_OUTPUT"
           VERSION=$(python setup.py --version)
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
       - name: Upload artifacts
