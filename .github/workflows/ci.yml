@@ -10,8 +10,6 @@ on:
 
 env:
   project-name: 2PPy
-  python-version: '3.11'
-  java-version: '11'
 
 defaults:
   run:
@@ -27,8 +25,8 @@ jobs:
         include:
           - package: false
           - os: ubuntu
-            python-version: ${{ env.python-version }}
-            java-version: ${{ env.java-version }}
+            python-version: '3.9'
+            java-version: '11'
             package: true
       fail-fast: false
     runs-on: ${{ matrix.os }}-latest
