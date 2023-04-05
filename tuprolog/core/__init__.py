@@ -190,7 +190,7 @@ def scope(*variables: Union[Var, str]) -> Scope:
     if len(variables) == 0:
         return Scope.empty()
     vars = [var(v) if isinstance(v, str) else v for v in variables]
-    return Scope.of(jpype.JArray(Var) @ vars)
+    return Scope.of(vars[0], jpype.JArray(Var) @ vars[1:])
 
 
 def variables(*names: str) -> PyTuple[Var]:

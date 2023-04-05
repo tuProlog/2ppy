@@ -49,15 +49,6 @@ BIG_DECIMAL_E = BigDecimal.E
 BIG_DECIMAL_PI = BigDecimal.PI
 
 
-def _int_to_bytes(n: int) -> bytes:
-    try:
-        size = n.bit_length() // 8 + 1
-        return n.to_bytes(size, 'big', signed=True)
-    except OverflowError as e:
-        e.args = ["%s: %d, whose size is %d" % (e.args[0], n, size)]
-        raise e
-
-
 def big_integer(value: Union[str, int], radix: int = None) -> BigInteger:
     if radix is not None:
         assert isinstance(value, str)
@@ -65,8 +56,7 @@ def big_integer(value: Union[str, int], radix: int = None) -> BigInteger:
     if isinstance(value, str):
         return BigInteger.of(jpype.JString @ value)
     assert isinstance(value, int)
-    bs = _int_to_bytes(value)
-    return BigInteger(jpype.JArray(jpype.JByte) @ bs, 0, len(bs))
+    return BigInteger.of(str(value))
 
 
 def python_integer(value: BigInteger) -> int:
