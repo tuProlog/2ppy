@@ -5,7 +5,6 @@ from tuprolog.solve.plp import solve_options, probability
 from tuprolog.solve.problog import problog_solver
 from tuprolog.solve.problog.operators import PROBLOG_OPERATORS
 
-
 class ExemplifyProblog(unittest.TestCase):
 
     def setUp(self) -> None:

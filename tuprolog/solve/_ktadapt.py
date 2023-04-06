@@ -1,4 +1,3 @@
-from collections import Mapping
 from itertools import chain
 
 from tuprolog import logger
@@ -19,9 +18,6 @@ class _KtSolverFactory:
 class _KtSolveOptions:
 
     _static_keys = {'lazy', 'is_lazy', 'eager', 'is_eager', 'timeout', 'limit'}
-
-    def __jclass_init__(self):
-        Mapping.register(self)
 
     @property
     def is_lazy(self):

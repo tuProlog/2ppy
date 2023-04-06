@@ -134,11 +134,11 @@ jobs:
           path: temp
       - name: Pull test file from repository
         run: |
-          cp temp/main.py .
+          cp temp/test/post_install_test.py test.py
           rm -rf temp
       - name: Test installation
         run: |
-          python main.py
+          python test.py
 
   release:
     runs-on: ubuntu-latest
