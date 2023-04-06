@@ -1,20 +1,10 @@
 import os
 import jdk
-import platform
 from pathlib import Path
 
 JAVA_HOME = Path(__file__).parent / 'java'
 
 CLASSPATH = Path(__file__).parent
-
-if platform.system() == 'Windows':
-    JAVA_PATH = JAVA_HOME / 'bin' / 'server' / 'jvm.dll'
-elif platform.system() == 'Darwin':
-    JAVA_PATH = JAVA_HOME / 'Contents' / 'Home' / 'lib' / 'jli' / 'libjli.dylib'
-elif platform.system() == 'Linux':
-    JAVA_PATH = JAVA_HOME / 'lib' / 'server' / 'libjvm.so'
-else:
-    raise RuntimeError("Unsupported platform: " + platform.system())
 
 def install_java_if_missing() -> Path:
     if JAVA_HOME.exists():

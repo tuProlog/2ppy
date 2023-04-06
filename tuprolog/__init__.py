@@ -1,12 +1,11 @@
-
+import os
 import logging
 # noinspection PyUnresolvedReferences
 import jpype
 import jpype.imports
 
-from .libs import JAVA_PATH, CLASSPATH, install_java_if_missing
-
-
+from .libs import JAVA_HOME, CLASSPATH, install_java_if_missing
+os.environ['JAVA_HOME'] = str(JAVA_HOME)
 
 logger = logging.getLogger('tuprolog')
 
