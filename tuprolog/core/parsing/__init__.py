@@ -21,9 +21,9 @@ InvalidTermTypeException = _parsing.InvalidTermTypeException
 def _factory(source, with_default_operators: bool = True, operators: OperatorSet = None):
     if operators is None:
         if with_default_operators:
-            return source.getWithDefaultOperators()
+            return source.withDefaultOperators()
         else:
-            return source.getWithNoOperator()
+            return source.withNoOperator()
     else:
         if with_default_operators:
             return source.withOperators(DEFAULT_OPERATORS.plus(operators))
