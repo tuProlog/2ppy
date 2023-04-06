@@ -2,7 +2,6 @@ import os
 import jdk
 import platform
 from pathlib import Path
-from jpype import _jvmfinder
 
 JAVA_HOME = Path(__file__).parent / 'java'
 
