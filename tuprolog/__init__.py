@@ -1,15 +1,12 @@
-import platform
+
 import logging
 # noinspection PyUnresolvedReferences
 import jpype
 import jpype.imports
 
-from .libs import JAVA_HOME, CLASSPATH, install_java_if_missing
+from .libs import JAVA_PATH, CLASSPATH, install_java_if_missing
 
-if platform.system() == 'Windows':
-    jvmpath = JAVA_HOME / 'bin' / 'server' / 'jvm.dll'
-else:
-    jvmpath = JAVA_HOME / 'lib' / 'server' / 'libjvm.so'
+
 
 logger = logging.getLogger('tuprolog')
 
@@ -17,7 +14,7 @@ jars = [str(j.resolve()) for j in CLASSPATH.glob('*.jar')]
 
 if not jpype.isJVMStarted():
     install_java_if_missing()
-    jpype.startJVM(jvmpath=str(jvmpath), classpath=jars)
+    jpype.startJVM(jvmpath=str(JAVA_PATH), classpath=jars)
 
 # noinspection PyUnresolvedReferences
 from it.unibo import tuprolog as _tuprolog
