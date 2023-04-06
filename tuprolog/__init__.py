@@ -13,7 +13,7 @@ jars = [str(j.resolve()) for j in CLASSPATH.glob('*.jar')]
 
 if not jpype.isJVMStarted():
     install_java_if_missing()
-    jpype.startJVM(jvmpath=str(JAVA_PATH), classpath=jars)
+    jpype.startJVM(classpath=jars)
 
 # noinspection PyUnresolvedReferences
 from it.unibo import tuprolog as _tuprolog
