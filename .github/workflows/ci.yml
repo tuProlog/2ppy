@@ -82,6 +82,12 @@ jobs:
             dist/*.whl
             dist/*.tar.gz
             LICENSE
+      - name: Upload test install script to artifact
+        if: ${{ matrix.package }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-install-script
+          path: test/post_install_test.py
 
   lint:
     runs-on: ubuntu-latest
@@ -128,17 +134,13 @@ jobs:
         if: ${{ matrix.install == 'sdist' }}
         run: |
           pip install dist/*.tar.gz
-      - name: Checkout repository in temp directory
-        uses: actions/checkout@v3
+      - name: Pull test file from artifacts
+        uses: actions/download-artifact@v3
         with:
-          path: temp
-      - name: Pull test file from repository
-        run: |
-          cp temp/test/post_install_test.py test.py
-          rm -rf temp
+          name: test-install-script
       - name: Test installation
         run: |
-          python test.py
+          python post_install_test.py
 
   release:
     runs-on: ubuntu-latest
