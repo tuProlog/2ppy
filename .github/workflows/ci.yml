@@ -128,10 +128,14 @@ jobs:
         if: ${{ matrix.install == 'sdist' }}
         run: |
           pip install dist/*.tar.gz
-      - name: Download main.py
+      - name: Checkout repository in temp directory
         uses: actions/checkout@v3
         with:
-          path: main.py
+          path: temp
+      - name: Pull test file from repository
+        run: |
+          cp temp/test.py .
+          rm -rf temp
       - name: Test installation
         run: |
           python main.py
