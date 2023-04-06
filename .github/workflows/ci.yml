@@ -99,9 +99,40 @@ jobs:
           # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
           python -m flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
+  install:
+    strategy:
+      matrix:
+        os: [ubuntu, windows, macos]
+        python-version: ['3.9', '3.10', '3.11']
+        java-version: ['11', '17']
+        install: ['wheel', 'sdist']
+      fail-fast: false
+    runs-on: ${{ matrix.os }}-latest
+    needs: [build]
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ needs.build.outputs.artifact-name }}
+      - name: Install from wheel
+        if: ${{ matrix.install == 'wheel' }}
+        run: |
+          pip install dist/*.whl
+      - name: Install from sdist
+        if: ${{ matrix.install == 'sdist' }}
+        run: |
+          pip install dist/*.tar.gz
+      - name: Download main.py
+        uses: actions/checkout@v3
+        with:
+          path: main.py
+      - name: Test installation
+        run: |
+          python main.py
+
   release:
     runs-on: ubuntu-latest
-    needs: [build, lint]
+    needs: [build, lint, install]
     concurrency:
       group: release
     if: ${{ startsWith(github.ref, 'refs/tags/') && github.event_name == 'push' }}

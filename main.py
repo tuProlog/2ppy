@@ -79,7 +79,7 @@ class Simplifier(AbstractTermVisitor):
 
 
 features = map(var, ["A", 'B', 'C', 'D', 'E', 'F'])
-weights = map(real, [2.5, -3.4, -0.09, 0.2, 0.0, -2.0])
+weights = map(real, ['2.5', '-3.4', '-0.09', '0.2', '0.0', '-2.0'])
 
 
 x = zip(features, weights)
@@ -88,5 +88,5 @@ x = map(lambda fw: struct('*', fw[1], fw[0]), x)
 x = foldr(lambda a, b: struct('+', a, b), x)
 x = struct('is', var('Y'), x)
 
-print(formatter.format(x))
-print(formatter.format(x.accept(Simplifier())))
+assert formatter.format(x) == 'Y is 2.5 * A + -3.4 * B + -0.09 * C + 0.2 * D + -2.0 * F'
+assert formatter.format(x.accept(Simplifier())) == 'Y is 2.5 * A - 3.4 * B - 0.09 * C + 0.2 * D - 2.0 * F'

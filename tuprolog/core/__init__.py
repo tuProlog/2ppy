@@ -123,6 +123,8 @@ def integer(value: Union[int, BigInteger, str]) -> Integer:
 
 
 def real(value: Union[float, BigDecimal, str, Decimal]) -> Real:
+    if isinstance(value, BigDecimal):
+        return Real.of(value)
     return Real.of(big_decimal(value))
 
 
