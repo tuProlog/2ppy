@@ -10,7 +10,7 @@ CLASSPATH = Path(__file__).parent
 if platform.system() == 'Windows':
     JAVA_PATH = JAVA_HOME / 'bin' / 'server' / 'jvm.dll'
 elif platform.system() == 'Darwin':
-    JAVA_PATH = JAVA_HOME / 'lib' / 'jli' / 'libjli.dylib'
+    JAVA_PATH = JAVA_HOME / 'lib' / 'libjli.dylib'
 else:
     JAVA_PATH = JAVA_HOME / 'lib' / 'server' / 'libjvm.so'    
 
