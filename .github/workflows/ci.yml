@@ -116,7 +116,6 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-          cache: pip
       - name: Download Artifacts
         uses: actions/download-artifact@v3
         with:
