@@ -1,14 +1,15 @@
-import os
 import platform
-import jdk
 import subprocess
+import sys
+import importlib.util
 from pathlib import Path
 from setuptools import setup
 from setuptools.command.build_py import build_py
+from setuptools.command.install import install
 
 
-JAR_FOLDER = Path('tuprolog', 'libs')
-JAVA_FOLDER = JAR_FOLDER / 'java'
+PACKAGE_NAME = 'tuprolog'
+JAR_FOLDER = Path(PACKAGE_NAME, 'libs')
 MAVEN_EXECUTABLE = ['mvn', '--batch-mode']
 
 
@@ -35,19 +36,21 @@ class BuildPyCommand(build_py):
         super().run()
 
 
-def install_java():
-    if JAVA_FOLDER.exists():
-        return
-    java_version = os.getenv('JAVA_VERSION', '11')
-    destination_folder = str(JAR_FOLDER)
-    installation_path = Path(jdk.install(java_version, jre=not java_version.startswith('16'), path=destination_folder))
-    destination_folder = JAVA_FOLDER
-    installation_path = installation_path.rename(destination_folder)
+class InstallCommand(install):
+    def run(self):
+        install.run(self)
+        def _post_install():
+            spec = importlib.util.spec_from_file_location(PACKAGE_NAME, JAR_FOLDER / '__init__.py')
+            lib = importlib.util.module_from_spec(spec)
+            sys.modules[spec.name] = lib
+            spec.loader.exec_module(lib)
+            lib.install_java_if_missing()
+        _post_install()
 
 
-install_java()
 setup(
     cmdclass={
-        'build_py': BuildPyCommand
+        'build_py': BuildPyCommand,
+        'install': InstallCommand,
     }
 )
