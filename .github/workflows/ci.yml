@@ -109,7 +109,14 @@ jobs:
       fail-fast: false
     runs-on: ${{ matrix.os }}-latest
     needs: [build]
+    env:
+      JAVA_VERSION: ${{ matrix.java-version }}
     steps:
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
       - name: Download Artifacts
         uses: actions/download-artifact@v3
         with:
