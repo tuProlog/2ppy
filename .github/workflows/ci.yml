@@ -134,7 +134,7 @@ jobs:
           path: temp
       - name: Pull test file from repository
         run: |
-          cp temp/test.py .
+          cp temp/main.py .
           rm -rf temp
       - name: Test installation
         run: |
