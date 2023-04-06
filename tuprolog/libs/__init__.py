@@ -1,7 +1,8 @@
 import os
 import jdk
-from pathlib import Path
 import platform
+from pathlib import Path
+from jpype import _jvmfinder
 
 JAVA_HOME = Path(__file__).parent / 'java'
 
@@ -12,7 +13,7 @@ if platform.system() == 'Windows':
 elif platform.system() == 'Darwin':
     JAVA_PATH = JAVA_HOME / 'lib' / 'libjli.dylib'
 else:
-    JAVA_PATH = JAVA_HOME / 'lib' / 'server' / 'libjvm.so'    
+    JAVA_PATH = JAVA_HOME / 'lib' / 'server' / 'libjvm.so'
 
 def install_java_if_missing() -> Path:
     if JAVA_HOME.exists():
@@ -22,3 +23,12 @@ def install_java_if_missing() -> Path:
     installation_path = Path(jdk.install(java_version, jre=not java_version.startswith('16'), path=destination_folder))
     destination_folder = JAVA_HOME
     installation_path = installation_path.rename(destination_folder)
+    def list_files(startpath):
+        for root, dirs, files in os.walk(startpath):
+            level = root.replace(startpath, '').count(os.sep)
+            indent = ' ' * 4 * (level)
+            print('{}{}/'.format(indent, os.path.basename(root)))
+            subindent = ' ' * 4 * (level + 1)
+            for f in files:
+                print('{}{}'.format(subindent, f))
+    list_files(installation_path)
