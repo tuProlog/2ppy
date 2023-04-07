@@ -21,21 +21,21 @@ Object-oriented and modular ecosystem for symbolic AI and logic programming, cur
 * two serialisation-related modules: one aimed at (de)serialising terms and clauses, namely `tuprolog.core.serialize`, and the 
 other aimed at  (de)serialising terms theories, namely `tuprolog.theory.serialize`,
 
-* a module for using Prolog via a command-line interface, namely `tuprolog.repl`.
+* a module for using Prolog via a command-line interface, namely `tuprolog.repl`,
 
-## How to do stuff
+* a module that implement probabilistic logic programming and solving, namely `tuprolog.solve.problog`.
 
-### Prerequisites
+## How to use 2ppy
 
-1. Install Python 3 (look into the `.python-version` to know the exact version)
-    * I suggest using [Pyenv](https://github.com/pyenv/pyenv) to easily handle multiple Python versions on the same machine
+### Use 2ppy as a library
+
+1. Install Python 3 (look into the `.pyproject.toml` to know the exact versions supported)
+    * If your system has 64-bit processor, install the Python 3 64-bit distribution, and viceversa
     * Ensure PIP works fine
+    * It's suggested to use a [virtual environment](https://docs.python.org/3/library/venv.html) to install the dependencies locally
+    * It's suggested to use [Pyenv](https://github.com/pyenv/pyenv) to easily handle multiple Python versions on the same machine
 
-2. Install Java (JDK preferred), and **ensure the `JAVA_HOME` variable is correctly set**
-
-3. Ensure Java and Python are both either 64bit or 32bit
-
-4. If you have installed some prior development version of 2PPy (e.g. `tuppy` or `tuprolog`), uninstall them via
+1. If you have installed some prior development version of 2PPy (e.g. `tuppy` or `tuprolog`), uninstall them via
     ```bash
     pip uninstall tuppy tuprolog
     ```
@@ -44,10 +44,21 @@ other aimed at  (de)serialising terms theories, namely `tuprolog.theory.serializ
     ```bash
     python3 -m pip uninstall tuppy tuprolog
     ```
+1. Install 2PPy from Pypi by running:
+    ```bash
+    pip install 2ppy
+    ```
+    On __Mac OS__ this may not work as expected.
+    Consider running the following command instead:
+    ```bash
+    python3 -m pip install 2ppy
+    ```
+1. Import `tuprolog.*` modules in your Python scripts
+1. *Note for the expert users:* 2ppy downloads its own [Java Virtual Machine](https://en.wikipedia.org/wiki/Java_virtual_machine) in order to call Java bytecode from python. If you install the package with sdist, it's downloaded during install. If you use the binary wheels packaging, it's download on first import of the `tuprolog` package.
 
 ### How to develop 2PPy
 
-5. Restore Python dependencies via PIP, by running:
+1. Restore Python dev dependencies via PIP, by running:
     ```bash
     pip install -r requirements.txt
     ```
@@ -56,46 +67,13 @@ other aimed at  (de)serialising terms theories, namely `tuprolog.theory.serializ
     ```bash
     python3 -m pip -r requirements.txt
     ```
-
-6. Restore JVM dependencies via `download-jars.sh`, by running:
-    ```bash
-    ./download-jars.sh
-    ```
-    Notice that this command requires `curl` and `wget` to be installed on your system (`wget` may be lacking on __Mac OS__ and Windows)
-
-### How to use 2PPy as a library
-
-5. Install 2PPy from Pypi by running:
-    ```bash
-    pip install 2ppy
-    ```
-    On __Mac OS__ this may not work as expected.
-    Consider running the following command instead:
-    ```bash
-    python3 -m pip install 2ppy
-    ```
-   
-6. Import `tuprolog.*` modules in your Python scripts
-
-7. Profit
+1. Write the code inside `tuprolog` and the unit tests inside `test`
+1. Execute tests with `python -m pytest -p no:faulthandler`
+1. Build the package with `python -m build`
+1. Install the package locally with `python setup.py install`
+1. Print the package version, computed from git tags with `python -m setuptools_git_versioning`
 
 ### How to use 2PPy as an executable
 
-5. Install 2PPy from Pypi by running:
-    ```bash
-    pip install 2ppy
-    ```
-    On __Mac OS__ this may not work as expected.
-    Consider running the following command instead:
-    ```bash
-    python3 -m pip install 2ppy
-    ```
-   
-6. Run `tuprolog` module via
-   ```bash
-   python -m tuprolog
-   ```
-
-For the moment, running 2PPy means starting an interactive Python shell with pre-loaded `tuprolog.*` modules.
-
-Eventually `python -m tuprolog` will launch a command-line logic solver.
+1. Python shell mode: WIP
+1. Logic solver [REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop): WIP
