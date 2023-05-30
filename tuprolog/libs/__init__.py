@@ -11,6 +11,6 @@ def install_java_if_missing() -> Path:
         return
     java_version = os.getenv('JAVA_VERSION', '11')
     destination_folder = str(CLASSPATH)
-    installation_path = Path(jdk.install(java_version, jre=not java_version.startswith('16'), path=destination_folder))
+    installation_path = Path(jdk.install(java_version, jre=not java_version.startswith('16'), path=destination_folder)) # Java 16 doesn't have a JRE
     destination_folder = JAVA_HOME
     installation_path = installation_path.rename(destination_folder)
