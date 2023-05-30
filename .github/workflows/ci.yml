@@ -17,6 +17,7 @@ defaults:
 
 jobs:
   build:
+    name: build & test
     strategy:
       matrix:
         os: [ubuntu, windows, macos]
