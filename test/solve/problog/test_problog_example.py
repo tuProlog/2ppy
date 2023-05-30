@@ -33,7 +33,7 @@ class ExemplifyProblog(unittest.TestCase):
             if solution.is_yes:
                 self.print(f"yes: {solution.solved_query} with probability {probability(solution)}")
 
-        self.assertEquals(
+        self.assertEqual(
             self.prints,
             [
                 'yes: path(1, 2) with probability 0.6',
