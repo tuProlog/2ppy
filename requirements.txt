@@ -2,4 +2,4 @@
 flake8==6.0.0
 pytest==7.3.1
 setuptools-git-versioning==1.13.3
-install-jdk==1.0.4
+install-jdk==1.1.0
