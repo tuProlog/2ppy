@@ -54,7 +54,7 @@ other aimed at  (de)serialising terms theories, namely `tuprolog.theory.serializ
     python3 -m pip install 2ppy
     ```
 1. Import `tuprolog.*` modules in your Python scripts
-1. *Note for the expert users:* 2ppy downloads its own [Java Virtual Machine](https://en.wikipedia.org/wiki/Java_virtual_machine) in order to call Java bytecode from python. If you install the package with sdist, it's downloaded during install. If you use the binary wheels packaging, it's download on first import of the `tuprolog` package.
+1. *Note for the expert users:* 2ppy downloads its own [Java Virtual Machine](https://en.wikipedia.org/wiki/Java_virtual_machine) in order to call Java bytecode from python. If you install the package with sdist, it's downloaded during install. If you use the binary wheels packaging, it's downloaded on first import of the `tuprolog` package.
 
 ### How to develop 2PPy
 
