@@ -13,24 +13,12 @@
     <dependency>
         <groupId>it.unibo.tuprolog</groupId>
         <artifactId>repl-jvm</artifactId>
-        <version>0.31.1-dev02+0cd8a1ae6</version>
-        <exclusions>
-          <exclusion>
-              <groupId>org.jetbrains.kotlin</groupId>
-              <artifactId>kotlin-bom</artifactId>
-          </exclusion>
-        </exclusions>
+        <version>0.31.15</version>
     </dependency>
     <dependency>
         <groupId>it.unibo.tuprolog</groupId>
         <artifactId>solve-problog-jvm</artifactId>
-        <version>0.31.1-dev02+0cd8a1ae6</version>
-        <exclusions>
-          <exclusion>
-              <groupId>org.jetbrains.kotlin</groupId>
-              <artifactId>kotlin-bom</artifactId>
-          </exclusion>
-        </exclusions>
+        <version>0.31.15</version>
     </dependency>
   </dependencies>
 </project>
