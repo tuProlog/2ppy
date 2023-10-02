@@ -1,16 +1,16 @@
 from tuprolog import logger
 from tuprolog.solve.flags import DEFAULT_FLAG_STORE, FlagStore
-from tuprolog.solve.library import libraries, Libraries
+from tuprolog.solve.library import libraries, Library
 from tuprolog.solve.channel import InputChannel, OutputChannel, std_out, std_in, std_err, warn
 from tuprolog.theory import theory, mutable_theory, Theory
 from tuprolog.solve import Solver, SolverFactory
 
 
-_PROLOG_SOLVER_FACTORY = Solver.getProlog()
+_PROLOG_SOLVER_FACTORY = Solver.prolog()
 
 
 def prolog_solver(
-        libraries: Libraries = libraries(),
+        libraries: Library = libraries(),
         flags: FlagStore = DEFAULT_FLAG_STORE,
         static_kb: Theory = theory(),
         dynamic_kb: Theory = mutable_theory(),

@@ -18,104 +18,9 @@ class _KtTerm:
     def __getitem__(self, item, *items):
         return self.get(item, *items)
 
-    @property
-    def variables(self):
-        return self.getVariables()
-
-    def structurally_equals(self, other):
-        return self.structurallyEquals(other)
-
     @jpype.JOverride()
     def equals(self, other, use_var_complete_name: bool = True):
         return self.equals_(other, use_var_complete_name)
-
-    @property
-    def is_var(self):
-        return self.isVar()
-
-    @property
-    def is_ground(self):
-        return self.isGround()
-
-    @property
-    def is_struct(self):
-        return self.isStruct()
-
-    @property
-    def is_truth(self):
-        return self.isTruth()
-
-    @property
-    def is_recursive(self):
-        return self.isRecursive()
-
-    @property
-    def is_atom(self):
-        return self.isAtom()
-
-    @property
-    def is_constant(self):
-        return self.isConstant()
-
-    @property
-    def is_number(self):
-        return self.isNumber()
-
-    @property
-    def is_integer(self):
-        return self.isInteger()
-
-    @property
-    def is_real(self):
-        return self.isReal()
-
-    @property
-    def is_list(self):
-        return self.isList()
-
-    @property
-    def is_tuple(self):
-        return self.isTuple()
-
-    @property
-    def is_block(self):
-        return self.isBlock()
-
-    @property
-    def is_clause(self):
-        return self.isClause()
-
-    @property
-    def is_rule(self):
-        return self.isRule()
-
-    @property
-    def is_fact(self):
-        return self.isFact()
-
-    @property
-    def is_directive(self):
-        return self.isDirective()
-
-    @property
-    def is_cons(self):
-        return self.isCons()
-
-    @property
-    def is_empty_list(self):
-        return self.isEmptyList()
-
-    @property
-    def is_true(self):
-        return self.isTrue()
-
-    @property
-    def is_fail(self):
-        return self.isFail()
-
-    @property
-    def is_indicator(self):
-        return self.isIndicator()
 
     def fresh_copy(self, scope=None):
         if scope is None:
@@ -419,14 +324,6 @@ class _KtSubstitution:
     def __jclass_init__(cls):
         pass
 
-    @property
-    def is_success(self):
-        return self.isSuccess()
-
-    @property
-    def is_failed(self):
-        return self.isFailed()
-
     def apply_to(self, term):
         return self.applyTo(term)
 
@@ -460,22 +357,6 @@ class _KtScope:
 
     def __getitem__(self, item):
         return self.get(item)
-
-    @property
-    def variables(self):
-        return self.getVariables()
-
-    @property
-    def fail(self):
-        return self.getFail()
-
-    @property
-    def empty_list(self):
-        return self.getEmptyList()
-
-    @property
-    def empty_block(self):
-        return self.getEmptyBlock()
 
     def atom(self, string):
         return self.atomOf(string)
@@ -534,14 +415,6 @@ class _KtScope:
 
     def tuple(self, first, second, *others):
         return iterable_or_varargs(others, lambda os: self.tupleOf(jiterable([first, second] + list(os))))
-
-    @property
-    def anonymous(self):
-        return self.getAnonymous()
-
-    @property
-    def whatever(self):
-        return self.getWhatever()
 
 
 logger.debug("Configure Kotlin adapters for types in it.unibo.tuprolog.core.*")

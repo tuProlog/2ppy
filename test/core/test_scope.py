@@ -1,5 +1,5 @@
 import unittest
-from tuprolog.core import scope, var, Scope, variables, struct
+from tuprolog.core import scope, var, Scope, variables, struct, FAIL
 
 
 class TestScope(unittest.TestCase):
@@ -26,6 +26,9 @@ class TestScope(unittest.TestCase):
         fAB = s.struct('f', s.var('A'), s.var('B'))
         self.assertEqual(struct('f', A, B), fAB)
 
+    def test_attributes(self):
+        s = scope()
+        self.assertEqual(s.fail, FAIL)
 
 if __name__ == '__main__':
     unittest.main()

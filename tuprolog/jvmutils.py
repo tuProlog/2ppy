@@ -1,24 +1,17 @@
-from tuprolog import logger
-# noinspection PyUnresolvedReferences
-import jpype
-# noinspection PyUnresolvedReferences
-import jpype.imports
-# noinspection PyProtectedMember
-from _jpype import _JObject as JObjectClass
-# noinspection PyUnresolvedReferences
-import java.util as _jutils
-# noinspection PyUnresolvedReferences
-import java.lang as _jlang
-# noinspection PyUnresolvedReferences
-import kotlin as _kotlin
-# noinspection PyUnresolvedReferences
-import kotlin.sequences as _ksequences
-# noinspection PyUnresolvedReferences
-import it.unibo.tuprolog.utils as _tuprolog_utils
-
 from typing import Iterable as PyIterable
 from typing import Iterator as PyIterator
 from typing import Mapping, MutableMapping, Callable, Any
+from tuprolog import logger
+import jpype
+import jpype.imports
+import jpype.beans
+from _jpype import _JObject as JObjectClass, _JMethod as JMethodClass # type: ignore
+import java.util as _jutils # type: ignore
+import java.lang as _jlang # type: ignore
+import kotlin as _kotlin # type: ignore
+import kotlin.sequences as _ksequences # type: ignore
+import it.unibo.tuprolog.utils as _tuprolog_utils # type: ignore
+
 
 from .jvmioutils import *
 
@@ -213,6 +206,57 @@ class _JvmComparable:
         return self.compareTo(other) >= 0
 
 
+def to_snake_case(camel_str: str) -> str:
+    return "".join("_" + x.lower() if x.isupper() and camel_str[i + 1:i + 2].islower() else x for i, x in enumerate(camel_str)).lstrip("_")
+
+
+@jpype.JImplementationFor("java.lang.Object")
+class _KtObjectWithSmartAccessors:
+    def __jclass_init__(self):
+        for name, member in self.__dict__.copy().items():
+            if name.startswith("_"):
+                continue
+            if isinstance(member, JMethodClass) and len(name) > 3:
+                snake_case = to_snake_case(name)
+                if snake_case.startswith("get_") and member._isBeanAccessor():
+                    snake_case = snake_case[4:]
+                    if snake_case not in self.__dict__:
+                        self._customize(snake_case, property(member))
+                elif snake_case not in self.__dict__:
+                    self._customize(snake_case, member)
+
+    # def __getattribute__(self, name: str) -> Any:
+    #     """
+    #     This method will convert Python styled member access to kotlin styled member access,
+    #     as a second attempt to access the correct member through JPype
+    #     after the first attempt failed.
+    #     """
+    #     try:
+    #         return object.__getattribute__(self, name)
+    #     except AttributeError:
+    #         if name.startswith("_"):
+    #             raise 
+    #         alias = to_camel_case(name)
+    #         try:
+    #             if alias == name:
+    #                 raise
+    #             result = object.__getattribute__(self, alias)
+    #         except AttributeError:
+    #             special_prefixes = ["get", "set", "has", "is"]
+    #             starts_with_special_prefix = None
+    #             for prefix in special_prefixes:
+    #                 if alias.startswith(prefix) and not alias[len(prefix)].islower():
+    #                     starts_with_special_prefix = prefix
+    #                     break
+    #             if starts_with_special_prefix is not None:
+    #                 raise
+    #             alias = f"get{name[0].upper()}{name[1:]}"
+    #             result = object.__getattribute__(self, alias)
+    #         if result._isBeanAccessor():
+    #             return result()
+    #         return result
+
+
 @jpype.JImplementationFor("java.lang.Throwable")
 class _JvmThrowable:
     def __jclass_init__(self):
@@ -221,14 +265,6 @@ class _JvmThrowable:
     @property
     def message(self):
         return self.getMessage()
-
-    @property
-    def localized_message(self):
-        return self.getLocalizedMessage()
-
-    @property
-    def cause(self):
-        return self.getCause()
 
 
 class _KtFunction(Callable):
@@ -260,6 +296,5 @@ def kfunction(arity: int):
 
         _kt_function_classes[arity] = _KtFunctionN
     return _kt_function_classes[arity]
-
 
 logger.debug("Configure JVM-specific extensions")

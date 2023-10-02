@@ -1,13 +1,10 @@
 import random
 import string
 import unittest
-
 from tuprolog.core import *
 from tuprolog.core.operators import DEFAULT_OPERATORS, EMPTY_OPERATORS, STANDARD_OPERATORS, XF, XFY, YF, YFX, FX, FY, \
     XFX, operator, operator_set, OperatorSet, specifier
-
-# noinspection PyUnresolvedReferences
-from java.lang import IllegalArgumentException
+from java.lang import IllegalArgumentException # type: ignore
 
 
 class AbstractTestOperatorStuff(unittest.TestCase):

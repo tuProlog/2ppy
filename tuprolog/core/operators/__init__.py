@@ -1,16 +1,11 @@
 from tuprolog import logger
 from ._ktadapt import *
-# noinspection PyUnresolvedReferences
-import jpype
-# noinspection PyUnresolvedReferences
 import jpype.imports
-# noinspection PyUnresolvedReferences
-import it.unibo.tuprolog.core.operators as _operators
+import it.unibo.tuprolog.core.operators as _operators # type: ignore
 from tuprolog.jvmutils import jiterable
 from tuprolog.pyutils import iterable_or_varargs
 from tuprolog.core import Atom, Integer, Struct, Term
 from functools import singledispatch
-
 
 Operator = _operators.Operator
 

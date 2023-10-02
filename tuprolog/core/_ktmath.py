@@ -1,12 +1,8 @@
-# noinspection PyUnresolvedReferences
 from typing import Union
 import decimal
 import jpype.imports
-# noinspection PyUnresolvedReferences
-import org.gciatto.kt.math as _ktmath
-# noinspection PyUnresolvedReferences
-import java.lang as _java_lang
-from math import ceil
+import org.gciatto.kt.math as _ktmath # type: ignore
+import java.lang as _java_lang # type: ignore
 
 from tuprolog.pyutils import and_then
 

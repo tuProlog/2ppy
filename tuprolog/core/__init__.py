@@ -1,11 +1,9 @@
 from decimal import Decimal
-
 from tuprolog import logger
+from ._ktadapt import *
 import jpype
 import jpype.imports
-from ._ktadapt import *
-# noinspection PyUnresolvedReferences
-import it.unibo.tuprolog.core as _core
+import it.unibo.tuprolog.core as _core # type: ignore
 from tuprolog.pyutils import iterable_or_varargs
 from tuprolog.jvmutils import jiterable, jmap
 from typing import Iterable, Dict, Tuple as PyTuple
