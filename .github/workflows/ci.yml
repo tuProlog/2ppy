@@ -35,7 +35,7 @@ jobs:
       artifact-name: ${{ steps.artifact.outputs.artifact-name }}
       version: ${{ steps.artifact.outputs.version }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Set up Python ${{ matrix.python-version }}
@@ -93,7 +93,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
