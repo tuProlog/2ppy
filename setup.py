@@ -36,7 +36,7 @@ def download_jars():
     if 'Apache Maven' not in stdout:
         raise RuntimeError(f'Could not find Apache Maven in {stdout}')
     run_maven('dependency:copy-dependencies', f'-DoutputDirectory={JAR_FOLDER}', cwd=Path(__file__).parent)
-    run_maven('dependency:copy-dependencies', f'-DoutputDirectory={JAR_FOLDER}', '-Dclassifier=javadoc', cwd=Path(__file__).parent)
+    # run_maven('dependency:copy-dependencies', f'-DoutputDirectory={JAR_FOLDER}', '-Dclassifier=javadoc', cwd=Path(__file__).parent)
 
 
 class BuildPyCommand(build_py):
