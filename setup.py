@@ -17,17 +17,26 @@ def is_windows():
     return platform.system() == 'Windows'
 
 
-def download_jars():
-    proc = subprocess.Popen(MAVEN_EXECUTABLE + ['-v'], shell=is_windows(), stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+def run_maven(*args, cwd=None) -> (str, str):
+    proc = subprocess.Popen(
+        MAVEN_EXECUTABLE + list(args), 
+        shell=is_windows(), 
+        stdout=subprocess.PIPE, 
+        stderr=subprocess.PIPE, 
+        text=True, 
+        cwd=cwd)
     stdout, stderr = proc.communicate()
     if proc.returncode != 0:
-        raise RuntimeError(f'Could not run mvn:\n{stdout}\n{stderr}')
+        raise RuntimeError(f'Error while running mvn:\n{stdout}\n{stderr}')
+    return stdout, stderr
+
+
+def download_jars():
+    stdout, _ = run_maven('-v')
     if 'Apache Maven' not in stdout:
         raise RuntimeError(f'Could not find Apache Maven in {stdout}')
-    proc = subprocess.Popen(MAVEN_EXECUTABLE + ['dependency:copy-dependencies', f'-DoutputDirectory={JAR_FOLDER}'], shell=is_windows(), stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, cwd=Path(__file__).parent)
-    stdout, stderr = proc.communicate()
-    if proc.returncode != 0:
-        raise RuntimeError(f'Error while downloading JARs:\n{stdout}\n{stderr}')
+    run_maven('dependency:copy-dependencies', f'-DoutputDirectory={JAR_FOLDER}', cwd=Path(__file__).parent)
+    run_maven('dependency:copy-dependencies', f'-DoutputDirectory={JAR_FOLDER}', '-Dclassifier=javadoc', cwd=Path(__file__).parent)
 
 
 class BuildPyCommand(build_py):
