@@ -9,8 +9,8 @@ class TestTermCreation(unittest.TestCase):
         self.integer = integer(1)
         self.real = real(1.2)
         self.var = var("X")
-        self.true = truth(True)
-        self.false = truth(False)
+        self.true = TRUE
+        self.false = FALSE
         self.fail = FAIL
         self.struct = struct('f', self.atom, self.integer, self.real)
         self.struct2 = struct('f', [self.atom, self.integer, self.real])
@@ -23,9 +23,12 @@ class TestTermCreation(unittest.TestCase):
         self.assertEqual(self.true.value, 'true')
         self.assertEqual(self.false.value, 'false')
         self.assertEqual(self.fail.value, 'fail')
-        self.assertEqual(list(self.var.getVariables())[0], self.var) # TODO: make pythonic
+        self.assertEqual(True, self.false.isTruth())
+        self.assertEqual(True, self.true.isTruth())
+        self.assertEqual(list(self.var.variables)[0], self.var)
         self.assertEqual(True, self.var.structurally_equals(var('Y')))
-        self.assertEqual(True, self.true.isTruth()) # TODO: make pythonic
+        self.assertEqual(True, self.false.is_truth)
+        self.assertEqual(True, self.true.is_truth)
 
     def test_struct_creation(self):
         self.assertEqual(self.struct.functor, 'f')

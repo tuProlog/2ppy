@@ -211,50 +211,34 @@ def to_snake_case(camel_str: str) -> str:
 
 
 @jpype.JImplementationFor("java.lang.Object")
-class _KtObjectWithSmartAccessors:
+class _KtObjectWithSmartPythonicAccessors:
     def __jclass_init__(self):
-        for name, member in self.__dict__.copy().items():
-            if name.startswith("_"):
+        members = dir(self)
+        members_set = set(members)
+        for name in members:
+            member = getattr(self, name, None)
+            if member is None:
                 continue
-            if isinstance(member, JMethodClass) and len(name) > 3:
-                snake_case = to_snake_case(name)
-                if snake_case.startswith("get_") and member._isBeanAccessor():
-                    snake_case = snake_case[4:]
-                    if snake_case not in self.__dict__:
-                        self._customize(snake_case, property(member))
-                elif snake_case not in self.__dict__:
-                    self._customize(snake_case, member)
-
-    # def __getattribute__(self, name: str) -> Any:
-    #     """
-    #     This method will convert Python styled member access to kotlin styled member access,
-    #     as a second attempt to access the correct member through JPype
-    #     after the first attempt failed.
-    #     """
-    #     try:
-    #         return object.__getattribute__(self, name)
-    #     except AttributeError:
-    #         if name.startswith("_"):
-    #             raise 
-    #         alias = to_camel_case(name)
-    #         try:
-    #             if alias == name:
-    #                 raise
-    #             result = object.__getattribute__(self, alias)
-    #         except AttributeError:
-    #             special_prefixes = ["get", "set", "has", "is"]
-    #             starts_with_special_prefix = None
-    #             for prefix in special_prefixes:
-    #                 if alias.startswith(prefix) and not alias[len(prefix)].islower():
-    #                     starts_with_special_prefix = prefix
-    #                     break
-    #             if starts_with_special_prefix is not None:
-    #                 raise
-    #             alias = f"get{name[0].upper()}{name[1:]}"
-    #             result = object.__getattribute__(self, alias)
-    #         if result._isBeanAccessor():
-    #             return result()
-    #         return result
+            elif name.startswith("_") or '$' in name:
+                continue
+            elif isinstance(member, JMethodClass):
+                if len(name) > 3:
+                    snake_case = to_snake_case(name)
+                    method_has_0_args = member.__annotations__.keys() == {"return"}
+                    method_is_property = False
+                    # Shorten method name and promote to property if it's a getter
+                    if method_has_0_args and snake_case.startswith("get_"):
+                        snake_case = snake_case[4:]
+                        method_is_property = True
+                    # Promote method to property if it's a boolean getter
+                    elif method_has_0_args and snake_case.startswith("is_"):
+                        method_is_property = True
+                    if snake_case not in members_set or getattr(self, snake_case, None) is None:
+                        self._customize(snake_case, property(member) if method_is_property else member)
+                        members_set.add(snake_case)
+                    else:
+                        member = getattr(self, snake_case, None)
+                        pass
 
 
 @jpype.JImplementationFor("java.lang.Throwable")
