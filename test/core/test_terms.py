@@ -17,8 +17,8 @@ class TestTermCreation(unittest.TestCase):
 
     def test_simple_terms_creation(self):
         self.assertEqual(self.atom.value, 'a')
-        self.assertEqual(self.integer.value.toInt(), 1)
-        self.assertEqual(self.real.value.toDouble(), 1.2)
+        self.assertEqual(self.integer.value.to_int(), 1)
+        self.assertEqual(self.real.value.to_double(), 1.2)
         self.assertEqual(self.var.name, 'X')
         self.assertEqual(self.true.value, 'true')
         self.assertEqual(self.false.value, 'false')

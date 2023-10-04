@@ -4,7 +4,6 @@ from typing import Mapping, MutableMapping, Callable, Any
 from tuprolog import logger
 import jpype
 import jpype.imports
-import jpype.beans
 from _jpype import _JObject as JObjectClass, _JMethod as JMethodClass # type: ignore
 import java.util as _jutils # type: ignore
 import java.lang as _jlang # type: ignore
@@ -219,26 +218,39 @@ class _KtObjectWithSmartPythonicAccessors:
             member = getattr(self, name, None)
             if member is None:
                 continue
-            elif name.startswith("_") or '$' in name:
+            elif name.startswith("_") or '$' in name or name == 'getClass':
                 continue
             elif isinstance(member, JMethodClass):
                 if len(name) > 3:
                     snake_case = to_snake_case(name)
                     method_has_0_args = member.__annotations__.keys() == {"return"}
-                    method_is_property = False
+                    add_property = None
+                    add_method = (snake_case, member)
                     # Shorten method name and promote to property if it's a getter
                     if method_has_0_args and snake_case.startswith("get_"):
-                        snake_case = snake_case[4:]
-                        method_is_property = True
+                        property_name = snake_case[4:]
+                        if member._isBeanAccessor():
+                            getter = member
+                            setter_name = "set" + name.removeprefix("get")
+                            setter = getattr(self, setter_name, None)
+                            if setter is not None and isinstance(setter, JMethodClass) and setter._isBeanMutator():
+                                add_property = (property_name, property(fget=getter, fset=setter))
+                            else:
+                                add_property = (property_name, property(fget=getter))
+                        else:
+                            add_property = (property_name, property(fget=member))
                     # Promote method to property if it's a boolean getter
                     elif method_has_0_args and snake_case.startswith("is_"):
-                        method_is_property = True
-                    if snake_case not in members_set or getattr(self, snake_case, None) is None:
-                        self._customize(snake_case, property(member) if method_is_property else member)
-                        members_set.add(snake_case)
-                    else:
-                        member = getattr(self, snake_case, None)
-                        pass
+                        add_property = (snake_case, property(fget=member))
+                        # Do not add method with the same name
+                        add_method = None
+                    # Add method and property
+                    for to_add in (add_property, add_method):
+                        if to_add is not None:
+                            # Avoid conflicts with existing members
+                            if to_add[0] not in members_set or not hasattr(self, to_add[0]):
+                                self._customize(*to_add)
+                                members_set.add(to_add[0])
 
 
 @jpype.JImplementationFor("java.lang.Throwable")
