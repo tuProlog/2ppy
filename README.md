@@ -2,7 +2,7 @@
 
 Experimental porting of [2P-Kt](https://github.com/tuProlog/2p-kt) on Python, via [JPype](https://jpype.readthedocs.io).
 
-> This is a __work in progress__. 2PPy is not ready for general availability, yet.
+> This is a __work in progress__.
 
 ## Introduction
 
@@ -56,7 +56,12 @@ other aimed at  (de)serialising terms theories, namely `tuprolog.theory.serializ
 1. Import `tuprolog.*` modules in your Python scripts
 1. *Note for the expert users:* 2ppy downloads its own [Java Virtual Machine](https://en.wikipedia.org/wiki/Java_virtual_machine) in order to call Java bytecode from python. If you install the package with sdist, it's downloaded during install. If you use the binary wheels packaging, it's downloaded on first import of the `tuprolog` package.
 
-### How to develop 2PPy
+### How to use 2PPy as interactive REPL
+
+1. Python shell mode: `python -m tuprolog`
+1. Logic solver [REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop): WIP
+
+## How to contribute to 2PPy
 
 1. Restore Python dev dependencies via PIP, by running:
     ```bash
@@ -72,8 +77,3 @@ other aimed at  (de)serialising terms theories, namely `tuprolog.theory.serializ
 1. Build the package with `python -m build`
 1. Install the package locally with `python setup.py install`
 1. Print the package version, computed from git tags with `python -m setuptools_git_versioning`
-
-### How to use 2PPy as an executable
-
-1. Python shell mode: WIP
-1. Logic solver [REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop): WIP
