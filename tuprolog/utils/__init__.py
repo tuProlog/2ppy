@@ -1,5 +1,4 @@
 from tuprolog import logger
-from ._ktadapt import *
 # noinspection PyUnresolvedReferences
 import jpype.imports
 # noinspection PyUnresolvedReferences

@@ -3,7 +3,6 @@ from tuprolog import logger
 import jpype.imports
 # noinspection PyUnresolvedReferences
 import it.unibo.tuprolog.unify.exception as _exceptions
-from ._ktadapt import *
 
 
 NoUnifyException = _exceptions.NoUnifyException

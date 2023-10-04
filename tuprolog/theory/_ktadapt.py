@@ -11,16 +11,6 @@ class _KtTheory:
     def __jclass_init__(cls):
         Sized.register(cls)
 
-    @property
-    def is_mutable(self):
-        return self.isMutable()
-
-    def to_mutable_theory(self):
-        return self.toMutableTheory()
-
-    def to_immutable_theory(self):
-        return self.toImmutableTheory()
-
     @jpype.JOverride
     def getClauses(self):
         return protect_iterable(self.getClauses_())
@@ -97,32 +87,6 @@ class _KtTheory:
 
     def to_string(self, as_prolog_text=False):
         return self.toString(as_prolog_text)
-
-
-@jpype.JImplementationFor("it.unibo.tuprolog.theory.RetractResult")
-class _KtRetractResult:
-    def __jclass_init__(cls):
-        pass
-
-    @property
-    def is_success(self):
-        return self.isSuccess()
-
-    @property
-    def is_failure(self):
-        return self.isFailure()
-
-    @property
-    def theory(self):
-        return self.getTheory()
-
-    @property
-    def clauses(self):
-        return self.getClauses()
-
-    @property
-    def first_clause(self):
-        return self.getFirstClause()
 
 
 logger.debug("Configure Kotlin adapters for types in it.unibo.tuprolog.theory.*")

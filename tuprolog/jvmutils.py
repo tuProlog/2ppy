@@ -231,6 +231,7 @@ class _KtObjectWithSmartPythonicAccessors:
                         property_name = snake_case[4:]
                         if member._isBeanAccessor():
                             getter = member
+                            # Attempt to find paired bean setter
                             setter_name = "set" + name.removeprefix("get")
                             setter = getattr(self, setter_name, None)
                             if setter is not None and isinstance(setter, JMethodClass) and setter._isBeanMutator():
