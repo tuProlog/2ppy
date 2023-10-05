@@ -1,8 +1,6 @@
 from tuprolog import logger
-# noinspection PyUnresolvedReferences
 import jpype.imports
-# noinspection PyUnresolvedReferences
-import it.unibo.tuprolog.unify.exception as _exceptions
+import it.unibo.tuprolog.unify.exception as _exceptions # type: ignore
 
 
 NoUnifyException = _exceptions.NoUnifyException

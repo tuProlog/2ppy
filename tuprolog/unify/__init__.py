@@ -1,8 +1,6 @@
 from tuprolog import logger
-# noinspection PyUnresolvedReferences
 import jpype.imports
-# noinspection PyUnresolvedReferences
-import it.unibo.tuprolog.unify as _unify
+import it.unibo.tuprolog.unify as _unify # type: ignore
 from tuprolog.core import Term, Substitution
 
 

@@ -1,10 +1,9 @@
+from typing import Sized, Callable
 from tuprolog import logger
 import jpype
 from ._ktmath import big_integer, BigInteger, python_integer, python_decimal
-from typing import Sized, Callable
-from tuprolog.jvmutils import jiterable
+from tuprolog.jvmutils import jiterable, kfunction, kpair, ksequence
 from tuprolog.pyutils import iterable_or_varargs
-from tuprolog.jvmutils import kfunction
 
 
 @jpype.JImplementationFor("it.unibo.tuprolog.core.Term")
