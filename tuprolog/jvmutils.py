@@ -1,7 +1,5 @@
-from typing import Iterable as PyIterable
-from typing import Iterator as PyIterator
-from typing import Mapping, MutableMapping, Callable, Any
 from tuprolog import logger
+from typing import Iterable as PyIterable, Iterator as PyIterator, Mapping, MutableMapping, Callable, Any
 import jpype
 import jpype.imports
 from _jpype import _JObject as JObjectClass, _JMethod as JMethodClass # type: ignore
@@ -10,8 +8,6 @@ import java.lang as _jlang # type: ignore
 import kotlin as _kotlin # type: ignore
 import kotlin.sequences as _ksequences # type: ignore
 import it.unibo.tuprolog.utils as _tuprolog_utils # type: ignore
-
-
 from .jvmioutils import *
 
 
@@ -211,6 +207,10 @@ def to_snake_case(camel_str: str) -> str:
 
 @jpype.JImplementationFor("java.lang.Object")
 class _KtObjectWithSmartPythonicAccessors:
+    """
+    This class provides every Java imported type with Pythonic versions of its methods and properties,
+    unless pythonic versions would conflict with existing members.
+    """
     def __jclass_init__(self):
         members = dir(self)
         members_set = set(members)

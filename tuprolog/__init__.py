@@ -1,10 +1,11 @@
 import os
 import logging
-# noinspection PyUnresolvedReferences
 import jpype
 import jpype.imports
 
 from .libs import JAVA_HOME, CLASSPATH, install_java_if_missing
+
+# Override the JAVA_HOME environment variable to use the locally installed JDK
 os.environ['JAVA_HOME'] = str(JAVA_HOME)
 
 logger = logging.getLogger('tuprolog')
@@ -15,8 +16,7 @@ if not jpype.isJVMStarted():
     install_java_if_missing()
     jpype.startJVM(classpath=jars)
 
-# noinspection PyUnresolvedReferences
-from it.unibo import tuprolog as _tuprolog
+from it.unibo import tuprolog as _tuprolog # type: ignore
 
 Info = _tuprolog.Info
 

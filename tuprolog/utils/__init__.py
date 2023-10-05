@@ -1,8 +1,8 @@
 from tuprolog import logger
-# noinspection PyUnresolvedReferences
 import jpype.imports
-# noinspection PyUnresolvedReferences
-import it.unibo.tuprolog.utils as _utils
+import it.unibo.tuprolog.utils as _utils # type: ignore
+
+Castable = _utils.Castable
 
 Taggable = _utils.Taggable
 

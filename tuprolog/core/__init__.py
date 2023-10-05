@@ -1,3 +1,4 @@
+from typing import Iterable, Dict, Tuple as PyTuple, Union
 from decimal import Decimal
 from tuprolog import logger
 from ._ktadapt import *
@@ -6,8 +7,10 @@ import jpype.imports
 import it.unibo.tuprolog.core as _core # type: ignore
 from tuprolog.pyutils import iterable_or_varargs
 from tuprolog.jvmutils import jiterable, jmap
-from typing import Iterable, Dict, Tuple as PyTuple
+from ._ktmath import *
 
+
+Applicable = _core.Applicable
 
 Atom = _core.Atom
 
@@ -68,6 +71,8 @@ Truth = _core.Truth
 Tuple = _core.Tuple
 
 Var = _core.Var
+
+Variabled = _core.Variabled
 
 
 @jpype.JImplements(TermConvertible)

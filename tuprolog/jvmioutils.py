@@ -1,14 +1,10 @@
 from tuprolog import logger
-# noinspection PyUnresolvedReferences
-import jpype
-# noinspection PyUnresolvedReferences
-import jpype.imports
-# noinspection PyUnresolvedReferences
-import java.io as _jio
-# noinspection PyUnresolvedReferences
-import java.nio.file as _jnio_file
 from io import IOBase, SEEK_SET
 from typing import Union
+import jpype
+import jpype.imports
+import java.io as _jio # type: ignore
+import java.nio.file as _jnio_file # type: ignore
 
 
 InputStream = _jio.InputStream

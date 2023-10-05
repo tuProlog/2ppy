@@ -1,13 +1,10 @@
-from decimal import Decimal
 from tuprolog import logger
 import jpype
-from ._ktmath import big_integer, big_decimal, BigInteger, BigDecimal
-from tuprolog.utils import *
+from ._ktmath import big_integer, BigInteger, python_integer, python_decimal
 from typing import Sized, Callable
 from tuprolog.jvmutils import jiterable
 from tuprolog.pyutils import iterable_or_varargs
 from tuprolog.jvmutils import kfunction
-from ._ktmath import *
 
 
 @jpype.JImplementationFor("it.unibo.tuprolog.core.Term")
