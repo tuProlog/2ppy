@@ -63,7 +63,7 @@ other aimed at  (de)serialising terms theories, namely `tuprolog.theory.serializ
 1. Import `tuprolog.*` modules in your Python scripts
 1. Use the Pythonic API to write, parse or solve your logic programs. You can find some examples in the [api tests folder](test/api).
 
-### How to use 2PPy as interactive REPL
+### Use 2PPy as an interactive REPL
 
 1. Python shell mode: `python -m tuprolog`
 1. Logic solver [REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop): *WIP*
@@ -94,7 +94,7 @@ The Git Flow for 2ppy consists of the following:
 - The ongoing development happens on the `develop` branch
 - The `master` branch is used to display the latest released code
 - Independent features are developed on their own branches, and merged into `develop` when ready
-- In order to make a new release, the code should be merged on master and a new [git tag](https://git-scm.com/book/en/v2/Git-Basics-Tagging#_annotated_tags) should be created on the release commit, following the [Semantic Versioning](https://semver.org/) semantic
+- In order to make a new release, the code should be merged on master and a new [git tag](https://git-scm.com/book/en/v2/Git-Basics-Tagging#_annotated_tags) should be created on the release commit, following the [Semantic Versioning](https://semver.org/) semantic.  
   As an example, the following commands can be used to make a new release:
     ```bash
     git checkout master
@@ -105,7 +105,7 @@ The Git Flow for 2ppy consists of the following:
 
 #### CI/CD
 
-The Continuous Integration pipeline will run unit tests against some combinations of operating systems, java version for the JVM and python version.
+The Continuous Integration pipeline will run unit tests against some combinations of operating systems, supported java versions for the JVM and supported python versions.
 It will also check the Python style with [flake8](https://flake8.pycqa.org/en/latest/).
 
 The Continuous Delivery pipeline will create a new [Github Release](https://github.com/tuProlog/2ppy/releases) and will deploy the package on [PyPI](https://pypi.org/project/2ppy/).
