@@ -1,17 +1,17 @@
+from typing import Sized
+from jpype import JImplementationFor, JOverride
 from tuprolog import logger
-import jpype
 from tuprolog.core import indicator as new_indicator
 from tuprolog.jvmutils import jiterable, protect_iterable
 from tuprolog.pyutils import iterable_or_varargs
-from typing import Sized
 
 
-@jpype.JImplementationFor("it.unibo.tuprolog.theory.Theory")
+@JImplementationFor("it.unibo.tuprolog.theory.Theory")
 class _KtTheory:
     def __jclass_init__(cls):
         Sized.register(cls)
 
-    @jpype.JOverride
+    @JOverride
     def getClauses(self):
         return protect_iterable(self.getClauses_())
 
@@ -19,7 +19,7 @@ class _KtTheory:
     def clauses(self):
         return self.getClauses()
 
-    @jpype.JOverride
+    @JOverride
     def getRules(self):
         return protect_iterable(self.getRules_())
 
@@ -27,7 +27,7 @@ class _KtTheory:
     def rules(self):
         return self.getRules()
 
-    @jpype.JOverride
+    @JOverride
     def getDirectives(self):
         return protect_iterable(self.getDirectives_())
 
@@ -58,7 +58,7 @@ class _KtTheory:
     def assert_z(self, clause, *clauses):
         self._assert(self.assertZ, clause, *clauses)
 
-    @jpype.JOverride
+    @JOverride
     def retract(self, clause, *clauses):
         if len(clauses) == 0:
             return self.retract_(clause)
@@ -67,7 +67,7 @@ class _KtTheory:
     def retract_all(self, clause):
         return self.retractAll(clause)
 
-    @jpype.JOverride
+    @JOverride
     def abolish(self, name, arity=None, indicator=None):
         if name is not None:
             if arity is not None:
@@ -78,7 +78,7 @@ class _KtTheory:
             return self.abolish_(indicator)
         raise ValueError("You should provide at least either a name-arity couple or an indicator")
 
-    @jpype.JOverride
+    @JOverride
     def equals(self, other, use_var_complete_name=True):
         return self.equals_(other, use_var_complete_name)
 

@@ -1,10 +1,9 @@
 from tuprolog import logger
-import jpype
-
+from jpype import JImplementationFor
 from tuprolog.jvmioutils import ensure_input_steam
 
 
-@jpype.JImplementationFor("it.unibo.tuprolog.core.parsing.TermParser")
+@JImplementationFor("it.unibo.tuprolog.core.parsing.TermParser")
 class _KtTermParser:
     def __jclass_init__(cls):
         pass
@@ -50,7 +49,7 @@ class _KtTermParser:
         return self._parse(self.parseClause, input, operators)
 
 
-@jpype.JImplementationFor("it.unibo.tuprolog.core.parsing.TermReader")
+@JImplementationFor("it.unibo.tuprolog.core.parsing.TermReader")
 class _KtTermReader:
     def __jclass_init__(cls):
         pass

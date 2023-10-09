@@ -1,17 +1,14 @@
+from jpype import JImplements, JOverride
 from tuprolog import logger
-
-import jpype
-
 from tuprolog.core import TermComparator
 
-
-@jpype.JImplements(TermComparator)
+@JImplements(TermComparator)
 class AbstractTermComparator(object):
-    @jpype.JOverride
+    @JOverride
     def equals(self, other):
         return self is other
 
-    @jpype.JOverride
+    @JOverride
     def compare(self, first, second):
         raise NotImplementedError()
 

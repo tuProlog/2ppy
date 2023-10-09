@@ -1,7 +1,6 @@
 import os
 import logging
 import jpype
-
 from .libs import JAVA_HOME, CLASSPATH, install_java_if_missing
 
 # Override the JAVA_HOME environment variable to use the locally installed JDK

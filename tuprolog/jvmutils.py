@@ -1,6 +1,6 @@
-from tuprolog import logger
 from typing import Iterable as PyIterable, Iterator as PyIterator, Mapping, MutableMapping, Callable, Any
-import jpype
+from jpype import JImplements, JOverride, JConversion, JImplementationFor, JArray
+from tuprolog import logger
 from .jvmioutils import *
 import jpype.imports
 from _jpype import _JObject as JObjectClass, _JMethod as JMethodClass # type: ignore
@@ -42,14 +42,14 @@ def protect_iterable(iterable: Iterable) -> Iterable:
     return PyUtils.iterable(iterable)
 
 
-@jpype.JImplements("java.util.Iterator", deferred=True)
+@JImplements("java.util.Iterator", deferred=True)
 class _IteratorAdapter(object):
     def __init__(self, iterator):
         assert isinstance(iterator, PyIterator)
         self._iterator = iterator
         self._queue = None
 
-    @jpype.JOverride
+    @JOverride
     def hasNext(self):
         if self._queue is None:
             try:
@@ -66,7 +66,7 @@ class _IteratorAdapter(object):
             except StopIteration:
                 return False
 
-    @jpype.JOverride
+    @JOverride
     def next(self):
         if self.hasNext():
             return self._queue.pop(0)
@@ -74,13 +74,13 @@ class _IteratorAdapter(object):
             raise NoSuchElementException()
 
 
-@jpype.JImplements("java.lang.Iterable", deferred=True)
+@JImplements("java.lang.Iterable", deferred=True)
 class _IterableAdapter(object):
     def __init__(self, iterable):
         assert isinstance(iterable, PyIterable)
         self._iterable = iterable
 
-    @jpype.JOverride
+    @JOverride
     def iterator(self):
         return _IteratorAdapter(iter(self._iterable))
 
@@ -94,7 +94,7 @@ def kpair(items: PyIterable) -> Pair:
     return Pair(first, second)
 
 
-@jpype.JConversion("kotlin.Pair", instanceof=PyIterable, excludes=str)
+@JConversion("kotlin.Pair", instanceof=PyIterable, excludes=str)
 def _kt_pair_covert(jcls, obj):
     return kpair(obj)
 
@@ -109,7 +109,7 @@ def ktriple(items: PyIterable) -> Triple:
     return Triple(first, second, third)
 
 
-@jpype.JConversion("kotlin.Triple", instanceof=PyIterable, excludes=str)
+@JConversion("kotlin.Triple", instanceof=PyIterable, excludes=str)
 def _kt_triple_covert(jcls, obj):
     return ktriple(obj)
 
@@ -129,13 +129,13 @@ def jiterable(iterable: PyIterable) -> Iterable:
     return _IterableAdapter(iterable)
 
 
-@jpype.JConversion("java.lang.Iterable", instanceof=PyIterable, excludes=str)
+@JConversion("java.lang.Iterable", instanceof=PyIterable, excludes=str)
 def _java_iterable_convert(jcls, obj):
     return jiterable(obj)
 
 
 def jarray(type, rank: int = 1):
-    return jpype.JArray(type, rank)
+    return JArray(type, rank)
 
 
 def jiterator(iterator: PyIterator) -> Iterator:
@@ -156,7 +156,7 @@ def _java_obj_repr(java_object: Object) -> str:
 JObjectClass.__repr__ = _java_obj_repr
 
 
-@jpype.JImplementationFor("kotlin.sequences.Sequence")
+@JImplementationFor("kotlin.sequences.Sequence")
 class _KtSequence:
     def __jclass_init__(self):
         PyIterable.register(self)
@@ -169,12 +169,12 @@ def ksequence(iterable: PyIterable) -> Sequence:
     return SequencesKt.asSequence(jiterable(iterable))
 
 
-@jpype.JConversion("kotlin.sequences.Sequence", instanceof=PyIterable, excludes=str)
+@JConversion("kotlin.sequences.Sequence", instanceof=PyIterable, excludes=str)
 def _kt_sequence_convert(jcls, obj):
     return ksequence(obj)
 
 
-@jpype.JImplementationFor("java.util.stream.Stream")
+@JImplementationFor("java.util.stream.Stream")
 class _JvmStream:
     def __jclass_init__(self):
         PyIterable.register(self)
@@ -183,7 +183,7 @@ class _JvmStream:
         return self.iterator()
 
 
-@jpype.JImplementationFor("java.lang.Comparable")
+@JImplementationFor("java.lang.Comparable")
 class _JvmComparable:
     def __jclass_init__(self):
         pass
@@ -205,7 +205,7 @@ def to_snake_case(camel_str: str) -> str:
     return "".join("_" + x.lower() if x.isupper() and camel_str[i + 1:i + 2].islower() else x for i, x in enumerate(camel_str)).lstrip("_")
 
 
-@jpype.JImplementationFor("java.lang.Object")
+@JImplementationFor("java.lang.Object")
 class _KtObjectWithSmartPythonicAccessors:
     """
     This class provides every Java imported type with Pythonic versions of its methods and properties,
@@ -254,7 +254,7 @@ class _KtObjectWithSmartPythonicAccessors:
                                 members_set.add(to_add[0])
 
 
-@jpype.JImplementationFor("java.lang.Throwable")
+@JImplementationFor("java.lang.Throwable")
 class _JvmThrowable:
     def __jclass_init__(self):
         pass
@@ -282,12 +282,12 @@ _kt_function_classes: MutableMapping[int, Any] = dict()
 
 def kfunction(arity: int):
     if arity not in _kt_function_classes:
-        @jpype.JImplements("kotlin.jvm.functions.Function" + str(arity), deferred=True)
+        @JImplements("kotlin.jvm.functions.Function" + str(arity), deferred=True)
         class _KtFunctionN(_KtFunction):
             def __init__(self, f):
                 super().__init__(arity, f)
 
-            @jpype.JOverride
+            @JOverride
             def invoke(self, *args):
                 return super().invoke(*args)
 

@@ -1,10 +1,9 @@
+from jpype import JImplementationFor
 from tuprolog import logger
-import jpype
-
 from tuprolog.jvmioutils import ensure_input_steam
 
 
-@jpype.JImplementationFor("it.unibo.tuprolog.theory.parsing.ClausesParser")
+@JImplementationFor("it.unibo.tuprolog.theory.parsing.ClausesParser")
 class _KtClausesParser:
     def __jclass_init__(cls):
         pass
@@ -30,7 +29,7 @@ class _KtClausesParser:
 
 
 
-@jpype.JImplementationFor("it.unibo.tuprolog.theory.parsing.ClausesReader")
+@JImplementationFor("it.unibo.tuprolog.theory.parsing.ClausesReader")
 class _KtClausesReader:
     def __jclass_init__(cls):
         pass

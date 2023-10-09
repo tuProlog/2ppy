@@ -1,12 +1,12 @@
 from typing import Sized, Callable
+from jpype import JImplements, JOverride, JImplementationFor
 from tuprolog import logger
-import jpype
-from ._ktmath import big_integer, BigInteger, python_integer, python_decimal
-from tuprolog.jvmutils import jiterable, kfunction, kpair, ksequence
+from tuprolog.jvmutils import jiterable, kfunction
 from tuprolog.pyutils import iterable_or_varargs
+from ._ktmath import big_integer, BigInteger, python_integer, python_decimal
 
 
-@jpype.JImplementationFor("it.unibo.tuprolog.core.Term")
+@JImplementationFor("it.unibo.tuprolog.core.Term")
 class _KtTerm:
     def __jclass_init__(cls):
         pass
@@ -14,7 +14,7 @@ class _KtTerm:
     def __getitem__(self, item, *items):
         return self.get(item, *items)
 
-    @jpype.JOverride()
+    @JOverride()
     def equals(self, other, use_var_complete_name: bool = True):
         return self.equals_(other, use_var_complete_name)
 
@@ -25,7 +25,7 @@ class _KtTerm:
             return self.freshCopy(scope)
 
 
-@jpype.JImplementationFor("it.unibo.tuprolog.core.Struct")
+@JImplementationFor("it.unibo.tuprolog.core.Struct")
 class _KtStruct:
     def __jclass_init__(cls):
         pass
@@ -37,7 +37,7 @@ class _KtStruct:
         return iterable_or_varargs(args, lambda xs: self.setArgs(jiterable(args)))
 
 
-@jpype.JImplementationFor("it.unibo.tuprolog.core.Numeric")
+@JImplementationFor("it.unibo.tuprolog.core.Numeric")
 class _KtNumeric:
     def __jclass_init__(cls):
         pass
@@ -57,7 +57,7 @@ class _KtNumeric:
         return float(self.decimal_value)
 
 
-@jpype.JImplementationFor("it.unibo.tuprolog.core.Integer")
+@JImplementationFor("it.unibo.tuprolog.core.Integer")
 class _KtInteger:
     def __jclass_init__(cls):
         pass
@@ -67,7 +67,7 @@ class _KtInteger:
         return self.int_value
 
 
-@jpype.JImplementationFor("it.unibo.tuprolog.core.Real")
+@JImplementationFor("it.unibo.tuprolog.core.Real")
 class _KtReal:
     def __jclass_init__(cls):
         pass
@@ -77,7 +77,7 @@ class _KtReal:
         return self.decimal_value
 
 
-@jpype.JImplementationFor("it.unibo.tuprolog.core.Recursive")
+@JImplementationFor("it.unibo.tuprolog.core.Recursive")
 class _KtRecursive:
     def __jclass_init__(cls):
         Sized.register(cls)
@@ -98,7 +98,7 @@ class _KtRecursive:
         return self.toSequence()
 
 
-@jpype.JImplementationFor("it.unibo.tuprolog.core.Clause")
+@JImplementationFor("it.unibo.tuprolog.core.Clause")
 class _KtClause:
     def __jclass_init__(cls):
         pass
@@ -113,7 +113,7 @@ class _KtClause:
         return iterable_or_varargs(args, lambda xs: self.setBodyItems(jiterable(args)))
 
 
-@jpype.JImplementationFor("it.unibo.tuprolog.core.Substitution")
+@JImplementationFor("it.unibo.tuprolog.core.Substitution")
 class _KtSubstitution:
     def __jclass_init__(cls):
         pass
@@ -124,7 +124,7 @@ class _KtSubstitution:
     def __sub__(self, other):
         return self.minus(other)
 
-    @jpype.JOverride
+    @JOverride
     def filter(self, filter):
         if isinstance(filter, Callable):
             return self.filter_(kfunction(1)(filter))
@@ -132,7 +132,7 @@ class _KtSubstitution:
             return self.filter_(filter)
 
 
-@jpype.JImplementationFor("it.unibo.tuprolog.core.Scope")
+@JImplementationFor("it.unibo.tuprolog.core.Scope")
 class _KtScope:
     def __jclass_init__(cls):
         pass

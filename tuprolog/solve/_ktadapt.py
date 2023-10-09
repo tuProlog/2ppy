@@ -1,14 +1,10 @@
 from itertools import chain
-
+from jpype import JImplementationFor, JOverride
 from tuprolog import logger
-
-# noinspection PyUnresolvedReferences
-import jpype
-
 from tuprolog.pyutils import iterable_or_varargs
 
 
-@jpype.JImplementationFor("it.unibo.tuprolog.solve.SolveOptions")
+@JImplementationFor("it.unibo.tuprolog.solve.SolveOptions")
 class _KtSolveOptions:
 
     _static_keys = {'lazy', 'is_lazy', 'eager', 'is_eager', 'timeout', 'limit'}
@@ -58,12 +54,12 @@ class _KtSolveOptions:
         return KeyError(f"No such option: {item}")
 
 
-@jpype.JImplementationFor("it.unibo.tuprolog.solve.Solver")
+@JImplementationFor("it.unibo.tuprolog.solve.Solver")
 class _KtSolver:
     def __jclass_init__(self):
         pass
 
-    @jpype.JOverride
+    @JOverride
     def solve(self, goal, options=None):
         if options is None:
             return self.solve_(goal)
@@ -72,7 +68,7 @@ class _KtSolver:
         else:
             return self.solve_(goal, options)
 
-    @jpype.JOverride
+    @JOverride
     def solve_once(self, goal, options=None):
         if options is None:
             return self.solveOnce(goal)
@@ -80,7 +76,7 @@ class _KtSolver:
             return self.solveOnce(goal, options)
 
 
-@jpype.JImplementationFor("it.unibo.tuprolog.solve.MutableSolver")
+@JImplementationFor("it.unibo.tuprolog.solve.MutableSolver")
 class _KtMutableSolver:
     def __jclass_init__(self):
         pass
