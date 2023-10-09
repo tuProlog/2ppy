@@ -1,6 +1,6 @@
 from tuprolog.core import *
 from tuprolog.core.parsing import *
-from tuprolog.core.visitors import AbstractTermVisitor
+from tuprolog.core import AbstractTermVisitor
 
 formatter = TermFormatter.prettyExpressions()
 

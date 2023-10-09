@@ -1,7 +1,7 @@
 import unittest
+from tuprolog.jvmutils import Pair
 from tuprolog.core import scope
 from tuprolog.unify import DEFAULT_UNIFICATOR
-from tuprolog.jvmutils import Pair
 
 class TestSubstitutionMerge(unittest.TestCase):
     def test_merge_with(self):

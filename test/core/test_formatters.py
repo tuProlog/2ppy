@@ -1,6 +1,6 @@
 import unittest
 from tuprolog.core import *
-from tuprolog.core.formatters import DefaultTermFormatter
+from tuprolog.core.impl import DefaultTermFormatter
 
 
 class TestFormatters(unittest.TestCase):

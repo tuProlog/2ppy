@@ -1,6 +1,6 @@
 import unittest
-from tuprolog.core.exception import *
 from tuprolog.core import Substitution, Atom
+from tuprolog.core.exception import *
 
 
 class TestExceptions(unittest.TestCase):

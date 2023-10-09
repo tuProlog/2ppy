@@ -1,5 +1,4 @@
 import unittest
-from tuprolog import *
 from tuprolog.core import *
 
 class TestTermCreation(unittest.TestCase):

@@ -1,9 +1,9 @@
+import unittest
 import random
 import string
-import unittest
 from tuprolog.core import *
-from tuprolog.core.operators import DEFAULT_OPERATORS, EMPTY_OPERATORS, STANDARD_OPERATORS, XF, XFY, YF, YFX, FX, FY, \
-    XFX, operator, operator_set, OperatorSet, specifier
+from tuprolog.core.operators import *
+import jpype.imports
 from java.lang import IllegalArgumentException # type: ignore
 
 

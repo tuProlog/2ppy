@@ -1,48 +1,8 @@
 from typing import Union
 import decimal
-import jpype.imports
-import org.gciatto.kt.math as _ktmath # type: ignore
-import java.lang as _java_lang # type: ignore
-
 from tuprolog.pyutils import and_then
-
-BigInteger = _ktmath.BigInteger
-
-BigDecimal = _ktmath.BigDecimal
-
-MathContext = _ktmath.MathContext
-
-RoundingMode = _ktmath.RoundingMode
-
-_MAX_LONG = _java_lang.Long.MAX_VALUE
-
-_MIN_LONG = _java_lang.Long.MIN_VALUE
-
-BIG_INTEGER_MAX_LONG = BigInteger.of(_MAX_LONG)
-
-BIG_INTEGER_MIN_LONG = BigInteger.of(_MIN_LONG)
-
-BIG_INTEGER_ZERO = BigInteger.ZERO
-
-BIG_INTEGER_TEN = BigInteger.TEN
-
-BIG_INTEGER_ONE = BigInteger.ONE
-
-BIG_INTEGER_NEGATIVE_ONE = BigInteger.NEGATIVE_ONE
-
-BIG_INTEGER_TWO = BigInteger.TWO
-
-BIG_DECIMAL_ZERO = BigDecimal.ZERO
-
-BIG_DECIMAL_ONE = BigDecimal.ONE
-
-BIG_DECIMAL_ONE_HALF = BigDecimal.ONE_HALF
-
-BIG_DECIMAL_ONE_TENTH = BigDecimal.ONE_TENTH
-
-BIG_DECIMAL_E = BigDecimal.E
-
-BIG_DECIMAL_PI = BigDecimal.PI
+from ._definitions import BigInteger, BigDecimal, MathContext, RoundingMode
+from jpype import JDouble, JString
 
 
 def big_integer(value: Union[str, int], radix: int = None) -> BigInteger:
@@ -50,7 +10,7 @@ def big_integer(value: Union[str, int], radix: int = None) -> BigInteger:
         assert isinstance(value, str)
         return BigInteger.of(value, radix)
     if isinstance(value, str):
-        return BigInteger.of(jpype.JString @ value)
+        return BigInteger.of(JString @ value)
     assert isinstance(value, int)
     return BigInteger.of(str(value))
 
@@ -99,13 +59,13 @@ def big_decimal(value: Union[str, int, float, decimal.Decimal], precision=0,
     if isinstance(value, str):
         return BigDecimal.of(value, context)
     if isinstance(value, decimal.Decimal):
-        return BigDecimal.of(jpype.JString @ str(value), context)
+        return BigDecimal.of(JString @ str(value), context)
     if isinstance(value, BigInteger):
         return BigDecimal.of(value, context)
     if isinstance(value, int):
         return BigDecimal.of(big_integer(value), context)
     assert isinstance(value, float)
-    return BigDecimal.of(jpype.JDouble @ value, context)
+    return BigDecimal.of(JDouble @ value, context)
 
 
 def python_decimal(value: BigDecimal) -> decimal.Decimal:

@@ -1,9 +1,7 @@
-from decimal import Decimal
 import unittest
+from decimal import Decimal
+from tuprolog.math import *
 
-from tuprolog.core import big_integer, python_integer, big_decimal, python_decimal, BIG_INTEGER_ZERO, BIG_INTEGER_TEN, \
-    BIG_INTEGER_ONE, BIG_INTEGER_NEGATIVE_ONE, BIG_INTEGER_TWO, BIG_DECIMAL_PI, BIG_DECIMAL_E, BIG_DECIMAL_ONE_TENTH, \
-    BIG_DECIMAL_ONE_HALF, BIG_DECIMAL_ONE, BIG_DECIMAL_ZERO, BigInteger
 
 
 class TestKtMath(unittest.TestCase):
