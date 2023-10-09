@@ -1,31 +1,13 @@
-from functools import reduce
-
+from typing import Mapping, Union, Iterable, Any
 from tuprolog import logger
-
-# noinspection PyUnresolvedReferences
-import jpype
-# noinspection PyUnresolvedReferences
-import jpype.imports
-
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.sideffects import SideEffect
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.sideffects import SideEffectFactory
-# noinspection PyUnresolvedReferences
-from it.unibo.tuprolog.solve.sideffects import SideEffectsBuilder
-
-# noinspection PyUnresolvedReferences
 from tuprolog.core import Clause, Term
-# noinspection PyUnresolvedReferences
-from tuprolog.core.operators import Operator, OperatorSet
-# noinspection PyUnresolvedReferences
-from tuprolog.solve.library import Library, libraries as new_libraries
-# noinspection PyUnresolvedReferences
-from tuprolog.solve.channel import InputChannel, OutputChannel
 from tuprolog.pyutils import iterable_or_varargs, dict_or_keyword_args
 from tuprolog.jvmutils import jlist, jmap
-
-from typing import Mapping, Union, Iterable, Any
+from tuprolog.core.operators import Operator, OperatorSet
+from tuprolog.solve.library import Library, libraries as new_libraries
+from tuprolog.solve.channel import InputChannel, OutputChannel
+import jpype.imports
+from it.unibo.tuprolog.solve.sideffects import SideEffect # type: ignore
 
 
 def _forward_iterable_or_varargs(callable, args, *callable_args):

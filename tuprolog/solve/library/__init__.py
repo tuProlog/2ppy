@@ -1,16 +1,13 @@
+from typing import Union, Mapping, Iterable
 from functools import reduce
 from tuprolog import logger
-# noinspection PyUnresolvedReferences
-import jpype.imports
 from tuprolog.core.operators import OperatorSet, operator_set
 from tuprolog.theory import Theory, theory
 from tuprolog.solve import Signature
 from tuprolog.solve.primitive import Primitive
 from tuprolog.solve.function import LogicFunction
-from tuprolog.jvmutils import jiterable
-from typing import Union, Mapping, Iterable
-# noinspection PyUnresolvedReferences
-import it.unibo.tuprolog.solve.library as _library
+import jpype.imports
+import it.unibo.tuprolog.solve.library as _library # type: ignore
 
 
 Library = _library.Library

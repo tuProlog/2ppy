@@ -1,8 +1,6 @@
 from tuprolog import logger
-# noinspection PyUnresolvedReferences
 import jpype.imports
-# noinspection PyUnresolvedReferences
-import it.unibo.tuprolog.solve.stdlib.function as _function
+import it.unibo.tuprolog.solve.stdlib.function as _function # type: ignore
 
 
 AbsoluteValue = _function.AbsoluteValue.INSTANCE

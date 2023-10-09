@@ -1,17 +1,13 @@
+from typing import Union, Iterable
 from tuprolog import logger
-# noinspection PyUnresolvedReferences
-import jpype
-# noinspection PyUnresolvedReferences
-import jpype.imports
-# noinspection PyUnresolvedReferences
-import it.unibo.tuprolog.theory.parsing as _parsing
 from tuprolog.core import Clause
 from tuprolog.core.parsing import _factory
 from tuprolog.theory import Theory
 from tuprolog.jvmutils import InputStream
 from tuprolog.core.operators import OperatorSet
-from typing import Union, Iterable
 from ._ktadapt import *
+import jpype.imports
+import it.unibo.tuprolog.theory.parsing as _parsing # type: ignore
 
 
 ClausesParser = _parsing.ClausesParser

@@ -1,7 +1,7 @@
-from tuprolog import logger
-from io import IOBase, SEEK_SET
 from typing import Union
-import jpype
+from io import IOBase, SEEK_SET
+from tuprolog import logger
+from jpype import JImplementationFor, JOverride
 import jpype.imports
 import java.io as _jio # type: ignore
 import java.nio.file as _jnio_file # type: ignore
@@ -20,12 +20,12 @@ Files = _jnio_file.Files
 Paths = _jnio_file.Paths
 
 
-@jpype.JImplementationFor("java.io.InputStream")
+@JImplementationFor("java.io.InputStream")
 class _JvmInputStream:
     def __jclass_init__(cls):
         IOBase.register(cls)
 
-    @jpype.JOverride
+    @JOverride
     def close(self):
         self._closed = True
         self.close_()

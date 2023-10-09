@@ -1,11 +1,9 @@
 from typing import Union
 from tuprolog import logger
-# noinspection PyUnresolvedReferences
-import jpype.imports
-# noinspection PyUnresolvedReferences
-import it.unibo.tuprolog.solve.exception.error as errors
 from tuprolog.core import Term, atom
 from tuprolog.solve import ExecutionContext
+import jpype.imports
+import it.unibo.tuprolog.solve.exception.error as errors # type: ignore
 
 EvaluationError = errors.EvaluationError
 

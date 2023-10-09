@@ -1,14 +1,12 @@
+from typing import Iterable, Mapping, Any
+from functools import singledispatch
 from tuprolog import logger
-# noinspection PyUnresolvedReferences
-import jpype.imports
-from ._ktadapt import *
-# noinspection PyUnresolvedReferences
-import it.unibo.tuprolog.solve as _solve
 from tuprolog.core import Indicator, Struct, Term, Substitution, EMPTY_UNIFIER, TermFormatter
 from tuprolog.solve.exception import ResolutionException
 from tuprolog.jvmutils import jlist, jmap, JavaSystem
-from functools import singledispatch
-from typing import Iterable, Mapping, Any
+from ._ktadapt import *
+import jpype.imports
+import it.unibo.tuprolog.solve as _solve # type: ignore
 
 
 ExecutionContext = _solve.ExecutionContext

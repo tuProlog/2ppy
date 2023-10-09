@@ -1,8 +1,6 @@
 from tuprolog import logger
-# noinspection PyUnresolvedReferences
 import jpype.imports
-# noinspection PyUnresolvedReferences
-import it.unibo.tuprolog.solve.stdlib.primitive as _primitive
+import it.unibo.tuprolog.solve.stdlib.primitive as _primitive # type: ignore
 
 
 Abolish = _primitive.Abolish.INSTANCE

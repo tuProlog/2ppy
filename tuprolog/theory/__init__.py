@@ -1,20 +1,16 @@
-from tuprolog import logger
-# noinspection PyUnresolvedReferences
-import jpype.imports
-# noinspection PyUnresolvedReferences
-import it.unibo.tuprolog.theory as _theory
-import it.unibo.tuprolog.unify as _unify
 from typing import Iterable, Union
+from tuprolog import logger
 from tuprolog.core import Clause
+from tuprolog.unify import Unificator
 from ._ktadapt import *
+import jpype.imports
+import it.unibo.tuprolog.theory as _theory # type: ignore
 
 Theory = _theory.Theory
 
 MutableTheory = _theory.MutableTheory
 
 RetractResult = _theory.RetractResult
-
-Unificator = _unify.Unificator
 
 
 def theory(*clauses: Union[Clause, Iterable[Clause]]) -> Theory:

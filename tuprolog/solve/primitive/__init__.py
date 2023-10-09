@@ -1,14 +1,11 @@
+from typing import List, Iterable, Callable
 from tuprolog import logger
-# noinspection PyUnresolvedReferences
-import jpype.imports
 from tuprolog.core import Term, Clause, Integer
 from tuprolog.solve import ExecutionContext, Signature, Solution, current_time_instant, MAX_TIMEOUT
-# from tuprolog.solve.sideffcts import SideEffect
 from tuprolog.pyutils import iterable_or_varargs
 from tuprolog.jvmutils import jlist
-from typing import List, Iterable, Callable
-# noinspection PyUnresolvedReferences
-import it.unibo.tuprolog.solve.primitive as _primitive
+import jpype.imports
+import it.unibo.tuprolog.solve.primitive as _primitive # type: ignore
 
 
 Primitive = _primitive.Primitive

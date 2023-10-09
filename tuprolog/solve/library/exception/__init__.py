@@ -1,8 +1,6 @@
 from tuprolog import logger
-# noinspection PyUnresolvedReferences
 import jpype.imports
-# noinspection PyUnresolvedReferences
-import it.unibo.tuprolog.solve.library.exception as _exception
+import it.unibo.tuprolog.solve.library.exception as _exception # type: ignore
 
 
 AlreadyLoadedLibraryException = _exception.AlreadyLoadedLibraryException

@@ -1,11 +1,9 @@
+from typing import Iterable, Union, Mapping
 from tuprolog import logger
-# noinspection PyUnresolvedReferences
-import jpype.imports
-# noinspection PyUnresolvedReferences
-import it.unibo.tuprolog.solve.flags as _flags
 from tuprolog.core import Term
 from tuprolog.jvmutils import kpair, jmap, jarray, Pair
-from typing import Iterable, Union, Mapping
+import jpype.imports
+import it.unibo.tuprolog.solve.flags as _flags # type: ignore
 
 
 DoubleQuotes = _flags.DoubleQuotes

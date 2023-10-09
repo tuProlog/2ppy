@@ -1,13 +1,10 @@
-from tuprolog import logger
-# noinspection PyUnresolvedReferences
-import jpype.imports
-# noinspection PyUnresolvedReferences
-import it.unibo.tuprolog.solve.channel as _channel
-# noinspection PyUnresolvedReferences
-import kotlin.jvm.functions as _kfunctions
-from tuprolog.jvmutils import jmap, kfunction
 from typing import Callable, Mapping
 from functools import singledispatch
+from tuprolog import logger
+from tuprolog.jvmutils import jmap, kfunction
+import jpype.imports
+import it.unibo.tuprolog.solve.channel as _channel # type: ignore
+import kotlin.jvm.functions as _kfunctions # type: ignore
 
 Channel = _channel.Channel
 

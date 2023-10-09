@@ -1,8 +1,6 @@
 from tuprolog import logger
-# noinspection PyUnresolvedReferences
 import jpype.imports
-# noinspection PyUnresolvedReferences
-import it.unibo.tuprolog.solve.stdlib as _stdlib
+import it.unibo.tuprolog.solve.stdlib as _stdlib # type: ignore
 
 
 CommonBuiltins = _stdlib.CommonBuiltins

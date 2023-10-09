@@ -1,8 +1,8 @@
 import unittest
-from tuprolog.core import *
+from tuprolog.core import Atom, Integer, Var
 from tuprolog.core.visitors import AbstractTermVisitor
 import jpype.imports
-import kotlin.jvm.functions as _functions
+import kotlin.jvm.functions as _functions # type: ignore
 
 import unittest
 from tuprolog.core import *

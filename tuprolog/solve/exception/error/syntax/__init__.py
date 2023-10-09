@@ -1,12 +1,10 @@
-# noinspection PyUnresolvedReferences
-import jpype.imports
 from tuprolog import logger
 from tuprolog.solve import ExecutionContext
-# noinspection PyUnresolvedReferences
-import it.unibo.tuprolog.solve.exception.error as errors
+import jpype.imports
+import it.unibo.tuprolog.solve.exception.error as _errors # type: ignore
 
 
-SyntaxError = errors.SyntaxError
+SyntaxError = _errors.SyntaxError
 
 
 def syntax_error(

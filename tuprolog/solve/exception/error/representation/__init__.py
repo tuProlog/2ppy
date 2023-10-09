@@ -1,15 +1,11 @@
 from typing import Union
-# noinspection PyUnresolvedReferences
-import jpype.imports
-
 from tuprolog import logger
 from tuprolog.core import Term
 from tuprolog.solve import ExecutionContext, Signature
+import jpype.imports
+import it.unibo.tuprolog.solve.exception.error as _errors # type: ignore
 
-# noinspection PyUnresolvedReferences
-import it.unibo.tuprolog.solve.exception.error as errors
-
-RepresentationError = errors.RepresentationError
+RepresentationError = _errors.RepresentationError
 
 Limit = RepresentationError.Limit
 

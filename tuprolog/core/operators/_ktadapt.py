@@ -1,8 +1,8 @@
 from tuprolog import logger
-import jpype
+from jpype import JImplementationFor
 
 
-@jpype.JImplementationFor("it.unibo.tuprolog.core.operators.OperatorSet")
+@JImplementationFor("it.unibo.tuprolog.core.operators.OperatorSet")
 class _KtOperatorSet:
     def __jclass_init__(cls):
         pass

@@ -1,13 +1,13 @@
 from typing import Iterable, Dict, Tuple as PyTuple, Union
 from decimal import Decimal
+from jpype import JImplements, JOverride
 from tuprolog import logger
-from ._ktadapt import *
-import jpype
-import jpype.imports
-import it.unibo.tuprolog.core as _core # type: ignore
 from tuprolog.pyutils import iterable_or_varargs
 from tuprolog.jvmutils import jiterable, jmap
+from ._ktadapt import *
 from ._ktmath import *
+import jpype.imports
+import it.unibo.tuprolog.core as _core # type: ignore
 
 
 Applicable = _core.Applicable
@@ -75,9 +75,9 @@ Var = _core.Var
 Variabled = _core.Variabled
 
 
-@jpype.JImplements(TermConvertible)
+@JImplements(TermConvertible)
 class AbstractTermConvertible(object):
-    @jpype.JOverride
+    @JOverride
     def toTerm(self):
         raise NotImplementedError()
 

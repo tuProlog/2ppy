@@ -1,6 +1,7 @@
 from tuprolog import logger
 from typing import Iterable as PyIterable, Iterator as PyIterator, Mapping, MutableMapping, Callable, Any
 import jpype
+from .jvmioutils import *
 import jpype.imports
 from _jpype import _JObject as JObjectClass, _JMethod as JMethodClass # type: ignore
 import java.util as _jutils # type: ignore
@@ -8,7 +9,6 @@ import java.lang as _jlang # type: ignore
 import kotlin as _kotlin # type: ignore
 import kotlin.sequences as _ksequences # type: ignore
 import it.unibo.tuprolog.utils as _tuprolog_utils # type: ignore
-from .jvmioutils import *
 
 
 Arrays = _jutils.Arrays

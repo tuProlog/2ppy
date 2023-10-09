@@ -1,13 +1,11 @@
-# noinspection PyUnresolvedReferences
-import jpype.imports
 from tuprolog import logger
 from tuprolog.core import Term
 from tuprolog.solve import ExecutionContext
-# noinspection PyUnresolvedReferences
-import it.unibo.tuprolog.solve.exception.error as errors
+import jpype.imports
+import it.unibo.tuprolog.solve.exception.error as _errors # type: ignore
 
 
-MessageError = errors.MessageError
+MessageError = _errors.MessageError
 
 
 def message_error(content: Term, context: ExecutionContext, cause=None) -> MessageError:

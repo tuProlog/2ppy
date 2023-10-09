@@ -1,8 +1,6 @@
 from tuprolog import logger
-# noinspection PyUnresolvedReferences
 import jpype.imports
-# noinspection PyUnresolvedReferences
-import it.unibo.tuprolog.solve.problog as _problog
+import it.unibo.tuprolog.solve.problog as _problog # type: ignore
 
 Operators = _problog.Operators
 

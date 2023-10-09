@@ -1,8 +1,6 @@
 from tuprolog import logger
-# noinspection PyUnresolvedReferences
 import jpype.imports
-# noinspection PyUnresolvedReferences
-import it.unibo.tuprolog.solve.exception as _exceptions
+import it.unibo.tuprolog.solve.exception as _exceptions # type: ignore
 
 HaltException = _exceptions.HaltException
 

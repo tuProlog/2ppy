@@ -1,7 +1,7 @@
 from tuprolog import logger
+from tuprolog.core import Term, Substitution
 import jpype.imports
 import it.unibo.tuprolog.unify as _unify # type: ignore
-from tuprolog.core import Term, Substitution
 
 
 Unificator = _unify.Unificator

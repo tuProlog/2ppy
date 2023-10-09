@@ -1,11 +1,9 @@
+from typing import TypeVar, Mapping, Any
 from tuprolog import logger
-# noinspection PyUnresolvedReferences
-import jpype.imports
-# noinspection PyUnresolvedReferences
-import it.unibo.tuprolog.solve as _solve
 from tuprolog.utils import Taggable
 from tuprolog.solve import SolveOptions, solve_options as _solve_options, MAX_TIMEOUT, ALL_SOLUTIONS
-from typing import TypeVar, Mapping, Any
+import jpype.imports
+import it.unibo.tuprolog.solve as _solve # type: ignore
 
 
 ProbExtensions = _solve.ProbExtensions

@@ -1,12 +1,10 @@
+from typing import List, Callable
 from tuprolog import logger
-# noinspection PyUnresolvedReferences
-import jpype.imports
 from tuprolog.core import Term
 from tuprolog.solve import ExecutionContext, Signature, current_time_instant, MAX_TIMEOUT
 from tuprolog.solve.primitive import SolveRequest
-# noinspection PyUnresolvedReferences
-import it.unibo.tuprolog.solve.function as _function
-from typing import List, Callable
+import jpype.imports
+import it.unibo.tuprolog.solve.function as _function # type: ignore
 
 
 LogicFunction = _function.LogicFunction

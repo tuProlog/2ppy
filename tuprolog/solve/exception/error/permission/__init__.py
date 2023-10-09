@@ -1,14 +1,12 @@
 from typing import Union
-# noinspection PyUnresolvedReferences
-import jpype.imports
 from tuprolog import logger
 from tuprolog.core import Term
 from tuprolog.solve import ExecutionContext, Signature
-# noinspection PyUnresolvedReferences
-import it.unibo.tuprolog.solve.exception.error as errors
+import jpype.imports
+import it.unibo.tuprolog.solve.exception.error as _errors # type: ignore
 
 
-PermissionError = errors.PermissionError
+PermissionError = _errors.PermissionError
 
 Operation = PermissionError.Operation
 

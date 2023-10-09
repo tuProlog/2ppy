@@ -1,12 +1,9 @@
-from tuprolog import logger
-# noinspection PyUnresolvedReferences
-import jpype.imports
-# noinspection PyUnresolvedReferences
-import it.unibo.tuprolog.solve.data as _data
-from tuprolog.jvmutils import Map
-from tuprolog.pyutils import dict_or_keyword_args
-from tuprolog.jvmutils import jmap
 from typing import Mapping, Any
+from tuprolog import logger
+from tuprolog.jvmutils import Map, jmap
+from tuprolog.pyutils import dict_or_keyword_args
+import jpype.imports
+import it.unibo.tuprolog.solve.data as _data # type: ignore
 
 
 CustomDataStore = _data.CustomDataStore

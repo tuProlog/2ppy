@@ -1,9 +1,7 @@
 from tuprolog import logger
-# noinspection PyUnresolvedReferences
-import jpype.imports
-# noinspection PyUnresolvedReferences
-import it.unibo.tuprolog.solve.stdlib.rule as _rule
 from tuprolog.solve import signature
+import jpype.imports
+import it.unibo.tuprolog.solve.stdlib.rule as _rule # type: ignore
 
 
 KtAppend = _rule.Append
