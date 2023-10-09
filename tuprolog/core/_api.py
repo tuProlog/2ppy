@@ -1,9 +1,10 @@
 from typing import Iterable, Dict, Tuple as PyTuple, Union
 from decimal import Decimal
+from jpype import JString, JArray
 from tuprolog.pyutils import iterable_or_varargs
 from tuprolog.jvmutils import jiterable, jmap
 from tuprolog.math import big_integer, big_decimal, BigInteger, BigDecimal
-from ._definitions import *
+from ._definitions import Atom, Block, Clause, Cons, Directive, EmptyBlock, EmptyList, Fact, Indicator, Integer, List, Numeric, Real, Rule, Scope, Struct, Substitution, Term, Tuple, Truth, Var
 
 
 def atom(string: str) -> Atom:
@@ -57,7 +58,7 @@ def real(value: Union[float, BigDecimal, str, Decimal]) -> Real:
 
 def numeric(value: Union[int, BigInteger, BigDecimal, str, float, Decimal]) -> Numeric:
     if isinstance(value, str):
-        return Numeric.of(jpype.JString @ value)
+        return Numeric.of(JString @ value)
     if isinstance(value, int) or isinstance(value, BigInteger):
         return integer(value)
     return real(value)
@@ -113,7 +114,7 @@ def scope(*variables: Union[Var, str]) -> Scope:
     if len(variables) == 0:
         return Scope.empty()
     vars = [var(v) if isinstance(v, str) else v for v in variables]
-    return Scope.of(vars[0], jpype.JArray(Var) @ vars[1:])
+    return Scope.of(vars[0], JArray(Var) @ vars[1:])
 
 
 def variables(*names: str) -> PyTuple[Var]:
