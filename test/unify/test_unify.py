@@ -13,7 +13,7 @@ class TestSubstitutionMerge(unittest.TestCase):
         a = s.atom_of("a")
 
         for v_name, v in s.variables.items():
-            assignment = s.unifier_of(Pair(v_name, a))
+            assignment = s.unifier_of(Pair @ (v_name, a))
             self.assertEqual(
                 s.unifier_of(
                     ("X", a),
