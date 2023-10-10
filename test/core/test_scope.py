@@ -29,6 +29,3 @@ class TestScope(unittest.TestCase):
     def test_attributes(self):
         s = scope()
         self.assertEqual(s.fail, FAIL)
-
-if __name__ == '__main__':
-    unittest.main()

@@ -1,7 +1,7 @@
 from tuprolog import logger
 from tuprolog.solve import signature
-import jpype.imports
-import it.unibo.tuprolog.solve.stdlib.rule as _rule # type: ignore
+import jpype.imports  # noqa: F401
+import it.unibo.tuprolog.solve.stdlib.rule as _rule  # type: ignore
 
 
 KtAppend = _rule.Append

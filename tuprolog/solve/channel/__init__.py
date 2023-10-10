@@ -2,9 +2,9 @@ from typing import Callable, Mapping
 from functools import singledispatch
 from tuprolog import logger
 from tuprolog.jvmutils import jmap, kfunction
-import jpype.imports
-import it.unibo.tuprolog.solve.channel as _channel # type: ignore
-import kotlin.jvm.functions as _kfunctions # type: ignore
+import jpype.imports  # noqa: F401
+import it.unibo.tuprolog.solve.channel as _channel  # type: ignore
+import kotlin.jvm.functions as _kfunctions  # type: ignore
 
 Channel = _channel.Channel
 

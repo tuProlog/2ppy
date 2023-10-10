@@ -1,5 +1,4 @@
-from tuprolog.core import *
-from tuprolog.core.parsing import *
+from tuprolog.core import TermFormatter, Struct, Integer, Real, Term, Numeric, numeric, var, struct, real
 from tuprolog.core import AbstractTermVisitor
 
 formatter = TermFormatter.prettyExpressions()
@@ -39,10 +38,6 @@ def absolute(term: Term):
             return numeric(term.getValue().unaryMinus())
         return struct(term.getFunctor(), map(absolute, term.getArgs()))
     return term
-
-
-def is_sum(term: Struct):
-    return term.getArity() == 2 and term.getFunctor() == '+'
 
 
 def foldr(accumulator, iterable, default=None):

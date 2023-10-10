@@ -6,8 +6,8 @@ from tuprolog.theory import Theory, theory
 from tuprolog.solve import Signature
 from tuprolog.solve.primitive import Primitive
 from tuprolog.solve.function import LogicFunction
-import jpype.imports
-import it.unibo.tuprolog.solve.library as _library # type: ignore
+import jpype.imports  # noqa: F401
+import it.unibo.tuprolog.solve.library as _library  # type: ignore
 
 
 Library = _library.Library

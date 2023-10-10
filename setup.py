@@ -19,11 +19,11 @@ def is_windows():
 
 def run_maven(*args, cwd=None) -> (str, str):
     proc = subprocess.Popen(
-        MAVEN_EXECUTABLE + list(args), 
-        shell=is_windows(), 
-        stdout=subprocess.PIPE, 
-        stderr=subprocess.PIPE, 
-        text=True, 
+        MAVEN_EXECUTABLE + list(args),
+        shell=is_windows(),
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
         cwd=cwd)
     stdout, stderr = proc.communicate()
     if proc.returncode != 0:
@@ -35,8 +35,17 @@ def download_jars():
     stdout, _ = run_maven('-v')
     if 'Apache Maven' not in stdout:
         raise RuntimeError(f'Could not find Apache Maven in {stdout}')
-    run_maven('dependency:copy-dependencies', f'-DoutputDirectory={JAR_FOLDER}', cwd=Path(__file__).parent)
-    # run_maven('dependency:copy-dependencies', f'-DoutputDirectory={JAR_FOLDER}', '-Dclassifier=javadoc', cwd=Path(__file__).parent)
+    run_maven(
+        'dependency:copy-dependencies',
+        f'-DoutputDirectory={JAR_FOLDER}',
+        cwd=Path(__file__).parent
+    )
+    # run_maven(
+    #     'dependency:copy-dependencies',
+    #     f'-DoutputDirectory={JAR_FOLDER}',
+    #     '-Dclassifier=javadoc',
+    #     cwd=Path(__file__).parent
+    # )
 
 
 class BuildPyCommand(build_py):
@@ -48,6 +57,7 @@ class BuildPyCommand(build_py):
 class InstallCommand(install):
     def run(self):
         install.run(self)
+
         def _post_install():
             spec = importlib.util.spec_from_file_location(PACKAGE_NAME, JAR_FOLDER / '__init__.py')
             lib = importlib.util.module_from_spec(spec)

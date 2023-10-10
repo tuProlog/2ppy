@@ -1,6 +1,6 @@
 from tuprolog import logger
-import jpype.imports
-import it.unibo.tuprolog.utils as _utils # type: ignore
+import jpype.imports  # noqa: F401
+import it.unibo.tuprolog.utils as _utils  # type: ignore
 
 Castable = _utils.Castable
 

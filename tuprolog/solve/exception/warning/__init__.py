@@ -1,8 +1,8 @@
 from tuprolog import logger
 from tuprolog.core import Struct
 from tuprolog.solve import ExecutionContext, ResolutionException, Signature
-import jpype.imports
-import it.unibo.tuprolog.solve.exception.warning as _warnings # type: ignore
+import jpype.imports  # noqa: F401
+import it.unibo.tuprolog.solve.exception.warning as _warnings  # type: ignore
 
 InitializationIssue = _warnings.InitializationIssue
 

@@ -1,10 +1,12 @@
 import unittest
 import random
 import string
-from tuprolog.core import *
-from tuprolog.core.operators import *
-import jpype.imports
-from java.lang import IllegalArgumentException # type: ignore
+from tuprolog.core import integer, atom, struct
+from tuprolog.core.operators import operator, specifier, operator_set
+from tuprolog.core.operators import XF, YF, FX, FY, XFY, YFX, XFX, OperatorSet
+from tuprolog.core.operators import EMPTY_OPERATORS, DEFAULT_OPERATORS, STANDARD_OPERATORS
+import jpype.imports  # noqa: F401
+from java.lang import IllegalArgumentException  # type: ignore
 
 
 class AbstractTestOperatorStuff(unittest.TestCase):
@@ -139,7 +141,3 @@ class TestOperatorSets(AbstractTestOperatorStuff):
         # Assert standard operators are in set of builtin operators
         for op in STANDARD_OPERATORS:
             self.assertTrue(op in self.all_builtin_operators)
-
-
-if __name__ == '__main__':
-    unittest.main()

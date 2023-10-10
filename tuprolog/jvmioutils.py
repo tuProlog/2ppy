@@ -2,9 +2,9 @@ from typing import Union
 from io import IOBase, SEEK_SET
 from tuprolog import logger
 from jpype import JImplementationFor, JOverride
-import jpype.imports
-import java.io as _jio # type: ignore
-import java.nio.file as _jnio_file # type: ignore
+import jpype.imports  # noqa: F401
+import java.io as _jio  # type: ignore
+import java.nio.file as _jnio_file  # type: ignore
 
 
 InputStream = _jio.InputStream
@@ -49,10 +49,10 @@ class _JvmInputStream:
     def readable(self):
         return True
 
-    def seekable(self): 
+    def seekable(self):
         return False
 
-    def writable(self): 
+    def writable(self):
         return False
 
     def _buffer(self):

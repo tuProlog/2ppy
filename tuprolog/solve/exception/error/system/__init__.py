@@ -1,12 +1,12 @@
 from tuprolog import logger
 from tuprolog.solve import ExecutionContext
 from tuprolog.solve.exception import LogicError
-import jpype.imports
-import it.unibo.tuprolog.solve.exception.error as _errors # type: ignore
-
+import jpype.imports  # noqa: F401
+import it.unibo.tuprolog.solve.exception.error as _errors  # type: ignore
 
 
 SystemError = _errors.SyntaxError
+
 
 def syntax_error(context: ExecutionContext, message: str, exception) -> SystemError:
     if isinstance(exception, LogicError):

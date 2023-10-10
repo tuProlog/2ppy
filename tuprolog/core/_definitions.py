@@ -1,7 +1,7 @@
 from jpype import JImplements, JOverride
 from tuprolog import logger
-import jpype.imports
-import it.unibo.tuprolog.core as _core # type: ignore
+import jpype.imports  # noqa: F401
+import it.unibo.tuprolog.core as _core  # type: ignore
 
 
 Applicable = _core.Applicable

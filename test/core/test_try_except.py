@@ -1,6 +1,6 @@
 import unittest
 from tuprolog.core import Substitution, Atom
-from tuprolog.core.exception import *
+from tuprolog.core.exception import TuPrologException, SubstitutionException, SubstitutionApplicationException
 
 
 class TestExceptions(unittest.TestCase):
@@ -10,7 +10,7 @@ class TestExceptions(unittest.TestCase):
             raise TuPrologException("test")
         except TuPrologException as e:
             self.assertEqual("test", e.message)
-    
+
     def test_SubstitutionException(self):
         sub = Substitution.empty()
         try:
@@ -28,7 +28,3 @@ class TestExceptions(unittest.TestCase):
             self.assertEqual("test", e.message)
             self.assertEqual(sub, e.substitution)
             self.assertEqual(term, e.term)
-
-
-if __name__ == '__main__':
-    unittest.main()

@@ -1,5 +1,6 @@
 import unittest
-from tuprolog.core import *
+from tuprolog.core import atom, integer, real, var, TRUE, FALSE, FAIL, struct
+
 
 class TestTermCreation(unittest.TestCase):
 
@@ -36,8 +37,4 @@ class TestTermCreation(unittest.TestCase):
         self.assertEqual(self.struct.getArgAt(1), self.integer)
         self.assertEqual(self.struct.getArgAt(2), self.real)
 
-        self.assertEqual(self.struct, self.struct2)        
-
-
-if __name__ == '__main__':
-    unittest.main()
+        self.assertEqual(self.struct, self.struct2)

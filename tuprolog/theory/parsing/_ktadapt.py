@@ -28,7 +28,6 @@ class _KtClausesParser:
         return list(self.parse_clauses_lazily(input, operators))
 
 
-
 @JImplementationFor("it.unibo.tuprolog.theory.parsing.ClausesReader")
 class _KtClausesReader:
     def __jclass_init__(cls):

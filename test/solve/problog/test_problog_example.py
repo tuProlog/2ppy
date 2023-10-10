@@ -5,6 +5,7 @@ from tuprolog.solve.plp import solve_options, probability
 from tuprolog.solve.problog import problog_solver
 from tuprolog.solve.problog.operators import PROBLOG_OPERATORS
 
+
 class ExemplifyProblog(unittest.TestCase):
 
     def setUp(self) -> None:
@@ -16,7 +17,7 @@ class ExemplifyProblog(unittest.TestCase):
         0.3::edge(3,4).
         0.8::edge(4,5).
         0.2::edge(5,6).
-        
+
         path(X,Y) :- edge(X,Y).
         path(X,Y) :- edge(X,Z),Y \\== Z,path(Z,Y).
         """
@@ -51,7 +52,3 @@ class ExemplifyProblog(unittest.TestCase):
                 'yes: path(4, 6) with probability 0.16000000000000003'
             ]
         )
-
-
-if __name__ == '__main__':
-    unittest.main()

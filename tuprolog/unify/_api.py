@@ -1,5 +1,5 @@
 from tuprolog.core import Term, Substitution
-from ._definitions import *
+from ._definitions import Unificator, DEFAULT_UNIFICATOR
 
 
 def strict_unificator(context: Substitution = None) -> Unificator:

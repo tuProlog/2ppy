@@ -1,6 +1,6 @@
 from tuprolog import logger
-import jpype.imports
-import it.unibo.tuprolog.solve.problog as _problog # type: ignore
+import jpype.imports  # noqa: F401
+import it.unibo.tuprolog.solve.problog as _problog  # type: ignore
 
 Operators = _problog.Operators
 

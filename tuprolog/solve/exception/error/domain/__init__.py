@@ -2,8 +2,8 @@ from typing import Iterable, Union
 from tuprolog import logger
 from tuprolog.core import Term
 from tuprolog.solve import ExecutionContext, Signature
-import jpype.imports
-import it.unibo.tuprolog.solve.exception.error as errors # type: ignore
+import jpype.imports  # noqa: F401
+import it.unibo.tuprolog.solve.exception.error as errors  # type: ignore
 
 DomainError = errors.DomainError
 

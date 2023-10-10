@@ -6,8 +6,8 @@ from tuprolog.jvmutils import jlist, jmap
 from tuprolog.core.operators import Operator, OperatorSet
 from tuprolog.solve.library import Library, libraries as new_libraries
 from tuprolog.solve.channel import InputChannel, OutputChannel
-import jpype.imports
-from it.unibo.tuprolog.solve.sideffects import SideEffect # type: ignore
+import jpype.imports  # noqa: F401
+from it.unibo.tuprolog.solve.sideffects import SideEffect  # type: ignore
 
 
 def _forward_iterable_or_varargs(callable, args, *callable_args):

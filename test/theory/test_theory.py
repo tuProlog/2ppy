@@ -1,7 +1,7 @@
 import unittest
 from tuprolog.core import clause, var, struct, atom
-from tuprolog.jvmutils import Iterable
 from tuprolog.theory import theory
+
 
 class TestTheory(unittest.TestCase):
     def test_empty_theory(self):
@@ -13,8 +13,13 @@ class TestTheory(unittest.TestCase):
     def test_retract(self):
         A = var('A')
         a = atom('a')
-        f = lambda arg: struct('f', arg)
-        g = lambda arg: struct('g', arg)
+
+        def f(arg):
+            return struct('f', arg)
+
+        def g(arg):
+            return struct('g', arg)
+
         t = theory([
             c1 := clause(f(A), g(A)),
             clause(g(a)),
@@ -26,8 +31,12 @@ class TestTheory(unittest.TestCase):
     def test_unificator(self):
         A = var('A')
         a = atom('a')
-        f = lambda arg: struct('f', arg)
-        g = lambda arg: struct('g', arg)
+
+        def f(arg):
+            return struct('f', arg)
+
+        def g(arg):
+            return struct('g', arg)
 
         t = theory([
             clause(g(a)),

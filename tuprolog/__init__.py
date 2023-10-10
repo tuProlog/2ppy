@@ -14,8 +14,8 @@ if not jpype.isJVMStarted():
     install_java_if_missing()
     jpype.startJVM(classpath=jars)
 
-import jpype.imports
-from it.unibo import tuprolog as _tuprolog # type: ignore
+import jpype.imports  # noqa: F401, E402
+from it.unibo import tuprolog as _tuprolog  # type: ignore # noqa: E402
 
 Info = _tuprolog.Info
 

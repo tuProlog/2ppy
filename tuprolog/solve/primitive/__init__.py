@@ -4,8 +4,8 @@ from tuprolog.core import Term, Clause, Integer
 from tuprolog.solve import ExecutionContext, Signature, Solution, current_time_instant, MAX_TIMEOUT
 from tuprolog.pyutils import iterable_or_varargs
 from tuprolog.jvmutils import jlist
-import jpype.imports
-import it.unibo.tuprolog.solve.primitive as _primitive # type: ignore
+import jpype.imports  # noqa: F401
+import it.unibo.tuprolog.solve.primitive as _primitive  # type: ignore
 
 
 Primitive = _primitive.Primitive

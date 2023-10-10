@@ -1,6 +1,6 @@
-import jpype.imports
-import org.gciatto.kt.math as _ktmath # type: ignore
-import java.lang as _java_lang # type: ignore
+import jpype.imports  # noqa: F401
+import org.gciatto.kt.math as _ktmath  # type: ignore
+import java.lang as _java_lang  # type: ignore
 
 
 BigInteger = _ktmath.BigInteger

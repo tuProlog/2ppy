@@ -1,14 +1,13 @@
 from typing import Iterable as PyIterable, Iterator as PyIterator, Mapping, MutableMapping, Callable, Any
 from jpype import JImplements, JOverride, JConversion, JImplementationFor, JArray
 from tuprolog import logger
-from .jvmioutils import *
-import jpype.imports
-from _jpype import _JObject as JObjectClass, _JMethod as JMethodClass # type: ignore
-import java.util as _jutils # type: ignore
-import java.lang as _jlang # type: ignore
-import kotlin as _kotlin # type: ignore
-import kotlin.sequences as _ksequences # type: ignore
-import it.unibo.tuprolog.utils as _tuprolog_utils # type: ignore
+import jpype.imports  # noqa: F401
+from _jpype import _JObject as JObjectClass, _JMethod as JMethodClass  # type: ignore
+import java.util as _jutils  # type: ignore
+import java.lang as _jlang  # type: ignore
+import kotlin as _kotlin  # type: ignore
+import kotlin.sequences as _ksequences  # type: ignore
+import it.unibo.tuprolog.utils as _tuprolog_utils  # type: ignore
 
 
 Arrays = _jutils.Arrays
@@ -202,7 +201,10 @@ class _JvmComparable:
 
 
 def to_snake_case(camel_str: str) -> str:
-    return "".join("_" + x.lower() if x.isupper() and camel_str[i + 1:i + 2].islower() else x for i, x in enumerate(camel_str)).lstrip("_")
+    return "".join(
+        "_" + x.lower() if x.isupper() and camel_str[i + 1:i + 2].islower() else x
+        for i, x in enumerate(camel_str)
+    ).lstrip("_")
 
 
 @JImplementationFor("java.lang.Object")
@@ -293,5 +295,6 @@ def kfunction(arity: int):
 
         _kt_function_classes[arity] = _KtFunctionN
     return _kt_function_classes[arity]
+
 
 logger.debug("Configure JVM-specific extensions")

@@ -3,11 +3,11 @@ from tuprolog import logger
 from tuprolog.core import Clause
 from tuprolog.core.parsing import _factory
 from tuprolog.theory import Theory
-from tuprolog.jvmutils import InputStream
+from tuprolog.jvmioutils import InputStream
 from tuprolog.core.operators import OperatorSet
 from ._ktadapt import *
-import jpype.imports
-import it.unibo.tuprolog.theory.parsing as _parsing # type: ignore
+import jpype.imports  # noqa: F401
+import it.unibo.tuprolog.theory.parsing as _parsing  # type: ignore
 
 
 ClausesParser = _parsing.ClausesParser

@@ -1,12 +1,6 @@
 import unittest
 from tuprolog.core import Atom, Integer, Var
 from tuprolog.core import AbstractTermVisitor
-import jpype.imports
-import kotlin.jvm.functions as _functions # type: ignore
-
-import unittest
-from tuprolog.core import *
-from tuprolog.core import AbstractTermVisitor
 
 
 class TestVisitors(unittest.TestCase):
@@ -18,7 +12,3 @@ class TestVisitors(unittest.TestCase):
         visitor = MyVisitor()
         for term in [Atom.of('a'), Integer.of(1), Var.of("X")]:
             self.assertEqual(term.accept(visitor), 'a')
-
-
-if __name__ == '__main__':
-    unittest.main()

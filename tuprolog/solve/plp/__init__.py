@@ -2,8 +2,8 @@ from typing import TypeVar, Mapping, Any
 from tuprolog import logger
 from tuprolog.utils import Taggable
 from tuprolog.solve import SolveOptions, solve_options as _solve_options, MAX_TIMEOUT, ALL_SOLUTIONS
-import jpype.imports
-import it.unibo.tuprolog.solve as _solve # type: ignore
+import jpype.imports  # noqa: F401
+import it.unibo.tuprolog.solve as _solve  # type: ignore
 
 
 ProbExtensions = _solve.ProbExtensions

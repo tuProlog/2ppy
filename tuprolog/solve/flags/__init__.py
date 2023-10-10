@@ -2,8 +2,8 @@ from typing import Iterable, Union, Mapping
 from tuprolog import logger
 from tuprolog.core import Term
 from tuprolog.jvmutils import kpair, jmap, jarray, Pair
-import jpype.imports
-import it.unibo.tuprolog.solve.flags as _flags # type: ignore
+import jpype.imports  # noqa: F401
+import it.unibo.tuprolog.solve.flags as _flags  # type: ignore
 
 
 DoubleQuotes = _flags.DoubleQuotes

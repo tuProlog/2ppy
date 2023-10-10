@@ -4,8 +4,8 @@ from tuprolog.jvmutils import jiterable
 from tuprolog.pyutils import iterable_or_varargs
 from tuprolog.core import Atom, Integer, Struct, Term
 from ._ktadapt import *
-import jpype.imports
-import it.unibo.tuprolog.core.operators as _operators # type: ignore
+import jpype.imports  # noqa: F401
+import it.unibo.tuprolog.core.operators as _operators  # type: ignore
 
 Operator = _operators.Operator
 

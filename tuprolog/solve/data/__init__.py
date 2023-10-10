@@ -2,8 +2,8 @@ from typing import Mapping, Any
 from tuprolog import logger
 from tuprolog.jvmutils import Map, jmap
 from tuprolog.pyutils import dict_or_keyword_args
-import jpype.imports
-import it.unibo.tuprolog.solve.data as _data # type: ignore
+import jpype.imports  # noqa: F401
+import it.unibo.tuprolog.solve.data as _data  # type: ignore
 
 
 CustomDataStore = _data.CustomDataStore

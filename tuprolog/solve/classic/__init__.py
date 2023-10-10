@@ -33,4 +33,5 @@ def classic_solver(
 def classic_solver_factory() -> SolverFactory:
     return _CLASSIC_SOLVER_FACTORY
 
+
 logger.debug("Loaded JVM classes from it.unibo.tuprolog.solve.classic.*")

@@ -1,8 +1,8 @@
 from tuprolog import logger
 from tuprolog.core import Term
 from tuprolog.solve import ExecutionContext
-import jpype.imports
-import it.unibo.tuprolog.solve.exception.error as _errors # type: ignore
+import jpype.imports  # noqa: F401
+import it.unibo.tuprolog.solve.exception.error as _errors  # type: ignore
 
 
 MessageError = _errors.MessageError

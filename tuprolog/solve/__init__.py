@@ -5,8 +5,8 @@ from tuprolog.core import Indicator, Struct, Term, Substitution, EMPTY_UNIFIER, 
 from tuprolog.solve.exception import ResolutionException
 from tuprolog.jvmutils import jlist, jmap, JavaSystem
 from ._ktadapt import *
-import jpype.imports
-import it.unibo.tuprolog.solve as _solve # type: ignore
+import jpype.imports  # noqa: F401
+import it.unibo.tuprolog.solve as _solve  # type: ignore
 
 
 ExecutionContext = _solve.ExecutionContext

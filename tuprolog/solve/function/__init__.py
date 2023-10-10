@@ -3,8 +3,8 @@ from tuprolog import logger
 from tuprolog.core import Term
 from tuprolog.solve import ExecutionContext, Signature, current_time_instant, MAX_TIMEOUT
 from tuprolog.solve.primitive import SolveRequest
-import jpype.imports
-import it.unibo.tuprolog.solve.function as _function # type: ignore
+import jpype.imports  # noqa: F401
+import it.unibo.tuprolog.solve.function as _function  # type: ignore
 
 
 LogicFunction = _function.LogicFunction

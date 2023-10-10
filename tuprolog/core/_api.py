@@ -4,7 +4,9 @@ from jpype import JString, JArray
 from tuprolog.pyutils import iterable_or_varargs
 from tuprolog.jvmutils import jiterable, jmap
 from tuprolog.math import big_integer, big_decimal, BigInteger, BigDecimal
-from ._definitions import Atom, Block, Clause, Cons, Directive, EmptyBlock, EmptyList, Fact, Indicator, Integer, List, Numeric, Real, Rule, Scope, Struct, Substitution, Term, Tuple, Truth, Var
+from ._definitions import Atom, Block, Clause, Cons, Directive, EmptyBlock
+from ._definitions import EmptyList, Fact, Indicator, Integer, List, Numeric
+from ._definitions import Real, Rule, Scope, Struct, Substitution, Term, Tuple, Truth, Var
 
 
 def atom(string: str) -> Atom:

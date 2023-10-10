@@ -1,6 +1,6 @@
 from tuprolog import logger
-import jpype.imports
-import it.unibo.tuprolog.solve.stdlib as _stdlib # type: ignore
+import jpype.imports  # noqa: F401
+import it.unibo.tuprolog.solve.stdlib as _stdlib  # type: ignore
 
 
 CommonBuiltins = _stdlib.CommonBuiltins

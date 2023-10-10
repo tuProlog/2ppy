@@ -1,11 +1,11 @@
 from typing import Union, Iterable
 from tuprolog import logger
-from tuprolog.jvmutils import InputStream
+from tuprolog.jvmioutils import InputStream
 from tuprolog.core import Term, Struct, Constant, Var, Atom, Numeric, Integer, Real, Clause
 from tuprolog.core.operators import OperatorSet, DEFAULT_OPERATORS
 from ._ktadapt import *
-import jpype.imports
-import it.unibo.tuprolog.core.parsing as _parsing # type: ignore
+import jpype.imports  # noqa: F401
+import it.unibo.tuprolog.core.parsing as _parsing  # type: ignore
 
 TermParser = _parsing.TermParser
 
