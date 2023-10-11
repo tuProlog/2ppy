@@ -144,7 +144,7 @@ def jiterator(iterator: PyIterator) -> Iterator:
 
 def jmap(dictionary: Mapping) -> Map:
     assert isinstance(dictionary, Mapping)
-    return Map@dictionary
+    return Map @ dictionary
 
 
 def _java_obj_repr(java_object: Object) -> str:
