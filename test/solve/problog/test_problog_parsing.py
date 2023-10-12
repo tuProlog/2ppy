@@ -6,10 +6,10 @@ from tuprolog.solve.problog import problog_solver
 from tuprolog.solve.problog import PROBLOG_OPERATORS
 
 
-class ExemplifyProblog(unittest.TestCase):
+class TestProblogWithParsingAndResolution(unittest.TestCase):
 
     def setUp(self) -> None:
-        self.probabilisticTheoryText = """
+        self.theory_text = """
         0.6::edge(1,2).
         0.1::edge(1,3).
         0.4::edge(2,5).
@@ -27,10 +27,10 @@ class ExemplifyProblog(unittest.TestCase):
         self.prints.append(message)
 
     def test_problog(self):
-        probabilisticTheory = parse_theory(self.probabilisticTheoryText, PROBLOG_OPERATORS)
-        probabilisticSolver = problog_solver(static_kb=probabilisticTheory)
+        probabilistic_theory = parse_theory(self.theory_text, PROBLOG_OPERATORS)
+        solver = problog_solver(static_kb=probabilistic_theory)
         query = struct('path', var('From'), var('To'))
-        for solution in probabilisticSolver.solve(query, solve_options(lazy=True, probabilistic=True)):
+        for solution in solver.solve(query, solve_options(lazy=True, probabilistic=True)):
             if solution.is_yes:
                 self.print(f"yes: {solution.solved_query} with probability {probability(solution)}")
 

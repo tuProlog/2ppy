@@ -1,12 +1,13 @@
 from tuprolog.solve import Solver
 from tuprolog.solve.flags import DEFAULT_FLAG_STORE, FlagStore
-from tuprolog.solve.library import libraries, Library
+from tuprolog.solve.library import libraries, Library, Runtime
 from tuprolog.solve.channel import InputChannel, OutputChannel, std_out, std_in, std_err, warn
-from tuprolog.theory import theory, mutable_theory, Theory
+from tuprolog.theory import theory, mutable_theory, Theory, Unificator
 from ._definitions import PROLOG_SOLVER_FACTORY
 
 
 def prolog_solver(
+        unificator: Unificator = Unificator.getDefault(),
         libraries: Library = libraries(),
         flags: FlagStore = DEFAULT_FLAG_STORE,
         static_kb: Theory = theory(),
@@ -19,9 +20,9 @@ def prolog_solver(
 ) -> Solver:
     if mutable:
         return PROLOG_SOLVER_FACTORY.mutableSolverWithDefaultBuiltins(
-            libraries, flags, static_kb, dynamic_kb, std_in, std_out, std_err, warning
+            unificator, Runtime.of(libraries), flags, static_kb, dynamic_kb, std_in, std_out, std_err, warning
         )
     else:
         return PROLOG_SOLVER_FACTORY.solverWithDefaultBuiltins(
-            libraries, flags, static_kb, dynamic_kb, std_in, std_out, std_err, warning
+            unificator, Runtime.of(libraries), flags, static_kb, dynamic_kb, std_in, std_out, std_err, warning
         )
