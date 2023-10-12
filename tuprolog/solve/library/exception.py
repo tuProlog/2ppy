@@ -5,7 +5,9 @@ import it.unibo.tuprolog.solve.library.exception as _exception  # type: ignore
 
 AlreadyLoadedLibraryException = _exception.AlreadyLoadedLibraryException
 
+
 LibraryException = _exception.LibraryException
+
 
 NoSuchALibraryException = _exception.NoSuchALibraryException
 
