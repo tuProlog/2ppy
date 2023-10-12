@@ -19,10 +19,10 @@ class Append:
     Recursive = _Append.Recursive.INSTANCE
 
 
-Arrow : _rule.Arrow = _rule.Arrow.INSTANCE
+Arrow: _rule.Arrow = _rule.Arrow.INSTANCE
 
 
-CurrentPrologFlag : _rule.CurrentPrologFlag = _rule.CurrentPrologFlag.INSTANCE
+CurrentPrologFlag: _rule.CurrentPrologFlag = _rule.CurrentPrologFlag.INSTANCE
 
 
 _Member = _rule.Member
@@ -40,10 +40,10 @@ class Member:
     Recursive = _Member.Recursive.INSTANCE
 
 
-Not : _rule.Not = _rule.Not.INSTANCE
+Not: _rule.Not = _rule.Not.INSTANCE
 
 
-Once : _rule.Once = _rule.Once.INSTANCE
+Once: _rule.Once = _rule.Once.INSTANCE
 
 
 _Semicolon = _rule.Semicolon
@@ -67,7 +67,7 @@ class Semicolon:
         Right = _Semicolon.Or.Right.INSTANCE
 
 
-SetPrologFlag : _rule.SetPrologFlag = _rule.SetPrologFlag.INSTANCE
+SetPrologFlag: _rule.SetPrologFlag = _rule.SetPrologFlag.INSTANCE
 
 
 logger.debug("Loaded JVM classes from it.unibo.tuprolog.solve.stdlib.rule.*")

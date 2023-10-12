@@ -4,7 +4,7 @@ import jpype.imports  # noqa: F401
 import it.unibo.tuprolog.solve.problog as _problog  # type: ignore
 
 
-PROBLOG_SOLVER_FACTORY : SolverFactory = Solver.problog()
+PROBLOG_SOLVER_FACTORY: SolverFactory = Solver.problog()
 
 
 Operators = _problog.Operators
