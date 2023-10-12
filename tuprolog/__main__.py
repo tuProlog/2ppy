@@ -28,7 +28,6 @@ from tuprolog.solve.stdlib.magic import *
 from tuprolog.solve.prolog import *
 from tuprolog.solve.plp import *
 from tuprolog.solve.problog import *
-from tuprolog.solve.problog.operators import *
 
 import code
 

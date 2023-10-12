@@ -3,7 +3,7 @@ from tuprolog.core import struct, var
 from tuprolog.theory.parsing import parse_theory
 from tuprolog.solve.plp import solve_options, probability
 from tuprolog.solve.problog import problog_solver
-from tuprolog.solve.problog.operators import PROBLOG_OPERATORS
+from tuprolog.solve.problog import PROBLOG_OPERATORS
 
 
 class ExemplifyProblog(unittest.TestCase):
