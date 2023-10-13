@@ -2,7 +2,7 @@ import unittest
 from tuprolog.core import struct, atom, integer
 from tuprolog.theory.parsing import parse_theory
 from tuprolog.solve.prolog import prolog_solver
-from tuprolog.solve.flags import DEFAULT_FLAG_STORE, LastCallOptimization, FlagStore
+from tuprolog.solve.flags import DEFAULT_FLAG_STORE, LastCallOptimization
 from tuprolog.solve.channel import output_channel
 
 
@@ -10,17 +10,17 @@ class TestPrologWithParsingAndResolution(unittest.TestCase):
     def setUp(self) -> None:
         self.theory_text = """
         % Towers of Hanoi
-        move(1,X,Y,_) :-  
-            write('Move top disk from '), 
-            write(X), 
-            write(' to '), 
-            write(Y), 
-            nl. 
-        move(N,X,Y,Z) :- 
-            N>1, 
-            M is N-1, 
-            move(M,X,Z,Y), 
-            move(1,X,Y,_), 
+        move(1,X,Y,_) :-
+            write('Move top disk from '),
+            write(X),
+            write(' to '),
+            write(Y),
+            nl.
+        move(N,X,Y,Z) :-
+            N>1,
+            M is N-1,
+            move(M,X,Z,Y),
+            move(1,X,Y,_),
             move(M,Z,Y,X).
         """
         self.prints: list[str] = []
@@ -37,6 +37,7 @@ class TestPrologWithParsingAndResolution(unittest.TestCase):
             self.prints.append(message)
         else:
             self.prints[-1] += message
+
     @unittest.skip("TODO: fix this test")
     def test_prolog(self):
         logic_theory = parse_theory(self.theory_text)
