@@ -2,7 +2,7 @@ import unittest
 from tuprolog.core import struct, atom, integer
 from tuprolog.theory.parsing import parse_theory
 from tuprolog.solve.prolog import prolog_solver
-from tuprolog.solve.flags import DEFAULT_FLAG_STORE, LastCallOptimization, TrackVariables
+from tuprolog.solve.flags import DEFAULT_FLAG_STORE, TrackVariables
 from tuprolog.solve.channel import output_channel
 
 
