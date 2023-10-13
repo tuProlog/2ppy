@@ -2,7 +2,7 @@ import unittest
 from tuprolog.core import struct, atom, integer
 from tuprolog.theory.parsing import parse_theory
 from tuprolog.solve.prolog import prolog_solver
-from tuprolog.solve.flags import DEFAULT_FLAG_STORE, LastCallOptimization
+from tuprolog.solve.flags import DEFAULT_FLAG_STORE, LastCallOptimization, TrackVariables
 from tuprolog.solve.channel import output_channel
 
 
@@ -38,10 +38,9 @@ class TestPrologWithParsingAndResolution(unittest.TestCase):
         else:
             self.prints[-1] += message
 
-    @unittest.skip("TODO: fix this test")
     def test_prolog(self):
         logic_theory = parse_theory(self.theory_text)
-        flags = DEFAULT_FLAG_STORE.set(LastCallOptimization, LastCallOptimization.OFF)
+        flags = DEFAULT_FLAG_STORE.set(TrackVariables, TrackVariables.ON)
         solver = prolog_solver(
             static_kb=logic_theory,
             flags=flags,

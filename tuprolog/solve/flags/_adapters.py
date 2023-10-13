@@ -14,9 +14,6 @@ class _KtFlagStore:
     def __getitem__(self, notableFlag):
         return self.get(notableFlag)
 
-    def __setitem__(self, notableFlagName, notableFlag):
-        self.set(notableFlagName, notableFlag)
-
     def __add__(self, other):
         return self.plus(other)
 
