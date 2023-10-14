@@ -17,11 +17,14 @@ class PrologREPL(Cmd):
                  stdout: IO[str] | None = None):
         super().__init__(completekey, stdin, stdout)
         self.intro = f"""
-Welcome to the {name} REPL.
+Welcome to the {name.title()} REPL.
     Usage
         Assert a clause by typing it in.
         Query the theory by typing ?- followed by a query.
-        Type ":help" for more information.
+        Clauses and queries must end with a period, otherwise they will be
+            considered incomplete and you will be prompted for more input.
+        Type ":help" for more information, including the list of available
+            commands that can be used by prefixing a colon ":".
         Type ":exit" to exit.
 """
         self.solver = solver
@@ -41,7 +44,9 @@ Welcome to the {name} REPL.
         return super().emptyline()
 
     def precmd(self, line: str) -> str:
-        if line.startswith(":") or line.endswith("."):
+        if line.startswith(":"):
+            return line
+        if line.endswith("."):
             command = self.multi_line_command + line
             self.multi_line_command = ""
             return command
