@@ -66,7 +66,9 @@ other aimed at  (de)serialising terms theories, namely `tuprolog.theory.serializ
 ### Use 2PPy as an interactive REPL
 
 1. Python shell mode: `python -m tuprolog`
-1. Logic solver [REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop): *WIP*
+1. Logic solver [REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop): 
+    1. `python -m tuprolog.repl.prolog` for Prolog
+    1. `python -m tuprolog.repl.problog` for ProbLog
 
 ## How to contribute to 2PPy
 
