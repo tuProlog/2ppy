@@ -8,7 +8,7 @@ Experimental porting of [2P-Kt](https://github.com/tuProlog/2p-kt) on Python, vi
 
 Object-oriented and modular ecosystem for symbolic AI and logic programming, currently featuring:
 
-* a command-line interface, in the form of a REPL, invoked by running `python -m tuprolog` (for a python interpreter) or `python -m tuprolog.repl.prolog` (for a Prolog theory interpreter and solver)
+* [a command-line interface, in the form of a REPL](#use-2ppy-as-an-interactive-repl)
 
 * a module for logic terms and clauses representation, namely `tuprolog.core`
 
