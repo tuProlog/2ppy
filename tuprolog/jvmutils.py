@@ -165,7 +165,7 @@ class _KtSequence:
 
 
 def ksequence(iterable: PyIterable) -> Sequence:
-    return SequencesKt.asSequence(jiterable(iterable))
+    return SequencesKt.asSequence(jiterable(iterable).iterator())
 
 
 @JConversion("kotlin.sequences.Sequence", instanceof=PyIterable, excludes=str)

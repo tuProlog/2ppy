@@ -85,7 +85,7 @@ def ensuring_argument_is_compound(request: SolveRequest, index: int) -> SolveReq
 
 
 def ensuring_argument_is_atom(request: SolveRequest, index: int) -> SolveRequest:
-    return PrimitiveWrapper.ensuringArgumentIsCompound(request, index)
+    return PrimitiveWrapper.ensuringArgumentIsAtom(request, index)
 
 
 def ensuring_argument_is_constant(request: SolveRequest, index: int) -> SolveRequest:

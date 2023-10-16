@@ -1,7 +1,8 @@
 from typing import Union, Mapping, Iterable
 from functools import reduce
+from tuprolog.jvmutils import protect_iterable
 from tuprolog.core.operators import OperatorSet, operator_set
-from tuprolog.theory import Theory, theory
+from tuprolog.theory import Clause
 from tuprolog.solve import Signature
 from tuprolog.solve.primitive import Primitive
 from tuprolog.solve.function import LogicFunction
@@ -11,14 +12,14 @@ from ._definititions import Library, Pluggable
 def library(
     alias: str = None,
     primitives: Mapping[Signature, Primitive] = dict(),
-    theory: Theory = theory(),
+    clauses: Iterable[Clause] = [],
     operators: OperatorSet = operator_set(),
     functions: Mapping[Signature, LogicFunction] = dict(),
 ) -> Union[Library, Pluggable]:
     if alias is None:
-        return Library.of(primitives, theory.clauses, operators, functions)
+        return Library.of(primitives, clauses, operators, functions)
     else:
-        return Library.of(alias, primitives, theory.clauses, operators, functions)
+        return Library.of(alias, primitives, clauses, operators, functions)
 
 
 def aliased(alias: str, library: Library) -> Library:

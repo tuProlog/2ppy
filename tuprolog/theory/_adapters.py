@@ -11,30 +11,6 @@ class _KtTheory:
     def __jclass_init__(cls):
         Sized.register(cls)
 
-    @JOverride
-    def getClauses(self):
-        return protect_iterable(self.getClauses_())
-
-    @property
-    def clauses(self):
-        return self.getClauses()
-
-    @JOverride
-    def getRules(self):
-        return protect_iterable(self.getRules_())
-
-    @property
-    def rules(self):
-        return self.getRules()
-
-    @JOverride
-    def getDirectives(self):
-        return protect_iterable(self.getDirectives_())
-
-    @property
-    def directives(self):
-        return self.getDirectives()
-
     def __len__(self):
         return self.getSize()
 
