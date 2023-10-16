@@ -5,8 +5,9 @@ from tuprolog.core import atom, integer
 from tuprolog.unify import mgu
 from tuprolog.theory.parsing import parse_theory
 from tuprolog.solve import signature
-from tuprolog.solve.library import library, libraries, Library
-from tuprolog.solve.primitive import primitive, SolveRequest, SolveResponse, ensuring_argument_is_variable, ensuring_all_arguments_are_instantiated, ensuring_argument_is_atom
+from tuprolog.solve.library import library, Library
+from tuprolog.solve.primitive import primitive, SolveRequest, SolveResponse, ensuring_argument_is_variable, \
+    ensuring_all_arguments_are_instantiated, ensuring_argument_is_atom
 from tuprolog.solve.flags import DEFAULT_FLAG_STORE, TrackVariables
 from tuprolog.solve.channel import output_channel
 from tuprolog.solve.prolog import prolog_solver
@@ -87,18 +88,18 @@ class ThermostatAgentTest(unittest.TestCase):
         self.assertSequenceEqual(
             self.prints,
             [
-                "Temperature is 15.\n", 
-                "Pushing hot air.\n", 
-                "Temperature is 16.\n", 
-                "Pushing hot air.\n", 
-                "Temperature is 17.\n", 
-                "Pushing hot air.\n", 
-                "Temperature is 18.\n", 
-                "Pushing hot air.\n", 
-                "Temperature is 19.\n", 
-                "Pushing hot air.\n", 
-                "Temperature is 20.\n", 
-                "Pushing hot air.\n", 
-                "Temperature is 21.\n", 
+                "Temperature is 15.\n",
+                "Pushing hot air.\n",
+                "Temperature is 16.\n",
+                "Pushing hot air.\n",
+                "Temperature is 17.\n",
+                "Pushing hot air.\n",
+                "Temperature is 18.\n",
+                "Pushing hot air.\n",
+                "Temperature is 19.\n",
+                "Pushing hot air.\n",
+                "Temperature is 20.\n",
+                "Pushing hot air.\n",
+                "Temperature is 21.\n",
                 "I'm done.\n"]
         )

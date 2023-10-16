@@ -2,7 +2,7 @@ from typing import Sized
 from jpype import JImplementationFor, JOverride
 from tuprolog import logger
 from tuprolog.core import indicator as new_indicator
-from tuprolog.jvmutils import jiterable, protect_iterable
+from tuprolog.jvmutils import jiterable
 from tuprolog.pyutils import iterable_or_varargs
 
 

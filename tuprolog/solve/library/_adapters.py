@@ -1,5 +1,5 @@
 from jpype import JImplementationFor
-from._definititions import Runtime
+from ._definititions import Runtime
 
 
 @JImplementationFor("it.unibo.tuprolog.solve.library.Library")

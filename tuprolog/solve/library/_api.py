@@ -1,6 +1,5 @@
 from typing import Union, Mapping, Iterable
 from functools import reduce
-from tuprolog.jvmutils import protect_iterable
 from tuprolog.core.operators import OperatorSet, operator_set
 from tuprolog.theory import Clause
 from tuprolog.solve import Signature
