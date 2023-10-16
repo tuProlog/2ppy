@@ -18,7 +18,7 @@
     <dependency>
         <groupId>it.unibo.tuprolog</groupId>
         <artifactId>solve-problog-jvm</artifactId>
-        <version>0.31.15</version>
+        <version>0.31.16</version>
     </dependency>
   </dependencies>
 </project>
