@@ -5,11 +5,11 @@ from tuprolog.core import atom, integer
 from tuprolog.unify import mgu
 from tuprolog.theory.parsing import parse_theory
 from tuprolog.solve import signature
-from tuprolog.solve.library import library, Library
-from tuprolog.solve.primitive import primitive, Primitive, SolveRequest, SolveResponse, ensuring_argument_is_variable, ensuring_all_arguments_are_instantiated, ensuring_argument_is_atom
-from tuprolog.solve.flags import TrackVariables
+from tuprolog.solve.library import library, libraries, Library
+from tuprolog.solve.primitive import primitive, SolveRequest, SolveResponse, ensuring_argument_is_variable, ensuring_all_arguments_are_instantiated, ensuring_argument_is_atom
+from tuprolog.solve.flags import DEFAULT_FLAG_STORE, TrackVariables
 from tuprolog.solve.channel import output_channel
-from tuprolog.solve.prolog import PROLOG_SOLVER_FACTORY
+from tuprolog.solve.prolog import prolog_solver
 
 
 class ThermostatAgent:
@@ -76,12 +76,12 @@ class ThermostatAgentTest(unittest.TestCase):
 
     def test_program(self):
         theory = parse_theory(self.thermostat_agent.program())
-        solver_builder = PROLOG_SOLVER_FACTORY.new_builder() \
-            .static_kb(theory) \
-            .flag(TrackVariables, TrackVariables.ON) \
-            .standard_output(output_channel(self.print_output))
-        solver_builder = solver_builder.runtime(solver_builder.get_runtime() + self.thermostat_agent.library.to_runtime())
-        solver = solver_builder.build()
+        solver = prolog_solver(
+            libraries=self.thermostat_agent.library,
+            flags=DEFAULT_FLAG_STORE.set(TrackVariables, TrackVariables.ON),
+            static_kb=theory,
+            std_out=output_channel(self.print_output)
+        )
         solution = solver.solve_once(atom("start"))
         self.assertTrue(solution.is_yes)
         self.assertSequenceEqual(
