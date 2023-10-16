@@ -10,10 +10,11 @@ dynamic = ["version"]
 name = "2ppy"
 authors = [
   { name="Giovanni Ciatto", email="giovanni.ciatto@unibo.it" },
+  { name="Luca Deluigi", email="luca.deluigi5@unibo.it" },
 ]
 description = "Python-based implementation of tuProlog -- the open ecosystem for symbolic AI --, based on 2P-Kt"
 readme = "README.md"
-requires-python = ">=3.9, <4"
+requires-python = ">=3.9, <3.12"
 classifiers=[
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
