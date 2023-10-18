@@ -28,9 +28,9 @@ class ThermostatAgent:
     def get_temp(self, request: SolveRequest) -> Iterable[SolveResponse]:
         ensuring_argument_is_variable(request, 0)
         sub = mgu(request.arguments[0], integer(self.temperature))
-        return [request.reply_with(sub)]
+        yield request.reply_with(sub)
 
-    def push(self, request: SolveRequest) -> SolveResponse:
+    def push(self, request: SolveRequest) -> Iterable[SolveResponse]:
         ensuring_all_arguments_are_instantiated(request)
         ensuring_argument_is_atom(request, 0)
         arg = request.arguments[0].cast_to_atom().value
@@ -39,8 +39,8 @@ class ThermostatAgent:
         elif arg == "cold":
             self._temperature -= 1
         else:
-            return request.reply_fail()
-        return [request.reply_success()]
+            yield request.reply_fail()
+        yield request.reply_success()
 
     @property
     def library(self) -> Library:
