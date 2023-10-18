@@ -15,7 +15,7 @@ def __jvm_lib_file_names():
         return {"libjvm.so"}
 
 
-def __jvmlib(): 
+def __jvmlib():
     for name in __jvm_lib_file_names():
         for path in JAVA_HOME.glob(f"**/{name}"):
             path.resolve()

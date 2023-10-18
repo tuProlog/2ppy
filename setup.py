@@ -1,11 +1,8 @@
 import platform
 import subprocess
-import sys
-import importlib.util
 from pathlib import Path
 from setuptools import setup
 from setuptools.command.build_py import build_py
-from setuptools.command.install import install
 
 
 PACKAGE_NAME = 'tuprolog'
