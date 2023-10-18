@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61", "wheel", "setuptools-git-versioning<2", "install-jdk==1.1.0"]
+requires = ["setuptools>=61", "wheel", "setuptools-git-versioning<2"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools-git-versioning]
@@ -33,7 +33,7 @@ license = {file = "LICENSE"}
 keywords = ["prolog", "symbolic ai", "ecosystem", "tuprolog", "2p", "python"]
 dependencies = [
   "JPype1==1.4.1",
-  "install-jdk==1.1.0"
+  "jdk4py==17.0.7.0"
 ]
 
 [project.urls]

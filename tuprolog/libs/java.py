@@ -1,33 +1,31 @@
-import os
-import jdk
-import shutil
-import logging
+import sys
 from pathlib import Path
-
-
-JAVA_HOME = Path(__file__).parent / 'java'
+from jdk4py import JAVA_HOME
 
 
 CLASSPATH = Path(__file__).parent
 
 
-logger = logging.getLogger('tuprolog')
+def __jvm_lib_file_names():
+    if sys.platform == "win32":
+        return {"jvm.dll"}
+    elif sys.platform == "darwin":
+        return {"libjli.dylib"}
+    else:
+        return {"libjvm.so"}
 
 
-def install_java_if_missing() -> Path:
-    if JAVA_HOME.exists():
-        return
-    java_version = os.getenv('JAVA_VERSION', '11')
-    destination_folder = str(CLASSPATH)
-    logger.info(f'Downloading Java {java_version} in {destination_folder}')
-    installation_path = Path(
-        jdk.install(
-            java_version,
-            jre=not java_version.startswith('16'),  # Java 16 doesn't have a JRE
-            path=destination_folder
-        )
-    )
-    destination_folder = JAVA_HOME
-    logger.info(f'Installing Java {java_version} in {destination_folder}')
-    shutil.copytree(installation_path, destination_folder, dirs_exist_ok=True)
-    shutil.rmtree(installation_path, ignore_errors=True)
+def __jvmlib(): 
+    for name in __jvm_lib_file_names():
+        for path in JAVA_HOME.glob(f"**/{name}"):
+            path.resolve()
+            if path.exists:
+                return path
+    return None
+
+
+def find_jvm() -> Path:
+    jvm = __jvmlib()
+    if jvm is None:
+        raise FileNotFoundError("Could not find jvm executable.")
+    return jvm

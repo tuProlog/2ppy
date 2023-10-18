@@ -51,8 +51,7 @@ Object-oriented and modular ecosystem for symbolic AI and logic programming, cur
     ```bash
     python3 -m pip install tuprolog
     ```
-1. *Note #1 for the expert users:* 2ppy downloads its own [Java Virtual Machine](https://en.wikipedia.org/wiki/Java_virtual_machine) in order to call Java bytecode from python. If you install the package with sdist, it's downloaded during install. If you use the binary wheels packaging, it's downloaded on first import of the `tuprolog` package.
-2. *Note #2 for the expert users:* The JVM version can be chosen by setting the `JAVA_VERSION` environment variable before downloading the JVM for the first time.
+1. *Note for the expert users:* 2ppy downloads its own [Java Virtual Machine](https://en.wikipedia.org/wiki/Java_virtual_machine) in order to call Java bytecode from python. If you install the package with sdist, it's downloaded during install. If you use the binary wheels packaging, it's downloaded on first import of the `tuprolog` package.
 
 ### Use 2ppy as a Python library
 

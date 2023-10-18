@@ -54,22 +54,8 @@ class BuildPyCommand(build_py):
         super().run()
 
 
-class InstallCommand(install):
-    def run(self):
-        install.run(self)
-
-        def _post_install():
-            spec = importlib.util.spec_from_file_location(PACKAGE_NAME, JAR_FOLDER / '__init__.py')
-            lib = importlib.util.module_from_spec(spec)
-            sys.modules[spec.name] = lib
-            spec.loader.exec_module(lib)
-            lib.install_java_if_missing()
-        _post_install()
-
-
 setup(
     cmdclass={
         'build_py': BuildPyCommand,
-        'install': InstallCommand,
     }
 )
