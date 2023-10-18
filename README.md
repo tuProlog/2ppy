@@ -57,6 +57,9 @@ Object-oriented and modular ecosystem for symbolic AI and logic programming, cur
 
 1. Import `tuprolog.*` modules in your Python scripts
 1. Use the Pythonic API to write, parse or solve your logic programs. You can find some examples in the [api tests folder](test/api).
+1. *Known issues*:
+    Some methods called on `tuprolog` types are forwarded to the underlying Java objects. This means that the return type of such methods is not always the expected one. For example, the `tuprolog.theory.Theory` class has a `getClauses` method that returns an anonymous object tha *should* implement `java.util.Iterable`. However, iterating such object from Python will result in an error.
+    In order to avoid this, wrap these anonymous non-iterable objects with `protect_iterable(object: Iterable) -> Iterable` from `tuprolog.jvmutils` before iterating them. This will return an iterable object that can be safely iterated from Python.
 
 ### Use 2PPy as an interactive REPL
 
