@@ -97,8 +97,8 @@ The Git Flow for 2ppy consists of the following:
     ```bash
     git checkout master
     git merge develop
-    git tag -a v0.1.0 -m "First release"
-    git push origin master --tags
+    git tag -a 0.1.0 -m "First release"
+    git push origin master --follow-tags
     ```
 
 #### CI/CD

@@ -145,7 +145,7 @@ jobs:
     needs: [build, lint, install]
     concurrency:
       group: release
-    if: ${{ startsWith(github.ref, 'refs/tags/') && github.event_name == 'push' }}
+    if: startsWith(github.ref, 'refs/tags/') && github.event_name == 'push'
     steps:
       - name: Download Artifacts
         uses: actions/download-artifact@v3
@@ -167,6 +167,8 @@ jobs:
     concurrency:
       group: publish
     environment: test-pypi
+    permissions:
+      id-token: write
     steps:
       - name: Download Artifacts
         uses: actions/download-artifact@v3
@@ -175,5 +177,4 @@ jobs:
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          password: ${{ secrets.TEST_PYPI_TOKEN }}
           repository-url: https://test.pypi.org/legacy/
