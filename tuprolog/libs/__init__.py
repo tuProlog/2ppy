@@ -1,3 +1,1 @@
-from pathlib import Path
-
-CLASSPATH = Path(__file__).parents[0]
+from .java import JAVA_HOME, CLASSPATH, find_jvm

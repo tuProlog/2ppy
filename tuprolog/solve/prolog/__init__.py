@@ -1,5 +1,2 @@
-from tuprolog.solve.classic import classic_solver, classic_solver_factory
-
-prolog_solver = classic_solver
-
-prolog_solver_factory = classic_solver_factory
+from ._definitions import PROLOG_SOLVER_FACTORY
+from ._api import prolog_solver

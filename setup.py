@@ -1,86 +1,58 @@
-
-from setuptools import setup, find_packages
-import pathlib
+import platform
 import subprocess
+from pathlib import Path
+from setuptools import setup
+from setuptools.command.build_py import build_py
 
-# current directory
-here = pathlib.Path(__file__).parent.resolve()
 
-version_file = here / 'VERSION'
+PACKAGE_NAME = 'tuprolog'
+JAR_FOLDER = Path(PACKAGE_NAME, 'libs')
+MAVEN_EXECUTABLE = ['mvn', '--batch-mode']
 
-print(f"Executing setup.py from {here}")
 
-# Get the long description from the README file
-long_description = (here / 'README.md').read_text(encoding='utf-8')
+def is_windows():
+    return platform.system() == 'Windows'
 
-def format_git_describe_version(version):
-    if '-' in version:
-        splitted = version.split('-')
-        tag = splitted[0]
-        index = f"dev{splitted[1]}" #{hex(int(splitted[1]))[2:]}"
-        # commit = splitted[2] 
-        # return f"{tag}.{index}+{commit}"
-        return f"{tag}.{index}"
-    else:
-        return version
 
-def get_version_from_git():
-    try:
-        process = subprocess.run(["git", "describe"], cwd=str(here), check=True, capture_output=True)
-        version = process.stdout.decode('utf-8').strip()
-        version = format_git_describe_version(version)
-        with version_file.open('w') as f:
-            f.write(version)
-        return version
-    except subprocess.CalledProcessError:
-        # with version_file.open('r') as f:
-        return version_file.read_text().strip()
+def run_maven(*args, cwd=None) -> (str, str):
+    proc = subprocess.Popen(
+        MAVEN_EXECUTABLE + list(args),
+        shell=is_windows(),
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        cwd=cwd)
+    stdout, stderr = proc.communicate()
+    if proc.returncode != 0:
+        raise RuntimeError(f'Error while running mvn:\n{stdout}\n{stderr}')
+    return stdout, stderr
 
-# version = os.popen('git describe').read().strip()
-version = get_version_from_git()
 
-print(f"Detected version {version} from git describe")
+def download_jars():
+    stdout, _ = run_maven('-v')
+    if 'Apache Maven' not in stdout:
+        raise RuntimeError(f'Could not find Apache Maven in {stdout}')
+    run_maven(
+        'dependency:copy-dependencies',
+        f'-DoutputDirectory={JAR_FOLDER}',
+        cwd=Path(__file__).parent
+    )
+    # run_maven(
+    #     'dependency:copy-dependencies',
+    #     f'-DoutputDirectory={JAR_FOLDER}',
+    #     '-Dclassifier=javadoc',
+    #     cwd=Path(__file__).parent
+    # )
 
-# Arguments marked as "Required" below must be included for upload to PyPI.
-# Fields marked as "Optional" may be commented out.
+
+class BuildPyCommand(build_py):
+    def run(self):
+        download_jars()
+        super().run()
+
 
 setup(
-    name='2ppy',  # Required
-    version=version,
-    description='Python-based implementation of tuProlog -- the open ecosystem for symbolic AI --, based on 2P-Kt',
-    license='Apache 2.0 License',
-    long_description=long_description,
-    long_description_content_type='text/markdown',
-    url='https://github.com/tuProlog/2ppy', 
-    author='Giovanni Ciatto', 
-    author_email='giovanni.ciatto@unibo.it',
-    classifiers=[
-        'Development Status :: 3 - Alpha',
-        'Intended Audience :: Developers',
-        'Topic :: Software Development :: Interpreters',
-        'Topic :: Software Development :: Libraries',
-        'Topic :: Scientific/Engineering :: Artificial Intelligence',
-        'License :: OSI Approved :: Apache Software License',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: 3.8',
-        'Programming Language :: Python :: 3.9',
-        'Programming Language :: Python :: 3 :: Only',
-        'Programming Language :: Prolog'
-    ],
-    keywords='prolog, symbolic ai, ecosystem, tuprolog, 2p, python',  # Optional
-    # package_dir={'': 'src'},  # Optional
-    packages=find_packages(),  # Required
-    include_package_data=True,
-    python_requires='>=3.6, <4',
-    install_requires=['JPype1==1.3.0'],  # Optional
-    zip_safe = False,
-    platforms = "Independant",
-    project_urls={  # Optional
-        'Bug Reports': 'https://github.com/tuProlog/2ppy/issues',
-        # 'Funding': 'https://donate.pypi.org',
-        # 'Say Thanks!': 'http://saythanks.io/to/example',
-        'Source': 'https://github.com/tuProlog/2ppy',
-    },
+    cmdclass={
+        'build_py': BuildPyCommand,
+    }
 )
