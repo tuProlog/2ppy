@@ -51,19 +51,22 @@ jobs:
           cache: maven
       - name: Install build tool
         run: |
-          python -m pip install --upgrade pip build
+          python -m pip install --upgrade pip
+      - name: Install CI dependencies
+        run: |
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Build
         run: |
           python -m build --sdist --wheel
       - name: Install
         run: |
           pip install dist/*.whl
-      - name: Install CI dependencies
-        run: |
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Test
         run: |
-          python -m pytest -p no:faulthandler
+          coverage run -m pytest -p no:faulthandler
+      - name: Coverage
+        run: |
+          coverage report -i -m
       - name: Prepare artifacts
         id: artifact
         if: ${{ matrix.package }}
