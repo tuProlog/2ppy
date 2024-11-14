@@ -4,7 +4,9 @@ get_latest_release() {
 
 TUPROLOG_GITHUB='tuProlog/2p-kt'
 TUPROLOG_VERSION=`get_latest_release $TUPROLOG_GITHUB`
-TUPROLOG_JAR_URL="https://github.com/$TUPROLOG_GITHUB/releases/download/$TUPROLOG_VERSION/2p-full-$TUPROLOG_VERSION-redist.jar"
+SPECIFIC_VERSION="0.20.8"
+# TUPROLOG_JAR_URL="https://github.com/$TUPROLOG_GITHUB/releases/download/$TUPROLOG_VERSION/2p-full-$TUPROLOG_VERSION-redist.jar"
+TUPROLOG_JAR_URL="https://github.com/$TUPROLOG_GITHUB/releases/download/$SPECIFIC_VERSION/2p-$SPECIFIC_VERSION-full.jar"
 
 rm -rf tuprolog/libs/*.jar
 
