@@ -5,6 +5,7 @@ on:
       - master
       - develop
       - 'feature/**'
+  workflow_dispatch:
 env:
   project-name: 2PPy
   workflow: quick-check
