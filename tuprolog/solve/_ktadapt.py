@@ -1,4 +1,8 @@
-from collections import Mapping
+import sys
+if sys.version_info < (3, 10):
+    from collections import Mapping  # for Python 3.9 and earlier
+else:
+    from collections.abc import Mapping  # for Python 3.10 and later
 from itertools import chain
 
 from tuprolog import logger
