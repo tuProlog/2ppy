@@ -1,4 +1,6 @@
 from collections.abc import Callable, Mapping, MutableMapping
+from copy import copy as _copy
+from itertools import tee as _tee
 from collections.abc import Iterable as PyIterable
 from collections.abc import Iterator as PyIterator
 from typing import Any
@@ -82,10 +84,16 @@ class _IteratorAdapter:
 class _IterableAdapter:
     def __init__(self, iterable):
         assert isinstance(iterable, PyIterable)
+        if isinstance(iterable, PyIterator):
+            # one-shot iterators (e.g. generators) are buffered lazily, as JVM code may iterate
+            # an Iterable more than once
+            iterable = _tee(iterable, 1)[0]
         self._iterable = iterable
 
     @JOverride
     def iterator(self):
+        if isinstance(self._iterable, PyIterator):
+            return _IteratorAdapter(_copy(self._iterable))
         return _IteratorAdapter(iter(self._iterable))
 
 
