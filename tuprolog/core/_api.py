@@ -68,6 +68,10 @@ def fact(struct: Term | Iterable[Term]) -> Fact:
 
 
 def indicator(name: str | Term, arity: int | Term) -> Indicator:
+    if isinstance(name, str) and isinstance(arity, int):
+        return Indicator.of(name, arity)
+    name = atom(name) if isinstance(name, str) else name
+    arity = integer(arity) if isinstance(arity, int) else arity
     return Indicator.of(name, arity)
 
 
