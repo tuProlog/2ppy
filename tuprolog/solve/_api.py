@@ -2,7 +2,7 @@ from collections.abc import Iterable, Mapping
 from functools import singledispatch
 from typing import Any
 
-from tuprolog.core import EMPTY_UNIFIER, Indicator, Struct, Substitution, Term, TermFormatter
+from tuprolog.core import EMPTY_UNIFIER, Struct, Substitution, Term, TermFormatter
 from tuprolog.jvmutils import JavaSystem, jlist, jmap
 
 from ._definitions import (
@@ -21,14 +21,14 @@ def signature(name: str, arity: int, vararg: bool = False) -> Signature:
     return Signature(name, arity, vararg)
 
 
-@signature.register
-def _signature_from_indicator(indicator: Indicator) -> Signature:
-    return Signature.fromIndicator(indicator)
+# JPype resolves `Signature.Companion` to the nested class, not to the companion instance
+_SIGNATURE_COMPANION = Signature.class_.getField("Companion").get(None)
 
 
 @signature.register
-def _signature_from_term(term: Term) -> Signature:
-    return Signature.fromSignatureTerm(term)
+def _signature_from_term(term: Term) -> Signature | None:
+    # also covers indicators, including vararg ones (e.g. f/'+'(2, vararg))
+    return _SIGNATURE_COMPANION.fromSignatureTerm(term)
 
 
 @singledispatch
