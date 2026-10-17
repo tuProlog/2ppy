@@ -175,6 +175,15 @@ def test_rejected_clause_is_reported_and_repl_continues():
     assert "yes: true" in output
 
 
+@pytest.mark.parametrize("query", ["halt", "halt(1)"])
+def test_halt_exits(query):
+    stdin = BoundedInput(f"?- {query}.\n?- true.\n")
+    stdout = io.StringIO()
+    PrologREPL(prolog_solver(), "prolog", stdin=stdin, stdout=stdout).cmdloop()
+    assert stdout.getvalue().endswith("prolog># goodbye.\n")
+    assert stdin.readline() == "?- true.\n"
+
+
 def test_help_lists_commands():
     output = run(":help\n")
     for command in ("assert", "exit", "help", "query"):

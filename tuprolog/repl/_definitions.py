@@ -7,6 +7,7 @@ from jpype import JException
 
 from tuprolog.core.parsing import ParseException, TermParser
 from tuprolog.solve import SolutionFormatter, Solver, TermFormatter, solution_formatter
+from tuprolog.solve.exception import HaltException
 from tuprolog.theory.parsing import ClausesParser
 
 
@@ -89,6 +90,9 @@ Welcome to the {name.title()} REPL.
             query = self.query_parser.parse_struct(arg)
             solutions = self.solver.solve(query)
             for solution in solutions:
+                if solution.is_halt and isinstance(solution.getException(), HaltException):
+                    self.stdout.write("# goodbye.\n")  # like 2P-Kt's REPL, halt/0,1 exit
+                    return True
                 formatted = str(self.solution_formatter.format(solution))
                 self.stdout.write(formatted)
                 self.stdout.write("\n")
