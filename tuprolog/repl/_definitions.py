@@ -4,7 +4,7 @@ from cmd import Cmd
 from typing import IO
 
 from tuprolog.core.parsing import ParseException, TermParser
-from tuprolog.solve import Solver, TermFormatter, solution_formatter
+from tuprolog.solve import SolutionFormatter, Solver, TermFormatter, solution_formatter
 from tuprolog.theory.parsing import ClausesParser
 
 
@@ -33,12 +33,20 @@ Welcome to the {name.title()} REPL.
 """
         self.solver = solver
         self.name = name
-        self.clauses_parser = ClausesParser.withOperators(self.solver.operators)
-        self.query_parser = TermParser.withOperators(self.solver.operators)
-        self.solution_formatter = solution_formatter(
-            TermFormatter.prettyExpressions(self.solver.operators)
-        )
         self.multi_line_command = ""
+
+    # parsers and formatter follow the solver's current operators, e.g. after ?- op(...).
+    @property
+    def clauses_parser(self) -> ClausesParser:
+        return ClausesParser.withOperators(self.solver.operators)
+
+    @property
+    def query_parser(self) -> TermParser:
+        return TermParser.withOperators(self.solver.operators)
+
+    @property
+    def solution_formatter(self) -> SolutionFormatter:
+        return solution_formatter(TermFormatter.prettyExpressions(self.solver.operators))
 
     @property  # Cmd reads the prompt as an attribute: a property computes it
     def prompt(self) -> str:  # type: ignore[override]

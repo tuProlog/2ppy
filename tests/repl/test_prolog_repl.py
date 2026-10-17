@@ -111,6 +111,12 @@ def test_operators_are_pretty_printed():
     assert "    X = 1 + 2 * 3\n" in run("?- X = 1 + 2 * 3.\n")
 
 
+def test_operators_declared_in_queries_are_used():
+    output = run("?- op(700, xfx, ===>).\na ===> b.\n?- X ===> Y.\n")
+    assert "Error" not in output
+    assert "yes: a ===> b\n    X = a\n    Y = b\n" in output
+
+
 def test_operator_clauses():
     output = run("p(X) :- X > 1, X < 3.\n?- p(2).\n?- p(5).\n")
     assert "yes: p(2)" in output
