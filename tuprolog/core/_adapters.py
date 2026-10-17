@@ -111,7 +111,7 @@ class _KtClause:
         return iterable_or_varargs(args, lambda xs: self.setHeadArgs(jiterable(xs)))
 
     def insert_head_arg(self, index, argument):
-        return self.setHeadArg(index, argument)
+        return self.insertHeadArg(index, argument)
 
     def set_body_items(self, *args):
         return iterable_or_varargs(args, lambda xs: self.setBodyItems(jiterable(xs)))
