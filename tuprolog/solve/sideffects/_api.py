@@ -3,7 +3,7 @@ from tuprolog.core import Clause, Term
 from tuprolog.pyutils import iterable_or_varargs, dict_or_keyword_args
 from tuprolog.jvmutils import jlist, jmap
 from tuprolog.core.operators import Operator
-from tuprolog.solve.library import Library, libraries as new_libraries
+from tuprolog.solve.library import Library, aliased, libraries as new_libraries
 from tuprolog.solve.channel import InputChannel, OutputChannel
 from ._definitions import ResetStaticKb, AddStaticClauses, RemoveStaticClauses, ResetDynamicKb, AddDynamicClauses, \
     RemoveDynamicClauses, SetFlags, ResetFlags, ClearFlags, LoadLibrary, UnloadLibraries, UpdateLibrary, AddLibraries, \
@@ -57,7 +57,7 @@ def clear_flags(*flag_names: str) -> ClearFlags:
 
 
 def load_library(alias: str, library: Library) -> LoadLibrary:
-    return LoadLibrary(alias, library)
+    return LoadLibrary(aliased(alias, library))
 
 
 def unload_libraries(*aliases: str) -> UnloadLibraries:
@@ -65,7 +65,7 @@ def unload_libraries(*aliases: str) -> UnloadLibraries:
 
 
 def update_library(alias: str, library: Library) -> UpdateLibrary:
-    return UpdateLibrary(alias, library)
+    return UpdateLibrary(aliased(alias, library))
 
 
 def add_libraries(*libraries: Library) -> AddLibraries:

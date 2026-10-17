@@ -1,3 +1,4 @@
+from __future__ import annotations
 from cmd import Cmd
 from typing import IO
 from tuprolog.core.parsing import TermParser, ParseException
@@ -44,6 +45,8 @@ Welcome to the {name.title()} REPL.
         return super().emptyline()
 
     def precmd(self, line: str) -> str:
+        if line == "EOF":
+            return ":exit"
         if line.startswith(":"):
             return line
         if line.endswith("."):

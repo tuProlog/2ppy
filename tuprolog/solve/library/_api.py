@@ -5,7 +5,7 @@ from tuprolog.theory import Clause
 from tuprolog.solve import Signature
 from tuprolog.solve.primitive import Primitive
 from tuprolog.solve.function import LogicFunction
-from ._definititions import Library, Pluggable
+from ._definititions import Library, Pluggable, Runtime
 
 
 def library(
@@ -28,7 +28,7 @@ def aliased(alias: str, library: Library) -> Library:
 def libraries(
         *libs: Union[Library, Iterable[Library]],
         **kwargs: Library
-) -> Library:
+) -> Runtime:
     all_libraries = []
     queue = list(libs)
     while len(queue) > 0:
@@ -42,4 +42,4 @@ def libraries(
     for alias, library in kwargs.items():
         if isinstance(library, Library):
             all_libraries.append(aliased(alias, kwargs[alias]))
-    return reduce(lambda a, b: a.plus(b), all_libraries, Library.of({}, [], operator_set(), {}))
+    return reduce(lambda a, b: a.plus(b), all_libraries, Runtime.empty())

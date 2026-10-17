@@ -27,7 +27,7 @@ class _KtSolveOptions:
 
     @property
     def options(self):
-        return self.getOptions()
+        return self.getCustomOptions()
 
     def __len__(self):
         return 4 + len(self.options)
@@ -51,7 +51,7 @@ class _KtSolveOptions:
             return self.options[item]
         elif default is not None:
             return default
-        return KeyError(f"No such option: {item}")
+        raise KeyError(f"No such option: {item}")
 
 
 @JImplementationFor("it.unibo.tuprolog.solve.Solver")
@@ -62,11 +62,11 @@ class _KtSolver:
     @JOverride
     def solve(self, goal, options=None):
         if options is None:
-            return self.solve_(goal)
+            return self._solve(goal)
         elif options.is_eager:
             return self.solveList(goal, options)
         else:
-            return self.solve_(goal, options)
+            return self._solve(goal, options)
 
     @JOverride
     def solve_once(self, goal, options=None):

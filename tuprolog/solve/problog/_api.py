@@ -1,3 +1,4 @@
+from typing import Union
 from tuprolog.solve import Solver
 from tuprolog.solve.flags import DEFAULT_FLAG_STORE, FlagStore
 from tuprolog.solve.library import libraries, Library, Runtime
@@ -8,7 +9,7 @@ from ._definitions import PROBLOG_SOLVER_FACTORY
 
 def problog_solver(
         unificator: Unificator = Unificator.getDefault(),
-        libraries: Library = libraries(),
+        libraries: Union[Runtime, Library] = libraries(),
         flags: FlagStore = DEFAULT_FLAG_STORE,
         static_kb: Theory = theory(),
         dynamic_kb: Theory = mutable_theory(),
@@ -18,11 +19,13 @@ def problog_solver(
         warning: OutputChannel = warn(),
         mutable: bool = True
 ) -> Solver:
+    if isinstance(libraries, Library):
+        libraries = Runtime.of(libraries)
     if mutable:
         return PROBLOG_SOLVER_FACTORY.mutableSolverWithDefaultBuiltins(
-            unificator, Runtime.of(libraries), flags, static_kb, dynamic_kb, std_in, std_out, std_err, warning
+            unificator, libraries, flags, static_kb, dynamic_kb, std_in, std_out, std_err, warning
         )
     else:
         return PROBLOG_SOLVER_FACTORY.solverWithDefaultBuiltins(
-            unificator, Runtime.of(libraries), flags, static_kb, dynamic_kb, std_in, std_out, std_err, warning
+            unificator, libraries, flags, static_kb, dynamic_kb, std_in, std_out, std_err, warning
         )
