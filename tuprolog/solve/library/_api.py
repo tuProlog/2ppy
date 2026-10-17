@@ -33,11 +33,11 @@ def libraries(*libs: Library | Iterable[Library], **kwargs: Library) -> Runtime:
     all_libraries = []
     queue = list(libs)
     while len(queue) > 0:
-        current = queue.pop()
+        current = queue.pop(0)
         if isinstance(current, Library):
             all_libraries.append(current)
         elif isinstance(current, Iterable):
-            queue.extend(current)
+            queue[0:0] = list(current)
         else:
             raise TypeError(f"Expected Library or Iterable[Library], got {type(current)}")
     for alias, library in kwargs.items():
