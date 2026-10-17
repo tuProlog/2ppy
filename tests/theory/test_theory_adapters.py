@@ -1,3 +1,4 @@
+import re
 from collections.abc import Sized
 
 import pytest
@@ -289,7 +290,10 @@ FACTORIES_TO_STRING = [
 
 
 def test_to_string_default(kb):
-    assert str(kb).endswith("{ p(a) :- true. p(b) :- true. q(X_0) :- p(X_1) }")
+    assert re.fullmatch(
+        r"(Mutable)?IndexedTheory\{ p\(a\) :- true\. p\(b\) :- true\. q\(X_\d+\) :- p\(X_\d+\) \}",
+        str(kb),
+    )
 
 
 @pytest.mark.parametrize("factory", FACTORIES_TO_STRING)
