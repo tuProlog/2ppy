@@ -159,8 +159,9 @@ class _KtScope:
     def block(self, *terms):
         return iterable_or_varargs(terms, lambda ts: self.blockOf(jiterable(ts)))
 
+    # clauseOf, directiveOf and ruleOf only have vararg overloads
     def clause(self, head=None, *body):
-        return iterable_or_varargs(body, lambda bs: self.clauseOf(head, jiterable(bs)))
+        return iterable_or_varargs(body, lambda bs: self.clauseOf(head, *bs))
 
     def cons(self, head, tail=None):
         if tail is None:
@@ -169,7 +170,7 @@ class _KtScope:
             return self.consOf(head, tail)
 
     def directive(self, *goals):
-        return iterable_or_varargs(goals, lambda gs: self.directiveOf(jiterable(gs)))
+        return iterable_or_varargs(goals, lambda gs: self.directiveOf(*gs))
 
     def fact(self, head):
         return self.factOf(head)
@@ -193,7 +194,7 @@ class _KtScope:
         return self.real(value)
 
     def rule(self, head, *body):
-        return iterable_or_varargs(body, lambda bs: self.ruleOf(head, jiterable(bs)))
+        return iterable_or_varargs(body, lambda bs: self.ruleOf(head, *bs))
 
     def struct(self, functor, *args):
         return iterable_or_varargs(args, lambda xs: self.structOf(functor, jiterable(xs)))
