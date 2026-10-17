@@ -100,9 +100,7 @@ class _IterableAdapter:
 def kpair(items: PyIterable) -> Pair:
     if isinstance(items, Pair):
         return items
-    i = iter(items)
-    first = next(i)
-    second = next(i)
+    first, second = items
     return Pair(first, second)
 
 
@@ -114,10 +112,7 @@ def _kt_pair_covert(jcls, obj):
 def ktriple(items: PyIterable) -> Triple:
     if isinstance(items, Triple):
         return items
-    i = iter(items)
-    first = next(i)
-    second = next(i)
-    third = next(i)
+    first, second, third = items
     return Triple(first, second, third)
 
 
