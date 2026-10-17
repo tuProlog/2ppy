@@ -1,7 +1,9 @@
 from collections.abc import Iterable, Mapping
 
+from jpype import JString
+
 from tuprolog.core import Term
-from tuprolog.jvmutils import jarray, jmap, kpair
+from tuprolog.jvmutils import jmap
 
 from ._definitions import Flag, FlagStore, NotableFlag
 
@@ -12,33 +14,33 @@ def flag(first: str | NotableFlag | Iterable, value: Term = None) -> Flag:
             return first.toPair()
         else:
             return first.to(value)
-    elif isinstance(first, str):
+    elif isinstance(first, (str, JString)):
         if value is None:
             raise ValueError("Argument value is None")
         return Flag(first, value)
+    elif isinstance(first, Flag) and value is None:
+        return first
     elif isinstance(first, Iterable) and value is None:
-        return kpair(first)
+        items = list(first)
+        if len(items) != 2 or not isinstance(items[0], (str, JString)):
+            raise ValueError(f"Expected a (name, value) pair, got {items}")
+        return Flag(*items)
     else:
         raise ValueError("Argument first is not iterable nor str")
 
 
-def flag_store(*flags: NotableFlag | Flag | Iterable | FlagStore, **kwargs: Mapping[str, Term]):
-    normal_flags = []
-    notable_flags = []
-    other_stores = []
+def flag_store(
+    *flags: NotableFlag | Flag | Iterable | FlagStore | Mapping[str, Term], **kwargs: Term
+) -> FlagStore:
+    """Merges flags in argument order (later ones override earlier ones), keyword arguments last."""
+    store = FlagStore.EMPTY
     for f in flags:
-        if isinstance(f, NotableFlag):
-            notable_flags.append(f)
-        elif isinstance(f, Flag):
-            normal_flags.append(f)
-        elif isinstance(f, FlagStore):
-            other_stores.append(f)
+        if isinstance(f, (NotableFlag, Flag, FlagStore)):
+            store = store.plus(f)
+        elif isinstance(f, Mapping):
+            store = store.plus(jmap(f))
         else:
-            normal_flags.append(flag(f))
-    store1 = FlagStore.of(jarray(NotableFlag) @ notable_flags)
-    store2 = FlagStore.of(jarray(Flag) @ normal_flags)
-    store3 = FlagStore.of(jmap(kwargs))
-    store = store1.plus(store2).plus(store3)
-    for s in other_stores:
-        store = store.plus(s)
+            store = store.plus(flag(f))
+    if kwargs:
+        store = store.plus(jmap(kwargs))
     return store

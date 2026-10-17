@@ -1,5 +1,7 @@
 from collections.abc import Callable, Iterable
 
+from jpype import JObject
+
 from tuprolog.core import Clause, Integer, Term
 from tuprolog.jvmutils import jlist
 from tuprolog.pyutils import iterable_or_varargs
@@ -19,17 +21,19 @@ def primitive(callable: Callable[[SolveResponse], Iterable[SolveResponse]]) -> P
         def solve(self, request: SolveRequest) -> Iterable[SolveResponse]:
             return callable(request)
 
-    return CallableToPrimitiveAdapter()
+    return JObject(CallableToPrimitiveAdapter(), Primitive)
 
 
 def solve_request(
     signature: Signature,
-    arguments: list[Term],
+    arguments: Iterable[Term],
     context: ExecutionContext,
-    issuing_instant: int = current_time_instant(),
+    issuing_instant: int | None = None,
     max_duration: int = MAX_TIMEOUT,
 ) -> SolveRequest:
-    return SolveRequest(signature, arguments, context, issuing_instant, max_duration)
+    if issuing_instant is None:
+        issuing_instant = current_time_instant()
+    return SolveRequest(signature, jlist(arguments), context, issuing_instant, max_duration)
 
 
 def solve_response(solution: Solution, *side_effects) -> SolveResponse:
@@ -122,6 +126,10 @@ def ensuring_argument_is_integer(request: SolveRequest, index: int) -> SolveRequ
 
 def ensuring_argument_is_list(request: SolveRequest, index: int) -> SolveRequest:
     return PrimitiveWrapper.ensuringArgumentIsList(request, index)
+
+
+def ensuring_argument_is_well_formed_list(request: SolveRequest, index: int) -> SolveRequest:
+    return PrimitiveWrapper.ensuringArgumentIsWellFormedList(request, index)
 
 
 def ensuring_argument_is_arity(request: SolveRequest, index: int) -> SolveRequest:

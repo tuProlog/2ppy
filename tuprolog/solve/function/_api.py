@@ -1,6 +1,9 @@
-from collections.abc import Callable
+from collections.abc import Callable, Iterable
+
+from jpype import JClass, JObject
 
 from tuprolog.core import Term
+from tuprolog.jvmutils import jlist
 from tuprolog.solve import MAX_TIMEOUT, ExecutionContext, Signature, current_time_instant
 from tuprolog.solve.primitive import SolveRequest
 
@@ -18,30 +21,34 @@ def logic_function(callable: Callable[[ComputeRequest], ComputeResponse]) -> Log
         def compute(self, request: ComputeRequest) -> ComputeResponse:
             return callable(request)
 
-    return CallableToLogicFunctionAdapter()
+    return JObject(CallableToLogicFunctionAdapter(), LogicFunction)
 
 
 def compute_request(
     signature: Signature,
-    arguments: list[Term],
+    arguments: Iterable[Term],
     context: ExecutionContext,
     issuing_instant: int | None = None,
     max_duration: int = MAX_TIMEOUT,
 ) -> ComputeRequest:
     if issuing_instant is None:
         issuing_instant = current_time_instant()
-    return ComputeRequest(signature, arguments, context, issuing_instant, max_duration)
+    return ComputeRequest(signature, jlist(arguments), context, issuing_instant, max_duration)
 
 
 def compute_response(result: Term) -> ComputeResponse:
     return ComputeResponse(result)
 
 
+def _boxed_index(index: int | None):
+    return None if index is None else JObject(index, JClass("java.lang.Integer"))
+
+
 def eval_as_expression(term: Term, request: SolveRequest, index: int | None = None) -> Term:
-    return ArithmeticUtilsKt.evalAsExpression(term, request, index)
+    return ArithmeticUtilsKt.evalAsExpression(term, request, _boxed_index(index))
 
 
 def eval_as_arithmetic_expression(
     term: Term, request: SolveRequest, index: int | None = None
 ) -> Term:
-    return ArithmeticUtilsKt.evalAsArithmeticExpression(term, request, index)
+    return ArithmeticUtilsKt.evalAsArithmeticExpression(term, request, _boxed_index(index))
