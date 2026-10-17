@@ -54,7 +54,7 @@ Welcome to the {name.title()} REPL.
             return ""
         if line.startswith(":"):
             return line
-        if line.endswith("."):
+        if line.rstrip().endswith("."):
             command = self.multi_line_command + line
             self.multi_line_command = ""
             return command

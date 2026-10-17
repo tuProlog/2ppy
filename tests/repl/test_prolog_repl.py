@@ -74,6 +74,13 @@ def test_blank_line_does_not_repeat_last_command():
     assert output.count("yes: c(1)") == 1
 
 
+@pytest.mark.parametrize("text", ["?- t(X). \n", "t(1).\t\n?- t(X).\n"])
+def test_trailing_whitespace_after_full_stop(text):
+    output = run(text, prolog_solver(static_kb=parse_theory("t(1).")))
+    assert "yes: t(1)\n    X = 1\n" in output
+    assert "...>" not in output
+
+
 def test_multi_line_clause_with_blank_line_inside():
     assert "yes: r(1)\n    Z = 1\n" in run("r(X) :-\n\n X = 1.\n?- r(Z).\n")
 
