@@ -3,6 +3,8 @@ from __future__ import annotations
 from cmd import Cmd
 from typing import IO
 
+from jpype import JException
+
 from tuprolog.core.parsing import ParseException, TermParser
 from tuprolog.solve import SolutionFormatter, Solver, TermFormatter, solution_formatter
 from tuprolog.theory.parsing import ClausesParser
@@ -102,6 +104,8 @@ Welcome to the {name.title()} REPL.
                 self.solver.assertZ(clause)
         except ParseException as e:
             self.on_parsing_error(e)
+        except JException as e:  # e.g. clauses the knowledge base rejects
+            self.stdout.write(f"Error: {e.getMessage()}\n")
         return False
 
     def on_parsing_error(self, err: ParseException) -> None:

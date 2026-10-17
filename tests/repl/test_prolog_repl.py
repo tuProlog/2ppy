@@ -169,6 +169,12 @@ def test_error_in_query_is_reported():
     assert "yes: true" in output
 
 
+def test_rejected_clause_is_reported_and_repl_continues():
+    output = run("foo :- 1.\n?- true.\n")
+    assert "Error: ClauseDatabase can contain only well formed clauses" in output
+    assert "yes: true" in output
+
+
 def test_help_lists_commands():
     output = run(":help\n")
     for command in ("assert", "exit", "help", "query"):
