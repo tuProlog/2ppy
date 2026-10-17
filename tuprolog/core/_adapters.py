@@ -4,7 +4,14 @@ from jpype import JImplementationFor, JOverride
 
 from tuprolog import logger
 from tuprolog.jvmutils import jiterable, kfunction
-from tuprolog.math import BigInteger, big_integer, python_decimal, python_integer
+from tuprolog.math import (
+    BigDecimal,
+    BigInteger,
+    big_decimal,
+    big_integer,
+    python_decimal,
+    python_integer,
+)
 from tuprolog.pyutils import iterable_or_varargs
 
 
@@ -174,14 +181,16 @@ class _KtScope:
         return self.intOf(big_integer(value))
 
     def real(self, value):
-        return self.intOf(big_integer(value))
+        if isinstance(value, BigDecimal):
+            return self.realOf(value)
+        return self.realOf(big_decimal(value))
 
     def numeric(self, value):
         if isinstance(value, str):
             return self.numOf(value)
         if isinstance(value, (int, BigInteger)):
-            return self.intOf(value)
-        return self.realOf(value)
+            return self.integer(value)
+        return self.real(value)
 
     def rule(self, head, *body):
         return iterable_or_varargs(body, lambda bs: self.ruleOf(head, jiterable(bs)))
