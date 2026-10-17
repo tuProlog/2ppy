@@ -13,8 +13,14 @@ class _KtTerm:
     def __jclass_init__(cls):
         pass
 
-    def __getitem__(self, item, *items):
-        return self.get(item, *items)
+    def __getitem__(self, item):
+        if isinstance(item, tuple):
+            # term[i, j, ...] is term[i][j]..., and term[s1, s2, ...] applies many substitutions
+            result = self
+            for index in item:
+                result = result.get(index)
+            return result
+        return self.get(item)
 
     def fresh_copy(self, scope=None):
         if scope is None:
