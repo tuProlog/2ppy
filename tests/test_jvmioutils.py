@@ -24,7 +24,7 @@ CONTENT = "first line\nsecond line\nthird line"
 @pytest.fixture
 def path(tmp_path):
     file = tmp_path / "file.txt"
-    file.write_text(CONTENT)
+    file.write_text(CONTENT, newline="\n")
     return str(file)
 
 
