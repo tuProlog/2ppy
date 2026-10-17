@@ -35,7 +35,7 @@ class _KtStruct:
         pass
 
     def insert_at(self, index, argument):
-        return self.addFirst(index, argument)
+        return self.insertAt(index, argument)
 
     def set_args(self, *args):
         return iterable_or_varargs(args, lambda xs: self.setArgs(jiterable(args)))
