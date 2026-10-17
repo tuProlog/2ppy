@@ -2,5 +2,5 @@
 flake8==6.1.0
 build==1.0.3
 pytest==7.4.2
-coverage==7.3.2
+coverage==7.3.4
 setuptools-git-versioning==1.13.5
