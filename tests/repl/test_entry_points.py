@@ -9,6 +9,7 @@ import pytest
 
 import tuprolog.core
 import tuprolog.solve.exception.error
+import tuprolog.solve.primitive
 import tuprolog.solve.prolog
 import tuprolog.theory
 
@@ -48,6 +49,12 @@ def shell_namespace():
         ("struct", tuprolog.core),
         ("var", tuprolog.core),
         ("Struct", tuprolog.core),
+        ("Atom", tuprolog.core),
+        ("Var", tuprolog.core),
+        ("Integer", tuprolog.core),
+        ("Clause", tuprolog.core),
+        ("rule", tuprolog.core),
+        ("primitive", tuprolog.solve.primitive),
         ("prolog_solver", tuprolog.solve.prolog),
         ("theory", tuprolog.theory),
         ("DomainError", tuprolog.solve.exception.error),
