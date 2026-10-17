@@ -16,7 +16,7 @@ ArithmeticUtilsKt = _function.ArithmeticUtilsKt
 ComputeRequest = Compute.Request
 
 
-ComputeResponse = Compute.Request
+ComputeResponse = Compute.Response
 
 
 @JImplements(LogicFunction)
