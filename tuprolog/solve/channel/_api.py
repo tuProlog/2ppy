@@ -61,7 +61,7 @@ def output_store(
     warnings: OutputChannel | None = None,
     channels: Mapping[str, OutputChannel] | None = None,
 ) -> OutputStore:
-    if all(channel is None for channel in (stdout, stderr, warnings)):
+    if channels is None and all(channel is None for channel in (stdout, stderr, warnings)):
         return OutputStore.fromStandard()
     elif channels is None:
         return OutputStore.fromStandard(
