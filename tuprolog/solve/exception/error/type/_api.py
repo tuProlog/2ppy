@@ -49,6 +49,6 @@ def type_error_for_goal(
 
 def type(name: str | Term) -> Type:
     if isinstance(name, str):
-        return TypeError.valueOf(name)
+        return Type.of(name)
     else:
-        return TypeError.fromTerm(name)
+        return Type.fromTerm(name)

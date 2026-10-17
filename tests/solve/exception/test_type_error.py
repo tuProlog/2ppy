@@ -7,6 +7,7 @@ from tuprolog.solve.exception import LogicError
 from tuprolog.solve.exception.error.type import (
     Type,
     TypeError,
+    type,
     type_error_for_goal,
     type_error_for_term,
 )
@@ -54,6 +55,18 @@ def test_type_constants(name):
     assert getattr(module, f"TYPE_{name}") == expected
     assert str(expected) == name.lower()
     assert expected.toTerm() == atom(name.lower())
+
+
+@pytest.mark.parametrize("name", TYPE_NAMES)
+def test_type_values(name):
+    expected = getattr(Type, name)
+    assert type(name.lower()) == expected
+    assert type(name) == expected
+    assert type(atom(name.lower())) == expected
+
+
+def test_type_from_non_atom_term_is_none():
+    assert type(integer(1)) is None
 
 
 def assert_type_error(error, expected, culprit, message):
