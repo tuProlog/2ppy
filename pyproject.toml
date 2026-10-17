@@ -1,41 +1,89 @@
-[build-system]
-requires = ["setuptools>=61", "wheel", "setuptools-git-versioning<2"]
-build-backend = "setuptools.build_meta"
-
-[tool.setuptools-git-versioning]
-enabled = true
-
 [project]
-dynamic = ["version"]
 name = "2ppy"
-authors = [
-  { name="Giovanni Ciatto", email="giovanni.ciatto@unibo.it" },
-  { name="Luca Deluigi", email="luca.deluigi5@unibo.it" },
-]
+version = "0.4.9"
 description = "Python-based implementation of tuProlog -- the open ecosystem for symbolic AI --, based on 2P-Kt"
 readme = "README.md"
-requires-python = ">=3.9, <3.12"
-classifiers=[
+authors = [
+    { name = "Giovanni Ciatto", email = "giovanni.ciatto@unibo.it" },
+    { name = "Luca Deluigi", email = "luca.deluigi5@unibo.it" },
+]
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+keywords = ["prolog", "symbolic ai", "ecosystem", "tuprolog", "2p", "python"]
+classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
     "Topic :: Software Development :: Interpreters",
     "Topic :: Software Development :: Libraries",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
-    "License :: OSI Approved :: Apache Software License",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Prolog",
 ]
-license = {file = "LICENSE"}
-keywords = ["prolog", "symbolic ai", "ecosystem", "tuprolog", "2p", "python"]
+requires-python = ">=3.10" # Update workflows/check.yml if you change this
 dependencies = [
-  "JPype1==1.4.1",
-  "jdk4py==17.0.7.0"
+    "jdk4py>=21.0.8.2",
+    "jpype1>=1.7.1",
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/tuProlog/2ppy"
-"Bug" = "https://github.com/tuProlog/2ppy/issues"
+Homepage = "https://github.com/tuProlog/2ppy"
+Issues = "https://github.com/tuProlog/2ppy/issues"
+
+[build-system]
+requires = ["uv_build>=0.13.0,<0.14.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "tuprolog"
+module-root = ""
+
+[dependency-groups]
+dev = [
+    "coverage>=7.14.0",
+    "mypy>=2.1.0",
+    "poethepoet>=0.45.0",
+    "pytest>=9.0.3",
+    "ruff>=0.15.12",
+]
+
+[tool.poe.tasks]
+# 2P-Kt's JARs (see pom.xml) go into tuprolog/libs/: needed before testing or building
+fetch-jars = "python scripts/fetch_jars.py"
+test = "pytest"
+coverage = "coverage run -m pytest"
+coverage-report = "coverage report -m"
+coverage-html = "coverage html"
+ruff-check = "ruff check"
+ruff-fix = "ruff check --fix"
+format = "ruff format"
+format-check = "ruff format --check"
+mypy = "mypy tuprolog tests scripts"
+compile = "python -m compileall -q tuprolog tests scripts"
+static-checks = [
+    "compile",
+    "format-check",
+    "ruff-check",
+    "mypy",
+]
+static-fixes = [
+    "ruff-fix",
+    "format",
+]
+# Local, untracked Git hooks; append hook names to pick some (pre-commit,
+# conventional-commits, no-ai-signature, pre-push)
+install-hooks = "python scripts/githooks.py install"
+uninstall-hooks = "python scripts/githooks.py uninstall"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[[tool.uv.index]]
+name = "testpypi"
+url = "https://test.pypi.org/simple/"
+publish-url = "https://test.pypi.org/legacy/"
+explicit = true
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100

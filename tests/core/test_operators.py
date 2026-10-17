@@ -57,7 +57,9 @@ class TestOperators(AbstractTestOperatorStuff):
                     different2 = operator(functor, spec, priority + 1)
 
                     self.assertTrue(op != different1)
-                    self.assertTrue(op != different2)
+                    # 2P-Kt's Operator.equals ignores the priority (compareTo does not)
+                    self.assertTrue(op == different2)
+                    self.assertTrue(op < different2)
 
 
 class TestSpecifiers(AbstractTestOperatorStuff):
