@@ -231,11 +231,6 @@ def test_read_theory_from_pathlib_path(source_file):
     assert strings(read_theory(source_file)) == expected_strings()
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="jvmioutils.ensure_input_steam rejects Python file-like objects with a broken "
-    "TypeError message ('can only concatenate str (not \"type\") to str')",
-)
 def test_read_theory_rejects_unsupported_inputs_with_a_clear_message():
     with pytest.raises(TypeError, match="Invalid type"):
         read_theory(io.StringIO(SOURCE))  # type: ignore[arg-type]

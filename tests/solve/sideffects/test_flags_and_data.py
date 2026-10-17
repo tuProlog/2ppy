@@ -56,10 +56,6 @@ def test_clear_flags_factory(arguments, expected):
     assert [str(n) for n in effect.names] == expected
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="iterable_or_varargs (tuprolog/pyutils.py) unpacks a single string into characters",
-)
 def test_clear_flags_with_single_name():
     assert [str(n) for n in clear_flags("unknown").names] == ["unknown"]
 

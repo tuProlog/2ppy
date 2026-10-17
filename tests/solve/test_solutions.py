@@ -72,11 +72,6 @@ def test_halt_exception_via_java_getter(halt):
     assert isinstance(exception.context, ExecutionContext)
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="jvmutils' auto-generated `exception` property on HaltImpl is bound to "
-    "SolutionImpl.getException, which JPype invokes non-virtually (returns null)",
-)
 def test_halt_exception_property(halt):
     assert halt.exception == halt.get_exception()
 

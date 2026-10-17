@@ -90,10 +90,6 @@ def test_unload_libraries_factory(arguments, expected):
     assert [str(a) for a in effect.aliases] == expected
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="iterable_or_varargs (tuprolog/pyutils.py) unpacks a single string into characters",
-)
 def test_unload_libraries_with_single_alias():
     assert [str(a) for a in unload_libraries("abc").aliases] == ["abc"]
 
@@ -228,10 +224,6 @@ def test_close_channel_factories(factory, kind):
     assert isinstance(factory(), kind)
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="iterable_or_varargs (tuprolog/pyutils.py) unpacks a single string into characters",
-)
 @pytest.mark.parametrize("factory", [close_input_channels, close_output_channels])
 def test_close_channel_factories_with_single_name(factory):
     assert [str(n) for n in factory("foo").names] == ["foo"]

@@ -309,12 +309,21 @@ def test_channel_setters_via_java_methods(solver):
     assert "undefined/1" in str(warnings[0])
 
 
-@pytest.mark.xfail(
+_SHADOWED_SETTER = pytest.mark.xfail(
     strict=True,
     reason="the MutableSolver customizer's property setters are shadowed by getter-only "
     "properties auto-generated on concrete classes ('property ... has no setter')",
 )
-@pytest.mark.parametrize("name", ["standard_output", "standard_error", "warnings"])
+
+
+@pytest.mark.parametrize(
+    "name",
+    [
+        pytest.param("standard_output", marks=_SHADOWED_SETTER),
+        pytest.param("standard_error", marks=_SHADOWED_SETTER),
+        "warnings",
+    ],
+)
 def test_channel_property_setters(solver, name):
     channel = output_channel(lambda _: None)
     setattr(solver, name, channel)
