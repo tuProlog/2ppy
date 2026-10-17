@@ -29,18 +29,23 @@ def aliased(alias: str, library: Library) -> Library:
     return Library.of(alias, library)
 
 
-def libraries(*libs: Library | Iterable[Library], **kwargs: Library) -> Runtime:
-    all_libraries = []
-    queue = list(libs)
-    while len(queue) > 0:
-        current = queue.pop(0)
-        if isinstance(current, Library):
-            all_libraries.append(current)
-        elif isinstance(current, Iterable):
-            queue[0:0] = list(current)
+def libraries(*libs: Library | Runtime | Iterable[Library], **kwargs: Library) -> Runtime:
+    all_libraries: list[Library] = []
+
+    def collect(item):
+        if isinstance(item, Library):
+            all_libraries.append(item)
+        elif isinstance(item, Runtime):
+            all_libraries.extend(item.libraries)
+        elif isinstance(item, Iterable) and not isinstance(item, str):
+            for nested in item:
+                collect(nested)
         else:
-            raise TypeError(f"Expected Library or Iterable[Library], got {type(current)}")
+            raise TypeError(f"Expected Library, Runtime or Iterable[Library], got {type(item)}")
+
+    collect(libs)
     for alias, library in kwargs.items():
-        if isinstance(library, Library):
-            all_libraries.append(aliased(alias, library))
+        if not isinstance(library, Library):
+            raise TypeError(f"Expected Library for alias {alias}, got {type(library)}")
+        all_libraries.append(aliased(alias, library))
     return reduce(lambda a, b: a.plus(b), all_libraries, Runtime.empty())

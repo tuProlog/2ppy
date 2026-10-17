@@ -70,3 +70,27 @@ def test_aliased():
     assert renamed.alias == "renamed"
     assert renamed.primitives.keySet() == original.primitives.keySet()
     assert original.alias == "original"
+
+
+@pytest.mark.parametrize("wrong", ["lib", 42, None, atom("a"), ["lib"], [library("a"), 1]])
+def test_libraries_rejects_non_libraries(wrong):
+    with pytest.raises(TypeError):
+        libraries(wrong)
+
+
+@pytest.mark.parametrize("wrong", ["lib", 42, None, [library("a")]])
+def test_libraries_rejects_non_library_keyword_arguments(wrong):
+    with pytest.raises(TypeError):
+        libraries(x=wrong)
+
+
+def test_libraries_accepts_runtimes():
+    runtime = libraries(library("a"), library("b"))
+    assert aliases_of(libraries(runtime)) == ["a", "b"]
+    assert aliases_of(libraries(runtime, library("c"))) == ["a", "b", "c"]
+    assert aliases_of(libraries([runtime], [library("c")])) == ["a", "b", "c"]
+
+
+def test_libraries_accepts_nested_iterables_and_generators():
+    nested = [[library("a"), (library("b"),)], (lib for lib in [library("c")])]
+    assert aliases_of(libraries(nested)) == ["a", "b", "c"]
