@@ -21,7 +21,7 @@ def logic_function(callable: Callable[[ComputeRequest], ComputeResponse]) -> Log
         def compute(self, request: ComputeRequest) -> ComputeResponse:
             return callable(request)
 
-    return CallableToLogicFunctionAdapter()
+    return JObject(CallableToLogicFunctionAdapter(), LogicFunction)
 
 
 def compute_request(

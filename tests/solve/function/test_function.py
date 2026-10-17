@@ -1,19 +1,24 @@
 import pytest
 
-from tests.solve.primitive._support import RequestCapturer
+from tests.solve.primitive._support import RequestCapturer, bindings, python_int, solve_all
 from tuprolog.core import integer, var
 from tuprolog.core.parsing import parse_term
 from tuprolog.solve import MAX_TIMEOUT, current_time_instant, signature
 from tuprolog.solve.exception.error import InstantiationError, TypeError
 from tuprolog.solve.function import (
+    AbstractLogicFunction,
     Compute,
     ComputeRequest,
     ComputeResponse,
+    LogicFunction,
     compute_request,
     compute_response,
     eval_as_arithmetic_expression,
     eval_as_expression,
+    logic_function,
 )
+from tuprolog.solve.library import library
+from tuprolog.solve.prolog import prolog_solver
 
 
 def test_compute_response_type_is_compute_response():
@@ -96,3 +101,85 @@ def test_eval_of_non_evaluable_raises_type_error(capturer, evaluate):
     with pytest.raises(TypeError) as info:
         evaluate(request.arguments[0], request, 0)
     assert "evaluable" in str(info.value.error_struct)
+
+
+# --- logic functions implemented in Python, end to end ---
+
+
+def _double(request):
+    return compute_response(integer(python_int(request.arguments[0]) * 2))
+
+
+def _solver_with_functions(**functions):
+    lib = library(
+        "lib.functions",
+        functions={signature(name, arity): f for name, (arity, f) in functions.items()},
+    )
+    return prolog_solver(libraries=lib)
+
+
+def test_logic_function_is_a_logic_function():
+    assert isinstance(logic_function(_double), LogicFunction)
+
+
+def test_abstract_logic_function_cannot_compute():
+    with pytest.raises(NotImplementedError):
+        AbstractLogicFunction().compute(None)
+
+
+def test_logic_function_in_is():
+    solver = _solver_with_functions(double=(1, logic_function(_double)))
+    assert bindings(solve_all(solver, "X is double(21)"), "X") == ["42"]
+    assert bindings(solve_all(solver, "X is double(1 + 2) * 2"), "X") == ["12"]
+    assert bindings(solve_all(solver, "X is double(double(1))"), "X") == ["4"]
+
+
+def test_logic_function_in_comparisons():
+    solver = _solver_with_functions(double=(1, logic_function(_double)))
+    assert solve_all(solver, "double(2) =:= 4")[0].is_yes
+    assert solve_all(solver, "double(2) > 5")[0].is_no
+
+
+def test_logic_function_receives_request():
+    seen = []
+
+    def spy(request):
+        seen.append(request)
+        return compute_response(integer(0))
+
+    solver = _solver_with_functions(spy=(2, logic_function(spy)))
+    assert solve_all(solver, "X is spy(1, 2)")[0].is_yes
+    request = seen[-1]
+    assert isinstance(request, ComputeRequest)
+    assert request.signature == signature("spy", 2)
+    assert [str(a) for a in request.arguments] == ["1", "2"]
+
+
+def test_nullary_logic_function():
+    solver = _solver_with_functions(
+        forty_two=(0, logic_function(lambda r: compute_response(integer(42))))
+    )
+    assert bindings(solve_all(solver, "X is forty_two"), "X") == ["42"]
+
+
+def test_logic_function_reply_with():
+    solver = _solver_with_functions(one=(0, logic_function(lambda r: r.reply_with(integer(1)))))
+    assert bindings(solve_all(solver, "X is one + 1"), "X") == ["2"]
+
+
+def test_subclassing_abstract_logic_function():
+    class Triple(AbstractLogicFunction):
+        def compute(self, request):
+            return compute_response(integer(python_int(request.arguments[0]) * 3))
+
+    solver = _solver_with_functions(triple=(1, Triple()))
+    assert bindings(solve_all(solver, "X is triple(3)"), "X") == ["9"]
+
+
+def test_python_exceptions_in_logic_functions_propagate():
+    def broken(request):
+        raise ValueError("boom")
+
+    solver = _solver_with_functions(broken=(0, logic_function(broken)))
+    with pytest.raises(ValueError, match="boom"):
+        solve_all(solver, "X is broken")
