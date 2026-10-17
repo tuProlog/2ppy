@@ -1,7 +1,7 @@
 from collections.abc import Callable, Mapping
 from functools import singledispatch
 
-from jpype import JObject
+from jpype import JObject, JString
 
 from tuprolog.jvmutils import jmap, kfunction
 
@@ -53,8 +53,12 @@ def warn() -> OutputChannel:
     return OutputChannel.warn()
 
 
+def _pythonic(value):
+    return str(value) if isinstance(value, JString) else value
+
+
 def output_channel(consumer: Callable) -> OutputChannel:
-    return OutputChannel.of(kfunction(1)(consumer))
+    return OutputChannel.of(kfunction(1)(lambda value: consumer(_pythonic(value))))
 
 
 def output_store(

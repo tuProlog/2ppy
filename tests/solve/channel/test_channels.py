@@ -73,6 +73,12 @@ def test_output_channel_forwards_writes():
     assert written == ["a", "b"]
 
 
+def test_output_channel_passes_python_strings():
+    written: list = []
+    output_channel(written.append).write("a")
+    assert type(written[0]) is str
+
+
 def test_closed_output_channel_rejects_writes():
     channel = output_channel(lambda _: None)
     assert not channel.is_closed
