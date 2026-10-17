@@ -212,6 +212,21 @@ def to_snake_case(camel_str: str) -> str:
     ).lstrip("_")
 
 
+def _virtual_getter(name: str) -> Callable:
+    # invoking an unbound JMethod (e.g. as a property fget) is a non-virtual call in JPype,
+    # which would ignore overrides in subclasses: look the method up on the instance instead
+    return lambda obj: getattr(obj, name)()
+
+
+def _virtual_setter(name: str) -> Callable:
+    return lambda obj, value: getattr(obj, name)(value)
+
+
+def _is_defined(cls, name: str) -> bool:
+    # hasattr() is unreliable here, as properties may fail when accessed on JVM classes
+    return any(name in base.__dict__ for base in cls.__mro__)
+
+
 @JImplementationFor("java.lang.Object")
 class _KtObjectWithSmartPythonicAccessors:
     """
@@ -221,7 +236,6 @@ class _KtObjectWithSmartPythonicAccessors:
 
     def __jclass_init__(self):
         members = dir(self)
-        members_set = set(members)
         for name in members:
             member = getattr(self, name, None)
             if member is None or name.startswith("_") or "$" in name or name == "getClass":
@@ -234,8 +248,8 @@ class _KtObjectWithSmartPythonicAccessors:
                 # Shorten method name and promote to property if it's a getter
                 if method_has_0_args and snake_case.startswith("get_"):
                     property_name = snake_case[4:]
+                    getter = _virtual_getter(name)
                     if member._isBeanAccessor():
-                        getter = member
                         # Attempt to find paired bean setter
                         setter_name = "set" + name.removeprefix("get")
                         setter = getattr(self, setter_name, None)
@@ -244,24 +258,22 @@ class _KtObjectWithSmartPythonicAccessors:
                             and isinstance(setter, JMethodClass)
                             and setter._isBeanMutator()
                         ):
+                            setter = _virtual_setter(setter_name)
                             add_property = (property_name, property(fget=getter, fset=setter))
                         else:
                             add_property = (property_name, property(fget=getter))
                     else:
-                        add_property = (property_name, property(fget=member))
+                        add_property = (property_name, property(fget=getter))
                 # Promote method to property if it's a boolean getter
                 elif method_has_0_args and snake_case.startswith("is_"):
-                    add_property = (snake_case, property(fget=member))
+                    add_property = (snake_case, property(fget=_virtual_getter(name)))
                     # Do not add method with the same name
                     add_method = None
                 # Add method and property
                 for to_add in (add_property, add_method):
-                    # Avoid conflicts with existing members
-                    if to_add is not None and (
-                        to_add[0] not in members_set or not hasattr(self, to_add[0])
-                    ):
+                    # Avoid conflicts with existing members (e.g. those defined by customizers)
+                    if to_add is not None and not _is_defined(self, to_add[0]):
                         self._customize(*to_add)
-                        members_set.add(to_add[0])
 
 
 @JImplementationFor("java.lang.Throwable")
