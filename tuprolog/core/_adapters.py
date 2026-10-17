@@ -94,7 +94,6 @@ class _KtRecursive:
     def unfolded(self):
         return self.getUnfoldedList()
 
-    @property
     def __len__(self):
         return self.getSize()
 
