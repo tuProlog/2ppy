@@ -61,6 +61,19 @@ def test_multi_line_query():
     assert "X = f(a)" in output
 
 
+@pytest.mark.parametrize("blank", ["", "   "], ids=["empty", "spaces"])
+def test_blank_lines_are_ignored(blank):
+    output = run(f"{blank}\n{blank}\n?- true.\n")
+    assert output.startswith("\nprolog>prolog>prolog>yes: true")
+    assert "...>" not in output
+
+
+def test_blank_line_does_not_repeat_last_command():
+    solver = prolog_solver(mutable=True)
+    output = run("?- assertz(c(1)).\n\n?- c(X).\n", solver)
+    assert output.count("yes: c(1)") == 1
+
+
 def test_multi_line_clause_with_blank_line_inside():
     assert "yes: r(1)\n    Z = 1\n" in run("r(X) :-\n\n X = 1.\n?- r(Z).\n")
 

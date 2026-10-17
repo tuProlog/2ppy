@@ -45,13 +45,13 @@ Welcome to the {name.title()} REPL.
         return "...>" if self.multi_line_command else f"{self.name}>"
 
     def emptyline(self) -> bool:
-        if self.multi_line_command:
-            return False
-        return super().emptyline()
+        return False  # never repeat the last command, as Cmd does by default
 
     def precmd(self, line: str) -> str:
         if line == "EOF":
             return ":exit"
+        if not line.strip() and not self.multi_line_command:
+            return ""
         if line.startswith(":"):
             return line
         if line.endswith("."):
