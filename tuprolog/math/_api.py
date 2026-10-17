@@ -7,14 +7,16 @@ from tuprolog.pyutils import and_then
 from ._definitions import BigDecimal, BigInteger, MathContext, RoundingMode
 
 
-def big_integer(value: str | int, radix: int | None = None) -> BigInteger:
+def big_integer(value: str | int | BigInteger, radix: int | None = None) -> BigInteger:
     if radix is not None:
         assert isinstance(value, str)
         return BigInteger.of(value, radix)
+    if isinstance(value, BigInteger):
+        return value
     if isinstance(value, str):
         return BigInteger.of(JString @ value)
     assert isinstance(value, int)
-    return BigInteger.of(str(value))
+    return BigInteger.of(str(int(value)))  # int() turns bools into 0/1
 
 
 def python_integer(value: BigInteger) -> int:
