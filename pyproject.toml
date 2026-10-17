@@ -32,7 +32,7 @@ classifiers=[
 license = {file = "LICENSE"}
 keywords = ["prolog", "symbolic ai", "ecosystem", "tuprolog", "2p", "python"]
 dependencies = [
-  "JPype1==1.4.1",
+  "JPype1==1.6.0",
   "jdk4py==17.0.7.0"
 ]
 
