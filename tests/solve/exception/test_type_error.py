@@ -8,9 +8,12 @@ from tuprolog.solve.exception.error.type import (
     Type,
     TypeError,
     type,
+    type_error,
     type_error_for_goal,
     type_error_for_term,
 )
+
+from .helpers import solve_once, solver_raising
 
 # `error.type` is shadowed by the type() factory: get the sub-package from sys.modules
 module = importlib.import_module("tuprolog.solve.exception.error.type")
@@ -78,6 +81,19 @@ def assert_type_error(error, expected, culprit, message):
     assert error.extra_data == atom(message)
     assert error.getType() == struct("type_error", expected.toTerm(), culprit)
     assert error.error_struct == struct("error", error.getType(), atom(message))
+
+
+def test_type_error(context):
+    error = type_error(context, Type.INTEGER, atom("x"), "not an integer")
+    assert_type_error(error, Type.INTEGER, atom("x"), "not an integer")
+
+
+def test_type_error_raised_from_primitive_is_catchable():
+    solver = solver_raising(te=lambda r: type_error(r.context, Type.ATOM, integer(1), "m"))
+    caught = solve_once(solver, "catch(te, error(type_error(T, C), M), true)")
+    assert caught.substitution.getByName("T") == atom("atom")
+    assert caught.substitution.getByName("C") == integer(1)
+    assert caught.substitution.getByName("M") == atom("m")
 
 
 def test_type_error_for_goal(context, procedure):

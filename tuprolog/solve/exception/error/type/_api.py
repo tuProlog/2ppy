@@ -4,10 +4,8 @@ from tuprolog.solve import ExecutionContext, Signature
 from ._definitions import Type, TypeError
 
 
-def type_error_for_flag_values(
-    context: ExecutionContext, procedure: Signature, expected: Type, actual: Term, message: str
-) -> TypeError:
-    return TypeError.of(context, procedure, expected, actual, message)
+def type_error(context: ExecutionContext, expected: Type, actual: Term, message: str) -> TypeError:
+    return TypeError.of(context, expected, actual, message)
 
 
 def type_error_for_argument_list(
