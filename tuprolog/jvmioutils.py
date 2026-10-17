@@ -93,7 +93,7 @@ def ensure_input_steam(input: str | InputStream) -> InputStream:
     elif isinstance(input, InputStream):
         return input
     else:
-        raise TypeError("Invalid type: " + type(input))
+        raise TypeError(f"Invalid type: {type(input)}")
 
 
 logger.debug("Configure JVM-specific IO extensions")
