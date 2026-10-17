@@ -1,6 +1,9 @@
+from collections.abc import Mapping
+
 from jpype import JImplementationFor
 
 from tuprolog import logger
+from tuprolog.jvmutils import jmap
 
 from ._definitions import NotableFlag
 
@@ -17,6 +20,8 @@ class _KtFlagStore:
         return self.get(notableFlag)
 
     def __add__(self, other):
+        if isinstance(other, Mapping):
+            return self.plus(jmap(other))
         return self.plus(other)
 
     def __sub__(self, other):
