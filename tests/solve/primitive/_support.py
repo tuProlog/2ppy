@@ -61,7 +61,7 @@ def bindings(solutions: Iterable[Solution], variable: str) -> list[str]:
 def error_of(solution: Solution) -> Term:
     """The error term carried by a halted solution."""
     assert solution.is_halt, solution
-    return solution.exception.error_struct
+    return solution.get_exception().error_struct
 
 
 def single_primitive_library(
