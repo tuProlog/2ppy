@@ -113,6 +113,13 @@ def test_contains_flag_names():
     assert "missing" not in DEFAULT_FLAG_STORE
 
 
+def test_contains_notable_flags():
+    for notable in NOTABLE_FLAGS:
+        assert notable in DEFAULT_FLAG_STORE
+        assert notable not in EMPTY_FLAG_STORE
+    assert Unknown not in DEFAULT_FLAG_STORE - Unknown
+
+
 def test_add_notable_flag_sets_its_default():
     assert (EMPTY_FLAG_STORE + Unknown)[Unknown] == Unknown.WARNING
 
