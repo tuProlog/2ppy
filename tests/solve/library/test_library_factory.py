@@ -133,3 +133,9 @@ def test_solver_load_library_at_runtime():
     assert solve_all(solver, "always")[0].is_no
     solver.load_library(library("late", primitives={signature("always", 0): ALWAYS}))
     assert solve_all(solver, "always")[0].is_yes
+
+
+@pytest.mark.parametrize("operators", [lambda: [ARROW], lambda: (ARROW,), lambda: iter([ARROW])])
+def test_library_operators_from_python_iterables(operators):
+    lib = library("lib.ops", operators=operators())
+    assert list(lib.operators) == [ARROW]

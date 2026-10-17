@@ -1,7 +1,7 @@
 from collections.abc import Iterable, Mapping
 from functools import reduce
 
-from tuprolog.core.operators import OperatorSet, operator_set
+from tuprolog.core.operators import Operator, OperatorSet, operator_set
 from tuprolog.solve import Signature
 from tuprolog.solve.function import LogicFunction
 from tuprolog.solve.primitive import Primitive
@@ -14,11 +14,13 @@ def library(
     alias: str | None = None,
     primitives: Mapping[Signature, Primitive] = {},
     clauses: Iterable[Clause] = [],
-    operators: OperatorSet | None = None,
+    operators: OperatorSet | Iterable[Operator] | None = None,
     functions: Mapping[Signature, LogicFunction] = {},
 ) -> Library | Pluggable:
     if operators is None:
         operators = operator_set()
+    elif not isinstance(operators, OperatorSet):
+        operators = operator_set(list(operators))
     if alias is None:
         return Library.of(primitives, clauses, operators, functions)
     else:
