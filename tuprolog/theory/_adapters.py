@@ -1,4 +1,4 @@
-from collections.abc import Sized
+from collections.abc import Iterable, Sized
 
 from jpype import JImplementationFor, JOverride
 
@@ -26,15 +26,15 @@ class _KtTheory:
         return self.get(item)
 
     def _assert(self, method, clause, *clauses):
-        if len(clauses) == 0:
+        if len(clauses) == 0 and not isinstance(clause, Iterable):
             return method(clause)
-        return iterable_or_varargs((clause,) + clauses, lambda cs: method(jiterable(cs)))
+        return iterable_or_varargs((clause,) + clauses, lambda cs: method(jiterable(list(cs))))
 
     def assert_a(self, clause, *clauses):
-        self._assert(self.assertA, clause, *clauses)
+        return self._assert(self.assertA, clause, *clauses)
 
     def assert_z(self, clause, *clauses):
-        self._assert(self.assertZ, clause, *clauses)
+        return self._assert(self.assertZ, clause, *clauses)
 
     @JOverride
     def retract(self, clause, *clauses):
