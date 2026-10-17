@@ -90,6 +90,7 @@ def test_shell_keeps_builtins(shell_namespace, name):
         ("tuprolog.repl.problog", "problog", "0.5::a.\n?- a.\n", "yes: a"),
     ],
 )
+@pytest.mark.filterwarnings("ignore:.*found in sys.modules:RuntimeWarning")
 def test_repl_modules_in_process(monkeypatch, capsys, module, solver_name, text, expected):
     monkeypatch.setattr(sys, "stdin", BoundedInput(text))
     runpy.run_module(module, run_name="__main__")
