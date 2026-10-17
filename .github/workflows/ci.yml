@@ -38,16 +38,15 @@ jobs:
         with:
           fetch-depth: 0
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
       - name: Set up Maven with Java 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: '17'
-          distribution: 'adopt'
-          architecture: 'x64'
+          distribution: 'temurin'
           cache: maven
       - name: Install build tool
         run: |
@@ -76,7 +75,7 @@ jobs:
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
       - name: Upload artifacts
         if: ${{ matrix.package }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.artifact.outputs.artifact-name }}
           path: |
@@ -85,7 +84,7 @@ jobs:
             LICENSE
       - name: Upload test install script to artifact
         if: ${{ matrix.package }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-install-script
           path: test/post_install_test.py
@@ -114,11 +113,11 @@ jobs:
     needs: [build]
     steps:
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       - name: Download Artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: ${{ needs.build.outputs.artifact-name }}
       - name: Install from wheel
@@ -130,7 +129,7 @@ jobs:
         run: |
           pip install dist/*.tar.gz
       - name: Pull test file from artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: test-install-script
       - name: Test installation
@@ -145,11 +144,11 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/') && github.event_name == 'push'
     steps:
       - name: Download Artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: ${{ needs.build.outputs.artifact-name }}
       - name: GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           name: ${{ needs.build.outputs.version }}
           fail_on_unmatched_files: true
@@ -168,7 +167,7 @@ jobs:
       id-token: write
     steps:
       - name: Download Artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: ${{ needs.build.outputs.artifact-name }}
       - name: Publish to PyPI
