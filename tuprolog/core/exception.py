@@ -1,6 +1,7 @@
-from tuprolog import logger
-import jpype.imports  # noqa: F401
 import it.unibo.tuprolog.core.exception as _exceptions  # type: ignore
+import jpype.imports  # noqa: F401
+
+from tuprolog import logger
 
 TuPrologException = _exceptions.TuPrologException
 

@@ -1,5 +1,6 @@
 from tuprolog.solve import ExecutionContext
 from tuprolog.solve.exception import LogicError
+
 from ._definitions import SystemError
 
 

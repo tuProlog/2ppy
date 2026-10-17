@@ -1,11 +1,11 @@
-from typing import Union
-from io import IOBase, SEEK_SET
-from tuprolog import logger
-from jpype import JImplementationFor, JOverride
-import jpype.imports  # noqa: F401
+from io import SEEK_SET, IOBase
+
 import java.io as _jio  # type: ignore
 import java.nio.file as _jnio_file  # type: ignore
+import jpype.imports  # noqa: F401
+from jpype import JImplementationFor, JOverride
 
+from tuprolog import logger
 
 InputStream = _jio.InputStream
 
@@ -32,7 +32,7 @@ class _JvmInputStream:
 
     @property
     def closed(self):
-        if hasattr(self, '_closed'):
+        if hasattr(self, "_closed"):
             return self._closed
         else:
             return False
@@ -56,7 +56,7 @@ class _JvmInputStream:
         return False
 
     def _buffer(self):
-        if not hasattr(self, '_buffered'):
+        if not hasattr(self, "_buffered"):
             self._buffered = BufferedReader(InputStreamReader(self))
 
     def readline(self, size=-1):
@@ -87,7 +87,7 @@ def open_file(path: str) -> InputStream:
     return Files.newInputStream(Paths.get(path))
 
 
-def ensure_input_steam(input: Union[str, InputStream]) -> InputStream:
+def ensure_input_steam(input: str | InputStream) -> InputStream:
     if isinstance(input, str):
         return open_file(input)
     elif isinstance(input, InputStream):

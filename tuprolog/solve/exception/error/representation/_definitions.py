@@ -1,7 +1,7 @@
-from tuprolog import logger
-import jpype.imports  # noqa: F401
 import it.unibo.tuprolog.solve.exception.error as _errors  # type: ignore
+import jpype.imports  # noqa: F401
 
+from tuprolog import logger
 
 RepresentationError = _errors.RepresentationError
 
@@ -33,4 +33,6 @@ LIMIT_OOP_OBJECT = Limit.OOP_OBJECT
 LIMIT_TOO_MANY_VARIABLES = Limit.TOO_MANY_VARIABLES
 
 
-logger.debug("Loaded JVM classes from it.unibo.tuprolog.solve.exception.error.RepresentationError.*")
+logger.debug(
+    "Loaded JVM classes from it.unibo.tuprolog.solve.exception.error.RepresentationError.*"
+)

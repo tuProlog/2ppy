@@ -87,3 +87,17 @@ explicit = true
 [tool.ruff]
 target-version = "py310"
 line-length = 100
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"] # sub-packages re-export their _definitions/_api, and load their _adapters
+"tests/core/test_kt_math.py" = ["RUF032"] # deliberately tests exact float -> Decimal conversions
+
+[tool.mypy]
+# JVM classes are re-exported as plain variables (e.g. `Term = _core.Term`): annotations using them
+# are opaque to mypy (Any), as JPype offers no static types for the JVM
+disable_error_code = ["valid-type"]
+
+[[tool.mypy.overrides]]
+# JPype ships no type information; JVM packages (it.unibo..., java..., kotlin...) are only known at runtime
+module = ["jpype", "jpype.*", "_jpype", "jdk4py", "it.*", "java.*", "kotlin.*"]
+ignore_missing_imports = true

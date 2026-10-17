@@ -1,10 +1,12 @@
-from typing import Iterable, Union, Mapping
+from collections.abc import Iterable, Mapping
+
 from tuprolog.core import Term
-from tuprolog.jvmutils import kpair, jmap, jarray
-from ._definitions import FlagStore, NotableFlag, Flag
+from tuprolog.jvmutils import jarray, jmap, kpair
+
+from ._definitions import Flag, FlagStore, NotableFlag
 
 
-def flag(first: Union[str, NotableFlag, Iterable], value: Term = None) -> Flag:
+def flag(first: str | NotableFlag | Iterable, value: Term = None) -> Flag:
     if isinstance(first, NotableFlag):
         if value is None:
             return first.toPair()
@@ -20,7 +22,7 @@ def flag(first: Union[str, NotableFlag, Iterable], value: Term = None) -> Flag:
         raise ValueError("Argument first is not iterable nor str")
 
 
-def flag_store(*flags: Union[NotableFlag, Flag, Iterable, FlagStore], **kwargs: Mapping[str, Term]):
+def flag_store(*flags: NotableFlag | Flag | Iterable | FlagStore, **kwargs: Mapping[str, Term]):
     normal_flags = []
     notable_flags = []
     other_stores = []
@@ -33,8 +35,8 @@ def flag_store(*flags: Union[NotableFlag, Flag, Iterable, FlagStore], **kwargs: 
             other_stores.append(f)
         else:
             normal_flags.append(flag(f))
-    store1 = FlagStore.of(jarray(NotableFlag)@notable_flags)
-    store2 = FlagStore.of(jarray(Flag)@normal_flags)
+    store1 = FlagStore.of(jarray(NotableFlag) @ notable_flags)
+    store2 = FlagStore.of(jarray(Flag) @ normal_flags)
     store3 = FlagStore.of(jmap(kwargs))
     store = store1.plus(store2).plus(store3)
     for s in other_stores:

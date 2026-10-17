@@ -1,19 +1,32 @@
 import unittest
 from decimal import Decimal
-from tuprolog.math import big_integer, python_integer, BigInteger, big_decimal, python_decimal
-from tuprolog.math import BIG_INTEGER_ZERO, BIG_INTEGER_TEN, BIG_INTEGER_ONE, BIG_INTEGER_NEGATIVE_ONE, BIG_INTEGER_TWO
-from tuprolog.math import BIG_DECIMAL_ZERO, BIG_DECIMAL_ONE, BIG_DECIMAL_ONE_HALF, BIG_DECIMAL_ONE_TENTH
-from tuprolog.math import BIG_DECIMAL_E, BIG_DECIMAL_PI
+
+from tuprolog.math import (
+    BIG_DECIMAL_E,
+    BIG_DECIMAL_ONE,
+    BIG_DECIMAL_ONE_HALF,
+    BIG_DECIMAL_ONE_TENTH,
+    BIG_DECIMAL_PI,
+    BIG_DECIMAL_ZERO,
+    BIG_INTEGER_NEGATIVE_ONE,
+    BIG_INTEGER_ONE,
+    BIG_INTEGER_TEN,
+    BIG_INTEGER_TWO,
+    BIG_INTEGER_ZERO,
+    BigInteger,
+    big_decimal,
+    big_integer,
+    python_decimal,
+    python_integer,
+)
 
 
 class TestKtMath(unittest.TestCase):
-
     def assertSameStringRepresentation(self, expected, actual):
         self.assertEqual(str(expected), str(actual))
 
 
 class TestBigInteger(TestKtMath):
-
     def setUp(self):
         self.large_int = 1 << 64
 
@@ -58,15 +71,18 @@ class TestBigInteger(TestKtMath):
 
 
 class TestBigDecimal(TestKtMath):
-
     def setUp(self):
-        self.e = '2.71828182845904523536028747135266249775724709369995957496696762772407663035354759457138217852' + \
-                 '5166427427466391932003059921817413596629043572900334295260595630738132328627943490763233829880' + \
-                 '753195251019011573834187930702154089149934884167509244761460668082264'
+        self.e = (
+            "2.71828182845904523536028747135266249775724709369995957496696762772407663035354759457138217852"
+            + "5166427427466391932003059921817413596629043572900334295260595630738132328627943490763233829880"
+            + "753195251019011573834187930702154089149934884167509244761460668082264"
+        )
 
-        self.pi = '3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253' + \
-                  '421170679821480865132823066470938446095505822317253594081284811174502841027019385211055596446' + \
-                  '22948954930381964428810975665933446128475648233786783165271201909145648'
+        self.pi = (
+            "3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253"
+            + "421170679821480865132823066470938446095505822317253594081284811174502841027019385211055596446"
+            + "22948954930381964428810975665933446128475648233786783165271201909145648"
+        )
 
         self.one_tenth = "0.01000000000000000020816681711721685132943093776702880859375"
 
@@ -153,7 +169,9 @@ class TestBigDecimal(TestKtMath):
         self.assertSameStringRepresentation(Decimal(-1), python_decimal(big_decimal(-1.00)))
         self.assertSameStringRepresentation(Decimal(-1), python_decimal(big_decimal(Decimal(-1))))
         self.assertSameStringRepresentation(Decimal(-1), python_decimal(big_decimal(Decimal(-1.0))))
-        self.assertSameStringRepresentation(Decimal(-1), python_decimal(big_decimal(Decimal(-1.00))))
+        self.assertSameStringRepresentation(
+            Decimal(-1), python_decimal(big_decimal(Decimal(-1.00)))
+        )
 
     def test_java_to_python_one_half(self):
         self.assertSameStringRepresentation(Decimal(0.5), python_decimal(big_decimal("0.5")))
@@ -163,16 +181,26 @@ class TestBigDecimal(TestKtMath):
         self.assertSameStringRepresentation(Decimal(0.5), python_decimal(big_decimal(0.50)))
         self.assertSameStringRepresentation(Decimal(0.5), python_decimal(big_decimal(0.500)))
         self.assertSameStringRepresentation(Decimal(0.5), python_decimal(big_decimal(Decimal(0.5))))
-        self.assertSameStringRepresentation(Decimal(0.5), python_decimal(big_decimal(Decimal(0.50))))
-        self.assertSameStringRepresentation(Decimal(0.5), python_decimal(big_decimal(Decimal(0.500))))
+        self.assertSameStringRepresentation(
+            Decimal(0.5), python_decimal(big_decimal(Decimal(0.50)))
+        )
+        self.assertSameStringRepresentation(
+            Decimal(0.5), python_decimal(big_decimal(Decimal(0.500)))
+        )
 
     def test_java_to_python_one_cent(self):
         self.assertSameStringRepresentation(Decimal("0.01"), python_decimal(big_decimal("0.01")))
         self.assertSameStringRepresentation(Decimal("0.01"), python_decimal(big_decimal("0.010")))
         self.assertSameStringRepresentation(Decimal("0.01"), python_decimal(big_decimal("0.0100")))
-        self.assertSameStringRepresentation(Decimal(self.one_tenth), python_decimal(big_decimal(Decimal(0.01))))
-        self.assertSameStringRepresentation(Decimal(self.one_tenth), python_decimal(big_decimal(Decimal(0.010))))
-        self.assertSameStringRepresentation(Decimal(self.one_tenth), python_decimal(big_decimal(Decimal(0.0100))))
+        self.assertSameStringRepresentation(
+            Decimal(self.one_tenth), python_decimal(big_decimal(Decimal(0.01)))
+        )
+        self.assertSameStringRepresentation(
+            Decimal(self.one_tenth), python_decimal(big_decimal(Decimal(0.010)))
+        )
+        self.assertSameStringRepresentation(
+            Decimal(self.one_tenth), python_decimal(big_decimal(Decimal(0.0100)))
+        )
 
     def test_constants(self):
         self.assertEqual(big_decimal(0), BIG_DECIMAL_ZERO)

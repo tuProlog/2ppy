@@ -1,7 +1,7 @@
-from tuprolog import logger
-import jpype.imports  # noqa: F401
 import it.unibo.tuprolog.solve.sideffects as _sideffects  # type: ignore
+import jpype.imports  # noqa: F401
 
+from tuprolog import logger
 
 SideEffect = _sideffects.SideEffect
 

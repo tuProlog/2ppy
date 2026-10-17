@@ -1,14 +1,13 @@
-from typing import Iterable, Mapping, TypeVar, Union, Callable
+from collections.abc import Callable, Iterable, Mapping, Sequence
+from typing import Any, TypeVar
 
-T = TypeVar('T')
-R = TypeVar('R')
+T = TypeVar("T")
 
 
 def iterable_or_varargs(
-        args: Union[Iterable[T], Iterable[Iterable[T]]],
-        dispatch: Callable[[Iterable[T]], R] = lambda x: x
-) -> R:
-    assert isinstance(args, Iterable)
+    args: Sequence[Any], dispatch: Callable[[Iterable[Any]], Any] = lambda x: x
+) -> Any:
+    assert isinstance(args, Sequence)
     if len(args) == 1:
         item = args[0]
         if isinstance(item, Iterable):
@@ -20,11 +19,11 @@ def iterable_or_varargs(
 
 
 def dict_or_keyword_args(
-        dictionary: Mapping[str, T],
-        kwargs: Mapping[str, T],
-        dispatch: Callable[[Mapping[str, T]], R] = lambda x: x
-) -> R:
-    all_data = dict()
+    dictionary: Mapping[str, T],
+    kwargs: Mapping[str, T],
+    dispatch: Callable[[Mapping[str, T]], Any] = lambda x: x,
+) -> Any:
+    all_data: dict[str, T] = {}
     for k in dictionary:
         all_data[k] = dictionary[k]
     for k in kwargs:
@@ -37,7 +36,9 @@ def and_then(continuation):
         def wrapper(*args, **kwargs):
             result = function(*args, **kwargs)
             return continuation(result)
+
         return wrapper
+
     return call_and_then_continue
 
 
@@ -47,5 +48,7 @@ def apply_to_result(consumer):
             result = function(*args, **kwargs)
             consumer(result)
             return result
+
         return wrapper
+
     return call_and_then_apply

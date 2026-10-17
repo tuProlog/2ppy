@@ -1,15 +1,26 @@
-from tuprolog.core import TermFormatter, Struct, Integer, Real, Term, Numeric, numeric, var, struct, real
-from tuprolog.core import AbstractTermVisitor
+from tuprolog.core import (
+    AbstractTermVisitor,
+    Integer,
+    Numeric,
+    Real,
+    Struct,
+    Term,
+    TermFormatter,
+    numeric,
+    real,
+    struct,
+    var,
+)
 
 formatter = TermFormatter.prettyExpressions()
 
 
 def is_sum(term: Struct):
-    return term.getArity() == 2 and term.getFunctor() == '+'
+    return term.getArity() == 2 and term.getFunctor() == "+"
 
 
 def is_mult(term: Struct):
-    return term.getArity() == 2 and term.getFunctor() == '*'
+    return term.getArity() == 2 and term.getFunctor() == "*"
 
 
 def is_negative(term: Term):
@@ -60,28 +71,30 @@ class Simplifier(AbstractTermVisitor):
         args = term.getArgs()
         if is_sum(term):
             left, right = args
-            if is_mult(right):
-                if is_negative(right):
-                    return struct('-', map(absolute, args))
+            if is_mult(right) and is_negative(right):
+                return struct("-", map(absolute, args))
             right_left, right_right = right
             if is_sum(right) and is_negative(right_left):
                 return struct(
-                    '-',
+                    "-",
                     left,
-                    struct(right.getFunctor(), absolute(right_left), right_right).accept(self)
+                    struct(right.getFunctor(), absolute(right_left), right_right).accept(self),
                 )
         return struct(term.getFunctor(), [a.accept(self) for a in args])
 
 
-features = map(var, ["A", 'B', 'C', 'D', 'E', 'F'])
-weights = map(real, ['2.5', '-3.4', '-0.09', '0.2', '0.0', '-2.0'])
+def test_simplifier():
+    features = map(var, ["A", "B", "C", "D", "E", "F"])
+    weights = map(real, ["2.5", "-3.4", "-0.09", "0.2", "0.0", "-2.0"])
+    terms = (
+        struct("*", weight, feature)
+        for feature, weight in zip(features, weights)
+        if not is_zero(weight)
+    )
+    x = struct("is", var("Y"), foldr(lambda a, b: struct("+", a, b), terms))
 
-
-x = zip(features, weights)
-x = filter(lambda fw: not is_zero(fw[1]), x)
-x = map(lambda fw: struct('*', fw[1], fw[0]), x)
-x = foldr(lambda a, b: struct('+', a, b), x)
-x = struct('is', var('Y'), x)
-
-assert formatter.format(x) == 'Y is 2.5 * A + -3.4 * B + -0.09 * C + 0.2 * D + -2.0 * F'
-assert formatter.format(x.accept(Simplifier())) == 'Y is 2.5 * A - 3.4 * B - 0.09 * C + 0.2 * D - 2.0 * F'
+    assert formatter.format(x) == "Y is 2.5 * A + -3.4 * B + -0.09 * C + 0.2 * D + -2.0 * F"
+    assert (
+        formatter.format(x.accept(Simplifier()))
+        == "Y is 2.5 * A - 3.4 * B - 0.09 * C + 0.2 * D - 2.0 * F"
+    )

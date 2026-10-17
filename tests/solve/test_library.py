@@ -1,10 +1,11 @@
 import unittest
+
 from tuprolog.core import struct, var
-from tuprolog.theory.parsing import parse_theory
 from tuprolog.solve import solve_options
-from tuprolog.solve.library import library, libraries, Runtime
-from tuprolog.solve.sideffects import load_library, update_library, add_libraries, reset_libraries
+from tuprolog.solve.library import Runtime, libraries, library
 from tuprolog.solve.prolog import prolog_solver
+from tuprolog.solve.sideffects import add_libraries, load_library, reset_libraries, update_library
+from tuprolog.theory.parsing import parse_theory
 
 
 def aliases(runtime):
@@ -12,7 +13,6 @@ def aliases(runtime):
 
 
 class TestLibraries(unittest.TestCase):
-
     def test_empty_libraries(self):
         self.assertEqual(set(), aliases(libraries()))
 
@@ -22,12 +22,14 @@ class TestLibraries(unittest.TestCase):
         self.assertEqual({"a", "b", "c"}, aliases(runtime))
 
     def test_solver_accepts_runtime_or_library(self):
-        self.assertTrue({"a", "b"} <= aliases(prolog_solver(libraries=libraries(library("a"), library("b"))).libraries))
+        self.assertTrue(
+            {"a", "b"}
+            <= aliases(prolog_solver(libraries=libraries(library("a"), library("b"))).libraries)
+        )
         self.assertIn("a", aliases(prolog_solver(libraries=library("a")).libraries))
 
 
 class TestLibrarySideEffects(unittest.TestCase):
-
     def test_load_library_applies_alias(self):
         self.assertEqual("x", str(load_library("x", library("a")).library.alias))
 
@@ -40,7 +42,6 @@ class TestLibrarySideEffects(unittest.TestCase):
 
 
 class TestSolverAdapters(unittest.TestCase):
-
     def setUp(self):
         self.solver = prolog_solver(static_kb=parse_theory("p(1). p(2)."))
 

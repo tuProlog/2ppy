@@ -1,5 +1,6 @@
 from tuprolog.core import Term
 from tuprolog.solve import ExecutionContext
+
 from ._definitions import MessageError
 
 

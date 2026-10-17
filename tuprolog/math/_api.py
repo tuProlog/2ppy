@@ -1,11 +1,13 @@
-from typing import Union
 import decimal
-from tuprolog.pyutils import and_then
-from ._definitions import BigInteger, BigDecimal, MathContext, RoundingMode
+
 from jpype import JDouble, JString
 
+from tuprolog.pyutils import and_then
 
-def big_integer(value: Union[str, int], radix: int = None) -> BigInteger:
+from ._definitions import BigDecimal, BigInteger, MathContext, RoundingMode
+
+
+def big_integer(value: str | int, radix: int | None = None) -> BigInteger:
     if radix is not None:
         assert isinstance(value, str)
         return BigInteger.of(value, radix)
@@ -16,11 +18,19 @@ def big_integer(value: Union[str, int], radix: int = None) -> BigInteger:
 
 
 def python_integer(value: BigInteger) -> int:
-    return int.from_bytes(value.toByteArray(), byteorder='big', signed=True)
+    return int.from_bytes(value.toByteArray(), byteorder="big", signed=True)
 
 
-_python_rounding_modes = {decimal.ROUND_DOWN, decimal.ROUND_HALF_UP, decimal.ROUND_HALF_EVEN, decimal.ROUND_CEILING,
-                          decimal.ROUND_FLOOR, decimal.ROUND_UP, decimal.ROUND_HALF_DOWN, decimal.ROUND_05UP}
+_python_rounding_modes = {
+    decimal.ROUND_DOWN,
+    decimal.ROUND_HALF_UP,
+    decimal.ROUND_HALF_EVEN,
+    decimal.ROUND_CEILING,
+    decimal.ROUND_FLOOR,
+    decimal.ROUND_UP,
+    decimal.ROUND_HALF_DOWN,
+    decimal.ROUND_05UP,
+}
 
 
 def jvm_rounding_mode(mode):
@@ -45,8 +55,9 @@ def jvm_rounding_mode(mode):
 
 
 @and_then(lambda bd: bd.stripTrailingZeros())
-def big_decimal(value: Union[str, int, float, decimal.Decimal], precision=0,
-                rounding=RoundingMode.HALF_UP) -> BigDecimal:
+def big_decimal(
+    value: str | float | decimal.Decimal, precision=0, rounding=RoundingMode.HALF_UP
+) -> BigDecimal:
     if precision is None:
         precision = decimal.getcontext().prec
     assert isinstance(precision, int)

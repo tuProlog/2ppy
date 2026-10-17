@@ -1,5 +1,6 @@
-from tuprolog import logger
 from jpype import JImplementationFor
+
+from tuprolog import logger
 
 
 @JImplementationFor("it.unibo.tuprolog.core.operators.OperatorSet")

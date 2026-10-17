@@ -1,6 +1,7 @@
 import unittest
-from tuprolog.jvmutils import Pair
+
 from tuprolog.core import scope
+from tuprolog.jvmutils import Pair
 from tuprolog.unify import DEFAULT_UNIFICATOR
 
 
@@ -13,7 +14,7 @@ class TestSubstitutionMerge(unittest.TestCase):
         )
         a = s.atom_of("a")
 
-        for v_name, v in s.variables.items():
+        for v_name in s.variables:
             assignment = s.unifier_of(Pair @ (v_name, a))
             self.assertEqual(
                 s.unifier_of(

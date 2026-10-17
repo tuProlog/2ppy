@@ -1,9 +1,11 @@
-from typing import Sized, Callable
-from jpype import JOverride, JImplementationFor
+from collections.abc import Callable, Sized
+
+from jpype import JImplementationFor, JOverride
+
 from tuprolog import logger
 from tuprolog.jvmutils import jiterable, kfunction
+from tuprolog.math import BigInteger, big_integer, python_decimal, python_integer
 from tuprolog.pyutils import iterable_or_varargs
-from tuprolog.math import big_integer, BigInteger, python_integer, python_decimal
 
 
 @JImplementationFor("it.unibo.tuprolog.core.Term")
@@ -13,10 +15,6 @@ class _KtTerm:
 
     def __getitem__(self, item, *items):
         return self.get(item, *items)
-
-    @JOverride()
-    def equals(self, other, use_var_complete_name: bool = True):
-        return self.equals_(other, use_var_complete_name)
 
     def fresh_copy(self, scope=None):
         if scope is None:
@@ -176,7 +174,7 @@ class _KtScope:
     def numeric(self, value):
         if isinstance(value, str):
             return self.numOf(value)
-        if isinstance(value, int) or isinstance(value, BigInteger):
+        if isinstance(value, (int, BigInteger)):
             return self.intOf(value)
         return self.realOf(value)
 
@@ -199,7 +197,9 @@ class _KtScope:
         return self.listFrom(jiterable(items), last)
 
     def tuple(self, first, second, *others):
-        return iterable_or_varargs(others, lambda os: self.tupleOf(jiterable([first, second] + list(os))))
+        return iterable_or_varargs(
+            others, lambda os: self.tupleOf(jiterable([first, second] + list(os)))
+        )
 
 
 logger.debug("Configure Kotlin adapters for types in it.unibo.tuprolog.core.*")

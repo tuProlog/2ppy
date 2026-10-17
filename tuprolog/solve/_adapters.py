@@ -1,13 +1,14 @@
 from itertools import chain
+
 from jpype import JImplementationFor, JOverride
+
 from tuprolog import logger
 from tuprolog.pyutils import iterable_or_varargs
 
 
 @JImplementationFor("it.unibo.tuprolog.solve.SolveOptions")
 class _KtSolveOptions:
-
-    _static_keys = {'lazy', 'is_lazy', 'eager', 'is_eager', 'timeout', 'limit'}
+    _static_keys = frozenset({"lazy", "is_lazy", "eager", "is_eager", "timeout", "limit"})
 
     @property
     def is_lazy(self):
@@ -39,13 +40,13 @@ class _KtSolveOptions:
         return item in _KtSolveOptions._static_keys
 
     def __getitem__(self, item, default=None):
-        if item in {'lazy', 'is_lazy'}:
+        if item in {"lazy", "is_lazy"}:
             return self.is_lazy
-        elif item in {'eager', 'is_eager'}:
+        elif item in {"eager", "is_eager"}:
             return self.is_eager
-        elif item == 'timeout':
+        elif item == "timeout":
             return self.timeout
-        elif item == 'limit':
+        elif item == "limit":
             return self.limit
         elif item in self.options:
             return self.options[item]
@@ -91,29 +92,29 @@ class _KtMutableSolver:
     def standard_output(self):
         return self.getStandardOutput()
 
+    @standard_output.setter
+    def standard_output(self, channel):
+        return self.setStandardOutput(channel)
+
     @property
     def standard_input(self):
         return self.getStandardInput()
-
-    @property
-    def standard_error(self):
-        return self.getStandardError()
-
-    @property
-    def warnings(self):
-        return self.getWarnings()
 
     @standard_input.setter
     def standard_input(self, channel):
         return self.setStandardInput(channel)
 
-    @standard_output.setter
-    def standard_output(self, channel):
-        return self.setStandardOutput(channel)
+    @property
+    def standard_error(self):
+        return self.getStandardError()
 
     @standard_error.setter
     def standard_error(self, channel):
         return self.setStandardError(channel)
+
+    @property
+    def warnings(self):
+        return self.getWarnings()
 
     @warnings.setter
     def warnings(self, channel):

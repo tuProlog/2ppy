@@ -1,4 +1,5 @@
 from jpype import JImplementationFor
+
 from tuprolog.core import Substitution
 
 

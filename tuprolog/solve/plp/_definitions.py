@@ -1,7 +1,7 @@
-from tuprolog import logger
-import jpype.imports  # noqa: F401
 import it.unibo.tuprolog.solve as _solve  # type: ignore
+import jpype.imports  # noqa: F401
 
+from tuprolog import logger
 
 ProbExtensions = _solve.ProbExtensions
 

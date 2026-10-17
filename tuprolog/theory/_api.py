@@ -1,14 +1,18 @@
-from typing import Iterable, Union
+from collections.abc import Iterable
+
 from tuprolog.core import Clause
-from tuprolog.unify import Unificator
 from tuprolog.jvmutils import jiterable
 from tuprolog.pyutils import iterable_or_varargs
-from ._definitions import Theory, MutableTheory
+from tuprolog.unify import Unificator
+
+from ._definitions import MutableTheory, Theory
 
 
-def theory(*clauses: Union[Clause, Iterable[Clause]]) -> Theory:
+def theory(*clauses: Clause | Iterable[Clause]) -> Theory:
     return iterable_or_varargs(clauses, lambda ts: Theory.of(jiterable(ts)))
 
 
-def mutable_theory(*clauses: Union[Clause, Iterable[Clause]]) -> MutableTheory:
-    return iterable_or_varargs(clauses, lambda ts: MutableTheory.of(Unificator.getDefault(), jiterable(ts)))
+def mutable_theory(*clauses: Clause | Iterable[Clause]) -> MutableTheory:
+    return iterable_or_varargs(
+        clauses, lambda ts: MutableTheory.of(Unificator.getDefault(), jiterable(ts))
+    )

@@ -1,8 +1,9 @@
 import io
 import unittest
-from tuprolog.theory.parsing import parse_theory
-from tuprolog.solve.prolog import prolog_solver
+
 from tuprolog.repl._definitions import PrologREPL
+from tuprolog.solve.prolog import prolog_solver
+from tuprolog.theory.parsing import parse_theory
 
 
 class BoundedInput(io.StringIO):
@@ -12,15 +13,14 @@ class BoundedInput(io.StringIO):
         super().__init__(text)
         self.reads = max_reads
 
-    def readline(self, *args) -> str:
+    def readline(self, size: int = -1, /) -> str:  # type: ignore[override]
         self.reads -= 1
         if self.reads < 0:
             raise AssertionError("REPL did not stop at end of input")
-        return super().readline(*args)
+        return super().readline(size)
 
 
 class TestPrologREPL(unittest.TestCase):
-
     def run_repl(self, text: str) -> str:
         solver = prolog_solver(static_kb=parse_theory("p(1)."))
         stdout = io.StringIO()

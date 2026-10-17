@@ -1,5 +1,7 @@
-from typing import Sized
+from collections.abc import Sized
+
 from jpype import JImplementationFor, JOverride
+
 from tuprolog import logger
 from tuprolog.core import indicator as new_indicator
 from tuprolog.jvmutils import jiterable

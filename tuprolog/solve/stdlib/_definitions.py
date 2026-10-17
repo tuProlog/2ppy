@@ -1,7 +1,7 @@
-from tuprolog import logger
-import jpype.imports  # noqa: F401
 import it.unibo.tuprolog.solve.stdlib as _stdlib  # type: ignore
+import jpype.imports  # noqa: F401
 
+from tuprolog import logger
 
 CommonBuiltins: _stdlib.CommonBuiltins = _stdlib.CommonBuiltins.INSTANCE
 

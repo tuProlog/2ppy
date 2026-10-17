@@ -1,7 +1,7 @@
-from tuprolog import logger
-import jpype.imports  # noqa: F401
 import it.unibo.tuprolog.theory.parsing as _parsing  # type: ignore
+import jpype.imports  # noqa: F401
 
+from tuprolog import logger
 
 ClausesParser = _parsing.ClausesParser
 

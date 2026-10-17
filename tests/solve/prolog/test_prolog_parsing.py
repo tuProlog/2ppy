@@ -1,9 +1,10 @@
 import unittest
-from tuprolog.core import struct, atom, integer
-from tuprolog.theory.parsing import parse_theory
-from tuprolog.solve.prolog import prolog_solver
-from tuprolog.solve.flags import DEFAULT_FLAG_STORE, TrackVariables
+
+from tuprolog.core import atom, integer, struct
 from tuprolog.solve.channel import output_channel
+from tuprolog.solve.flags import DEFAULT_FLAG_STORE, TrackVariables
+from tuprolog.solve.prolog import prolog_solver
+from tuprolog.theory.parsing import parse_theory
 
 
 class TestPrologWithParsingAndResolution(unittest.TestCase):
@@ -31,9 +32,7 @@ class TestPrologWithParsingAndResolution(unittest.TestCase):
 
     def print_output(self, message):
         message = str(message)
-        if len(self.prints) == 0:
-            self.prints.append(message)
-        elif self.prints[-1].endswith('\n'):
+        if len(self.prints) == 0 or self.prints[-1].endswith("\n"):
             self.prints.append(message)
         else:
             self.prints[-1] += message
@@ -42,9 +41,8 @@ class TestPrologWithParsingAndResolution(unittest.TestCase):
         logic_theory = parse_theory(self.theory_text)
         flags = DEFAULT_FLAG_STORE.set(TrackVariables, TrackVariables.ON)
         solver = prolog_solver(
-            static_kb=logic_theory,
-            flags=flags,
-            std_out=output_channel(self.print_output))
+            static_kb=logic_theory, flags=flags, std_out=output_channel(self.print_output)
+        )
         query = struct("move", integer(3), atom("left"), atom("right"), atom("center"))
         for solution in solver.solve(query):
             if solution.is_yes:
@@ -53,13 +51,13 @@ class TestPrologWithParsingAndResolution(unittest.TestCase):
         self.assertEqual(
             self.prints,
             [
-                'Move top disk from left to right\n',
-                'Move top disk from left to center\n',
-                'Move top disk from right to center\n',
-                'Move top disk from left to right\n',
-                'Move top disk from center to left\n',
-                'Move top disk from center to right\n',
-                'Move top disk from left to right\n',
-                'yes: move(3, left, right, center)'
-            ]
+                "Move top disk from left to right\n",
+                "Move top disk from left to center\n",
+                "Move top disk from right to center\n",
+                "Move top disk from left to right\n",
+                "Move top disk from center to left\n",
+                "Move top disk from center to right\n",
+                "Move top disk from left to right\n",
+                "yes: move(3, left, right, center)",
+            ],
         )

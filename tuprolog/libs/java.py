@@ -1,7 +1,7 @@
 import sys
 from pathlib import Path
-from jdk4py import JAVA_HOME
 
+from jdk4py import JAVA_HOME
 
 CLASSPATH = Path(__file__).parent
 

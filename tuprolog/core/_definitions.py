@@ -1,8 +1,8 @@
-from jpype import JImplements, JOverride
-from tuprolog import logger
-import jpype.imports  # noqa: F401
 import it.unibo.tuprolog.core as _core  # type: ignore
+import jpype.imports  # noqa: F401
+from jpype import JImplements, JOverride
 
+from tuprolog import logger
 
 Applicable = _core.Applicable
 
@@ -110,7 +110,7 @@ FAIL = Truth.FAIL
 
 
 @JImplements(TermComparator)
-class AbstractTermComparator(object):
+class AbstractTermComparator:
     @JOverride
     def equals(self, other):
         return self is other
@@ -121,15 +121,14 @@ class AbstractTermComparator(object):
 
 
 @JImplements(TermConvertible)
-class AbstractTermConvertible(object):
+class AbstractTermConvertible:
     @JOverride
     def toTerm(self):
         raise NotImplementedError()
 
 
 @JImplements(TermVisitor)
-class AbstractTermVisitor(object):
-
+class AbstractTermVisitor:
     @JOverride
     def defaultValue(self, term):
         raise NotImplementedError()

@@ -1,7 +1,9 @@
 from functools import singledispatch
+
+from tuprolog.core import Atom, Integer, Struct, Term
 from tuprolog.jvmutils import jiterable
 from tuprolog.pyutils import iterable_or_varargs
-from tuprolog.core import Atom, Integer, Struct, Term
+
 from ._definitions import Operator, OperatorSet, Specifier
 
 

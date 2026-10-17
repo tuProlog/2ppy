@@ -1,5 +1,7 @@
 from jpype import JImplementationFor
+
 from tuprolog import logger
+
 from ._definitions import NotableFlag
 
 

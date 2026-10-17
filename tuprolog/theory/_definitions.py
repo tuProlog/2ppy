@@ -1,6 +1,7 @@
-from tuprolog import logger
-import jpype.imports  # noqa: F401
 import it.unibo.tuprolog.theory as _theory  # type: ignore
+import jpype.imports  # noqa: F401
+
+from tuprolog import logger
 
 Theory = _theory.Theory
 

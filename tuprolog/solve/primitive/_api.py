@@ -1,9 +1,17 @@
-from typing import List, Iterable, Callable
-from tuprolog.pyutils import iterable_or_varargs
+from collections.abc import Callable, Iterable
+
+from tuprolog.core import Clause, Integer, Term
 from tuprolog.jvmutils import jlist
-from tuprolog.core import Term, Clause, Integer
-from tuprolog.solve import ExecutionContext, Signature, Solution, current_time_instant, MAX_TIMEOUT
-from ._definitions import Primitive, PrimitiveWrapper, SolveRequest, SolveResponse, AbstractPrimitive
+from tuprolog.pyutils import iterable_or_varargs
+from tuprolog.solve import MAX_TIMEOUT, ExecutionContext, Signature, Solution, current_time_instant
+
+from ._definitions import (
+    AbstractPrimitive,
+    Primitive,
+    PrimitiveWrapper,
+    SolveRequest,
+    SolveResponse,
+)
 
 
 def primitive(callable: Callable[[SolveResponse], Iterable[SolveResponse]]) -> Primitive:
@@ -15,11 +23,11 @@ def primitive(callable: Callable[[SolveResponse], Iterable[SolveResponse]]) -> P
 
 
 def solve_request(
-        signature: Signature,
-        arguments: List[Term],
-        context: ExecutionContext,
-        issuing_instant: int = current_time_instant(),
-        max_duration: int = MAX_TIMEOUT
+    signature: Signature,
+    arguments: list[Term],
+    context: ExecutionContext,
+    issuing_instant: int = current_time_instant(),
+    max_duration: int = MAX_TIMEOUT,
 ) -> SolveRequest:
     return SolveRequest(signature, arguments, context, issuing_instant, max_duration)
 
@@ -36,11 +44,15 @@ def ensuring_all_arguments_are_instantiated(request: SolveRequest) -> SolveReque
     return PrimitiveWrapper.ensuringAllArgumentsAreInstantiated(request)
 
 
-def ensuring_procedure_has_permission(request: SolveRequest, signature: Signature, operation) -> SolveRequest:
+def ensuring_procedure_has_permission(
+    request: SolveRequest, signature: Signature, operation
+) -> SolveRequest:
     return PrimitiveWrapper.ensuringProcedureHasPermission(request, signature, operation)
 
 
-def ensuring_clause_procedure_has_permission(request: SolveRequest, clause: Clause, operation) -> SolveRequest:
+def ensuring_clause_procedure_has_permission(
+    request: SolveRequest, clause: Clause, operation
+) -> SolveRequest:
     return PrimitiveWrapper.ensuringClauseProcedureHasPermission(request, clause, operation)
 
 

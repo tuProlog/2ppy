@@ -1,13 +1,12 @@
 import unittest
+
 from tuprolog.core import struct, var
+from tuprolog.solve.plp import probability, solve_options
+from tuprolog.solve.problog import PROBLOG_OPERATORS, problog_solver
 from tuprolog.theory.parsing import parse_theory
-from tuprolog.solve.plp import solve_options, probability
-from tuprolog.solve.problog import problog_solver
-from tuprolog.solve.problog import PROBLOG_OPERATORS
 
 
 class TestProblogWithParsingAndResolution(unittest.TestCase):
-
     def setUp(self) -> None:
         self.theory_text = """
         0.6::edge(1,2).
@@ -21,7 +20,7 @@ class TestProblogWithParsingAndResolution(unittest.TestCase):
         path(X,Y) :- edge(X,Y).
         path(X,Y) :- edge(X,Z),Y \\== Z,path(Z,Y).
         """
-        self.prints = []
+        self.prints: list[str] = []
 
     def print(self, message):
         self.prints.append(message)
@@ -29,7 +28,7 @@ class TestProblogWithParsingAndResolution(unittest.TestCase):
     def test_problog(self):
         probabilistic_theory = parse_theory(self.theory_text, PROBLOG_OPERATORS)
         solver = problog_solver(static_kb=probabilistic_theory)
-        query = struct('path', var('From'), var('To'))
+        query = struct("path", var("From"), var("To"))
         for solution in solver.solve(query, solve_options(lazy=True, probabilistic=True)):
             if solution.is_yes:
                 self.print(f"yes: {solution.solved_query} with probability {probability(solution)}")
@@ -37,18 +36,18 @@ class TestProblogWithParsingAndResolution(unittest.TestCase):
         self.assertEqual(
             self.prints,
             [
-                'yes: path(1, 2) with probability 0.6',
-                'yes: path(1, 3) with probability 0.1',
-                'yes: path(2, 5) with probability 0.4',
-                'yes: path(2, 6) with probability 0.356',
-                'yes: path(3, 4) with probability 0.3',
-                'yes: path(4, 5) with probability 0.8',
-                'yes: path(5, 6) with probability 0.2',
-                'yes: path(1, 5) with probability 0.25824',
-                'yes: path(1, 6) with probability 0.2167296',
-                'yes: path(1, 4) with probability 0.03',
-                'yes: path(3, 5) with probability 0.24',
-                'yes: path(3, 6) with probability 0.04800000000000001',
-                'yes: path(4, 6) with probability 0.16000000000000003'
-            ]
+                "yes: path(1, 2) with probability 0.6",
+                "yes: path(1, 3) with probability 0.1",
+                "yes: path(2, 5) with probability 0.4",
+                "yes: path(2, 6) with probability 0.356",
+                "yes: path(3, 4) with probability 0.3",
+                "yes: path(4, 5) with probability 0.8",
+                "yes: path(5, 6) with probability 0.2",
+                "yes: path(1, 5) with probability 0.25824",
+                "yes: path(1, 6) with probability 0.2167296",
+                "yes: path(1, 4) with probability 0.03",
+                "yes: path(3, 5) with probability 0.24",
+                "yes: path(3, 6) with probability 0.04800000000000001",
+                "yes: path(4, 6) with probability 0.16000000000000003",
+            ],
         )

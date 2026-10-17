@@ -1,9 +1,9 @@
 import unittest
-from tuprolog.core import substitution, struct, atom, scope
+
+from tuprolog.core import atom, scope, struct, substitution
 
 
 class TestSubstitution(unittest.TestCase):
-
     def test_substitution_creation(self):
         sub = substitution({})
         self.assertEqual(0, len(sub))

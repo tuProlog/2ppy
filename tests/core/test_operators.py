@@ -1,35 +1,52 @@
-import unittest
 import random
 import string
-from tuprolog.core import integer, atom, struct
-from tuprolog.core.operators import operator, specifier, operator_set
-from tuprolog.core.operators import XF, YF, FX, FY, XFY, YFX, XFX, OperatorSet
-from tuprolog.core.operators import EMPTY_OPERATORS, DEFAULT_OPERATORS, STANDARD_OPERATORS
+import unittest
+
 import jpype.imports  # noqa: F401
 from java.lang import IllegalArgumentException  # type: ignore
 
+from tuprolog.core import atom, integer, struct
+from tuprolog.core.operators import (
+    DEFAULT_OPERATORS,
+    EMPTY_OPERATORS,
+    FX,
+    FY,
+    STANDARD_OPERATORS,
+    XF,
+    XFX,
+    XFY,
+    YF,
+    YFX,
+    OperatorSet,
+    operator,
+    operator_set,
+    specifier,
+)
+
 
 class AbstractTestOperatorStuff(unittest.TestCase):
-
     def setUp(self):
         self.priorities = {random.randint(2, 1199) for _ in range(10)}
         self.specifiers = {XF, YF, FX, FY, XFY, YFX, XFX}
-        self.functors = {''.join(random.choices(string.ascii_lowercase, k=1)) for _ in range(10)}
-        self.random_operators = {operator(functor, spec, priority)
-                                 for priority in self.priorities
-                                 for spec in self.specifiers
-                                 for functor in self.functors}
+        self.functors = {"".join(random.choices(string.ascii_lowercase, k=1)) for _ in range(10)}
+        self.random_operators = {
+            operator(functor, spec, priority)
+            for priority in self.priorities
+            for spec in self.specifiers
+            for functor in self.functors
+        }
 
 
 class TestOperators(AbstractTestOperatorStuff):
-
     def test_operator_construction(self):
         for priority in self.priorities:
             for spec in self.specifiers:
                 for functor in self.functors:
                     op_simple = operator(functor, spec, priority)
                     op_terms = operator(integer(priority), spec.toTerm(), atom(functor))
-                    op_struct = operator(struct('op', integer(priority), spec.toTerm(), atom(functor)))
+                    op_struct = operator(
+                        struct("op", integer(priority), spec.toTerm(), atom(functor))
+                    )
 
                     for op in {op_simple, op_struct, op_terms}:
                         self.assertEqual(op.getFunctor(), functor)
@@ -47,7 +64,9 @@ class TestOperators(AbstractTestOperatorStuff):
                     op = operator(functor, spec, priority)
                     op2 = operator(functor, spec, priority)
                     op_terms = operator(integer(priority), spec.toTerm(), atom(functor))
-                    op_struct = operator(struct('op', integer(priority), spec.toTerm(), atom(functor)))
+                    op_struct = operator(
+                        struct("op", integer(priority), spec.toTerm(), atom(functor))
+                    )
 
                     self.assertTrue(op == op2)
                     self.assertTrue(op == op_terms)
@@ -63,11 +82,12 @@ class TestOperators(AbstractTestOperatorStuff):
 
 
 class TestSpecifiers(AbstractTestOperatorStuff):
-
     def setUp(self):
         self.actual_specifiers = {XF, YF, FX, FY, XFY, YFX, XFX}
-        specifiers_names = {'Xf', 'yF', 'fX', 'fY', 'xFy', 'YfX', 'xFx'}
-        self.specifiers_names = {x for name in specifiers_names for x in (name.lower(), name.upper())}
+        specifiers_names = {"Xf", "yF", "fX", "fY", "xFy", "YfX", "xFx"}
+        self.specifiers_names = {
+            x for name in specifiers_names for x in (name.lower(), name.upper())
+        }
         self.specifiers = {specifier(name) for name in self.specifiers_names}
 
     def test_specifier_parsing(self):
@@ -80,7 +100,7 @@ class TestSpecifiers(AbstractTestOperatorStuff):
         for name in self.specifiers_names:
             self.assertTrue(specifier(atom(name)) in self.actual_specifiers)
             with self.assertRaises(IllegalArgumentException):
-                wrong_name = name + 'g'
+                wrong_name = name + "g"
                 specifier(atom(wrong_name))
 
     def test_specifier_names(self):
@@ -90,23 +110,28 @@ class TestSpecifiers(AbstractTestOperatorStuff):
             logic_name = name.lower()
             self.assertEqual(spec.name(), enum_name)
             self.assertEqual(spec.toTerm(), atom(logic_name))
-            self.assertEqual(spec.isPrefix(), len(logic_name) == 2 and logic_name[0] == 'f')
-            self.assertEqual(spec.isPostfix(), len(logic_name) == 2 and logic_name[-1] == 'f')
-            self.assertEqual(spec.isInfix(), len(logic_name) == 3 and logic_name[1] == 'f')
+            self.assertEqual(spec.isPrefix(), len(logic_name) == 2 and logic_name[0] == "f")
+            self.assertEqual(spec.isPostfix(), len(logic_name) == 2 and logic_name[-1] == "f")
+            self.assertEqual(spec.isInfix(), len(logic_name) == 3 and logic_name[1] == "f")
 
 
 class TestOperatorSets(AbstractTestOperatorStuff):
-
     def setUp(self):
         super().setUp()
-        self.builtin_operator_sets = {EMPTY_OPERATORS, DEFAULT_OPERATORS, STANDARD_OPERATORS,
-                                      OperatorSet.CONTROL_FLOW, OperatorSet.ARITHMETIC,
-                                      OperatorSet.ARITHMETIC_COMPARISON,
-                                      OperatorSet.CLAUSES, OperatorSet.TERM_COMPARISON}
+        self.builtin_operator_sets = {
+            EMPTY_OPERATORS,
+            DEFAULT_OPERATORS,
+            STANDARD_OPERATORS,
+            OperatorSet.CONTROL_FLOW,
+            OperatorSet.ARITHMETIC,
+            OperatorSet.ARITHMETIC_COMPARISON,
+            OperatorSet.CLAUSES,
+            OperatorSet.TERM_COMPARISON,
+        }
         self.all_builtin_operators = {op for op_set in self.builtin_operator_sets for op in op_set}
         self.builtin_operators_set = operator_set(self.all_builtin_operators)
         self.random_operators_set = operator_set(self.random_operators)
-        self.some_operators = [operator('a', XF, 1), operator('b', YF, 2)]
+        self.some_operators = [operator("a", XF, 1), operator("b", YF, 2)]
 
     def test_operator_set_creation(self):
         empty = operator_set()

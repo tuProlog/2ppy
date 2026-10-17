@@ -1,6 +1,7 @@
-from tuprolog import logger
-import jpype.imports  # noqa: F401
 import it.unibo.tuprolog.core.parsing as _parsing  # type: ignore
+import jpype.imports  # noqa: F401
+
+from tuprolog import logger
 
 TermParser = _parsing.TermParser
 

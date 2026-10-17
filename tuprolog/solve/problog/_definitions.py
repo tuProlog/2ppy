@@ -1,8 +1,8 @@
+import it.unibo.tuprolog.solve.problog as _problog  # type: ignore
+import jpype.imports  # noqa: F401
+
 from tuprolog import logger
 from tuprolog.solve import Solver, SolverFactory
-import jpype.imports  # noqa: F401
-import it.unibo.tuprolog.solve.problog as _problog  # type: ignore
-
 
 PROBLOG_SOLVER_FACTORY: SolverFactory = Solver.problog()
 

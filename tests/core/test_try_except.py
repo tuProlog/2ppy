@@ -1,10 +1,14 @@
 import unittest
-from tuprolog.core import Substitution, Atom
-from tuprolog.core.exception import TuPrologException, SubstitutionException, SubstitutionApplicationException
+
+from tuprolog.core import Atom, Substitution
+from tuprolog.core.exception import (
+    SubstitutionApplicationException,
+    SubstitutionException,
+    TuPrologException,
+)
 
 
 class TestExceptions(unittest.TestCase):
-
     def test_TuprologException(self):
         try:
             raise TuPrologException("test")

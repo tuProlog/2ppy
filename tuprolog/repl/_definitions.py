@@ -1,21 +1,24 @@
 from __future__ import annotations
+
 from cmd import Cmd
 from typing import IO
-from tuprolog.core.parsing import TermParser, ParseException
+
+from tuprolog.core.parsing import ParseException, TermParser
+from tuprolog.solve import Solver, TermFormatter, solution_formatter
 from tuprolog.theory.parsing import ClausesParser
-from tuprolog.solve import solution_formatter, TermFormatter
-from tuprolog.solve import Solver
 
 
 class PrologREPL(Cmd):
     use_rawinput = False
 
-    def __init__(self,
-                 solver: Solver,
-                 name: str,
-                 completekey: str = "tab",
-                 stdin: IO[str] | None = None,
-                 stdout: IO[str] | None = None):
+    def __init__(
+        self,
+        solver: Solver,
+        name: str,
+        completekey: str = "tab",
+        stdin: IO[str] | None = None,
+        stdout: IO[str] | None = None,
+    ):
         super().__init__(completekey, stdin, stdout)
         self.intro = f"""
 Welcome to the {name.title()} REPL.
@@ -32,11 +35,13 @@ Welcome to the {name.title()} REPL.
         self.name = name
         self.clauses_parser = ClausesParser.withOperators(self.solver.operators)
         self.query_parser = TermParser.withOperators(self.solver.operators)
-        self.solution_formatter = solution_formatter(TermFormatter.prettyExpressions(self.solver.operators))
+        self.solution_formatter = solution_formatter(
+            TermFormatter.prettyExpressions(self.solver.operators)
+        )
         self.multi_line_command = ""
 
-    @property
-    def prompt(self) -> str:
+    @property  # Cmd reads the prompt as an attribute: a property computes it
+    def prompt(self) -> str:  # type: ignore[override]
         return "...>" if self.multi_line_command else f"{self.name}>"
 
     def emptyline(self) -> bool:

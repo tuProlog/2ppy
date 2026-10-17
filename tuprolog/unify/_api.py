@@ -1,5 +1,6 @@
-from tuprolog.core import Term, Substitution
-from ._definitions import Unificator, DEFAULT_UNIFICATOR
+from tuprolog.core import Substitution, Term
+
+from ._definitions import DEFAULT_UNIFICATOR, Unificator
 
 
 def strict_unificator(context: Substitution = None) -> Unificator:
@@ -16,7 +17,9 @@ def naive_unificator(context: Substitution = None) -> Unificator:
         return Unificator.naive(context)
 
 
-def cached_unificator(unificator: Unificator, cache_size: int = Unificator.DEFAULT_CACHE_CAPACITY) -> Unificator:
+def cached_unificator(
+    unificator: Unificator, cache_size: int = Unificator.DEFAULT_CACHE_CAPACITY
+) -> Unificator:
     return Unificator.cached(unificator, cache_size)
 
 

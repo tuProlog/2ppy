@@ -1,9 +1,10 @@
-from typing import Iterable
-from jpype import JImplements, JOverride
-from tuprolog import logger
-import jpype.imports  # noqa: F401
-import it.unibo.tuprolog.solve.primitive as _primitive  # type: ignore
+from collections.abc import Iterable
 
+import it.unibo.tuprolog.solve.primitive as _primitive  # type: ignore
+import jpype.imports  # noqa: F401
+from jpype import JImplements, JOverride
+
+from tuprolog import logger
 
 Primitive = _primitive.Primitive
 
@@ -21,7 +22,7 @@ SolveResponse = Solve.Response
 
 
 @JImplements(Primitive)
-class AbstractPrimitive(object):
+class AbstractPrimitive:
     @JOverride
     def solve(self, request: SolveRequest) -> Iterable[SolveResponse]:
         raise NotImplementedError()

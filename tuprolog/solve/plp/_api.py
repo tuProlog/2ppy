@@ -1,6 +1,10 @@
-from typing import TypeVar, Mapping, Any
+from collections.abc import Mapping
+from typing import Any, TypeVar
+
+from tuprolog.solve import ALL_SOLUTIONS, MAX_TIMEOUT, SolveOptions
+from tuprolog.solve import solve_options as _solve_options
 from tuprolog.utils import Taggable
-from tuprolog.solve import SolveOptions, solve_options as _solve_options, MAX_TIMEOUT, ALL_SOLUTIONS
+
 from ._definitions import ProbExtensions
 
 
@@ -8,7 +12,7 @@ def probability(taggable: Taggable) -> float:
     return ProbExtensions.getProbability(taggable)
 
 
-T = TypeVar("T", bound=Taggable, covariant=True)
+T = TypeVar("T", bound=Taggable)
 
 
 def set_probability(taggable: T) -> T:
@@ -28,12 +32,12 @@ def probabilistic(solve_opts: SolveOptions) -> SolveOptions:
 
 
 def solve_options(
-        lazy: bool = True,
-        timeout: int = MAX_TIMEOUT,
-        limit: int = ALL_SOLUTIONS,
-        probabilistic: bool = False,
-        custom: Mapping[str, Any] = dict(),
-        **kwargs: Any
+    lazy: bool = True,
+    timeout: int = MAX_TIMEOUT,
+    limit: int = ALL_SOLUTIONS,
+    probabilistic: bool = False,
+    custom: Mapping[str, Any] = {},
+    **kwargs: Any,
 ) -> SolveOptions:
     non_probabilistic = _solve_options(lazy, timeout, limit, custom, **kwargs)
     if probabilistic:
