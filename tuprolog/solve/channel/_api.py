@@ -1,6 +1,8 @@
 from collections.abc import Callable, Mapping
 from functools import singledispatch
 
+from jpype import JObject
+
 from tuprolog.jvmutils import jmap, kfunction
 
 from ._definitions import InputChannel, InputStore, Listener, OutputChannel, OutputStore
@@ -75,4 +77,4 @@ def output_store(
 
 
 def listener(consumer: Callable) -> Listener:
-    return kfunction(1)(consumer)
+    return JObject(kfunction(1)(consumer), Listener)
