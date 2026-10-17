@@ -26,9 +26,11 @@ def solve_request(
     signature: Signature,
     arguments: Iterable[Term],
     context: ExecutionContext,
-    issuing_instant: int = current_time_instant(),
+    issuing_instant: int | None = None,
     max_duration: int = MAX_TIMEOUT,
 ) -> SolveRequest:
+    if issuing_instant is None:
+        issuing_instant = current_time_instant()
     return SolveRequest(signature, jlist(arguments), context, issuing_instant, max_duration)
 
 

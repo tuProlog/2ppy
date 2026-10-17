@@ -1,8 +1,10 @@
+import inspect
+
 import pytest
 
 from tests.solve.primitive._support import RequestCapturer
 from tuprolog.core import atom, integer
-from tuprolog.solve import MAX_TIMEOUT, signature
+from tuprolog.solve import MAX_TIMEOUT, current_time_instant, signature
 from tuprolog.solve.primitive import SolveRequest, solve_request
 
 
@@ -32,8 +34,16 @@ def test_solve_request_explicit_instant_and_duration(context):
     assert request.max_duration == 20
 
 
-def test_solve_request_default_duration(context):
-    assert solve_request(signature("f", 0), [], context).max_duration == MAX_TIMEOUT
+def test_solve_request_defaults(context):
+    before = current_time_instant()
+    request = solve_request(signature("f", 0), [], context)
+    after = current_time_instant()
+    assert before <= request.start_time <= after
+    assert request.max_duration == MAX_TIMEOUT
+
+
+def test_solve_request_issuing_instant_is_not_frozen_at_import_time():
+    assert inspect.signature(solve_request).parameters["issuing_instant"].default is None
 
 
 def test_solve_request_vararg_signature_accepts_more_arguments(context):
