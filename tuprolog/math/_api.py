@@ -9,13 +9,15 @@ from ._definitions import BigDecimal, BigInteger, MathContext, RoundingMode
 
 def big_integer(value: str | int | BigInteger, radix: int | None = None) -> BigInteger:
     if radix is not None:
-        assert isinstance(value, str)
+        if not isinstance(value, str):
+            raise TypeError(f"A radix can only be used with strings, not {type(value)}")
         return BigInteger.of(value, radix)
     if isinstance(value, BigInteger):
         return value
     if isinstance(value, str):
         return BigInteger.of(JString @ value)
-    assert isinstance(value, int)
+    if not isinstance(value, int):
+        raise TypeError(f"Cannot convert {type(value)} into BigInteger")
     return BigInteger.of(str(int(value)))  # int() turns bools into 0/1
 
 
@@ -62,12 +64,14 @@ def big_decimal(
 ) -> BigDecimal:
     if precision is None:
         precision = decimal.getcontext().prec
-    assert isinstance(precision, int)
+    if not isinstance(precision, int):
+        raise TypeError(f"Invalid precision: {precision!r}")
     if rounding is None:
         rounding = jvm_rounding_mode(decimal.getcontext().rounding)
     elif rounding in _python_rounding_modes:
         rounding = jvm_rounding_mode(rounding)
-    assert isinstance(rounding, RoundingMode)
+    if not isinstance(rounding, RoundingMode):
+        raise TypeError(f"Invalid rounding mode: {rounding!r}")
     context = MathContext(precision, rounding)
     if isinstance(value, str):
         return BigDecimal.of(value, context)
@@ -77,7 +81,8 @@ def big_decimal(
         return BigDecimal.of(value, context)
     if isinstance(value, int):
         return BigDecimal.of(big_integer(value), context)
-    assert isinstance(value, float)
+    if not isinstance(value, float):
+        raise TypeError(f"Cannot convert {type(value)} into BigDecimal")
     return BigDecimal.of(JDouble @ value, context)
 
 
