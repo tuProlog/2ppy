@@ -126,6 +126,10 @@ def ensuring_argument_is_list(request: SolveRequest, index: int) -> SolveRequest
     return PrimitiveWrapper.ensuringArgumentIsList(request, index)
 
 
+def ensuring_argument_is_well_formed_list(request: SolveRequest, index: int) -> SolveRequest:
+    return PrimitiveWrapper.ensuringArgumentIsWellFormedList(request, index)
+
+
 def ensuring_argument_is_arity(request: SolveRequest, index: int) -> SolveRequest:
     return PrimitiveWrapper.ensuringArgumentIsArity(request, index)
 

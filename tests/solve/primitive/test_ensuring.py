@@ -166,6 +166,11 @@ EXPECTATIONS: dict[str, dict[str, tuple[str, str] | None]] = {
         "atom": (TE, "list"),
         "compound": (TE, "list"),
     },
+    "ensuring_argument_is_well_formed_list": {
+        "list": OK,
+        "partial_list": (DE, "well_formed_list"),
+        "atom": (TE, "list"),
+    },
     "ensuring_argument_is_well_formed_indicator": {
         "indicator": OK,
         "var": (IE, ""),
