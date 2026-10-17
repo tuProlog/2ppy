@@ -80,6 +80,11 @@ def test_assert_changes_mutable_theory_in_place():
     assert list(t) == [P_B, P_A, Z]
 
 
+def test_theories_are_hashable():
+    assert hash(theory(P_A, P_B)) == hash(theory(P_A, P_B))
+    assert len({theory(P_A), theory(P_A), theory(P_B)}) == 2
+
+
 TO_STRING_SHADOWED = pytest.mark.xfail(
     strict=True,
     reason="MutableTheory.to_string(True) resolves to the auto-generated java.lang.Object.to_string "

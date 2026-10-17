@@ -63,6 +63,9 @@ class _KtTheory:
     def __eq__(self, other):
         return self.equals(other, use_var_complete_name=True)
 
+    def __hash__(self):
+        return self.hashCode()
+
     def to_string(self, as_prolog_text=False):
         return self.toString(as_prolog_text)
 
