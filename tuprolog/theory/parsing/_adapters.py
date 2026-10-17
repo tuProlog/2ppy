@@ -19,13 +19,13 @@ class _KtClausesParser:
         else:
             return method(input, operators)
 
-    def parse_theory(self, input, operators):
+    def parse_theory(self, input, operators=None):
         return self._parse(self.parseTheory, input, operators)
 
-    def parse_clauses_lazily(self, input, operators):
+    def parse_clauses_lazily(self, input, operators=None):
         return self._parse(self.parseClausesLazily, input, operators)
 
-    def parse_clauses(self, input, operators):
+    def parse_clauses(self, input, operators=None):
         return list(self.parse_clauses_lazily(input, operators))
 
 
@@ -45,13 +45,13 @@ class _KtClausesReader:
         else:
             return method(input_stream, operators)
 
-    def read_theory(self, input, operators):
+    def read_theory(self, input, operators=None):
         return self._read(self.readTheory, input, operators)
 
-    def read_clauses_lazily(self, input, operators):
+    def read_clauses_lazily(self, input, operators=None):
         return self._read(self.readClausesLazily, input, operators)
 
-    def read_clauses(self, input, operators):
+    def read_clauses(self, input, operators=None):
         return list(self.read_clauses_lazily(input, operators))
 
 
