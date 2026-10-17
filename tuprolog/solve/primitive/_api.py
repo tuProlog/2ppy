@@ -1,5 +1,7 @@
 from collections.abc import Callable, Iterable
 
+from jpype import JObject
+
 from tuprolog.core import Clause, Integer, Term
 from tuprolog.jvmutils import jlist
 from tuprolog.pyutils import iterable_or_varargs
@@ -19,7 +21,7 @@ def primitive(callable: Callable[[SolveResponse], Iterable[SolveResponse]]) -> P
         def solve(self, request: SolveRequest) -> Iterable[SolveResponse]:
             return callable(request)
 
-    return CallableToPrimitiveAdapter()
+    return JObject(CallableToPrimitiveAdapter(), Primitive)
 
 
 def solve_request(

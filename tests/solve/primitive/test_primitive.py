@@ -16,8 +16,10 @@ from tuprolog.solve import signature
 from tuprolog.solve.flags import Unknown
 from tuprolog.solve.primitive import (
     AbstractPrimitive,
+    Primitive,
     SolveRequest,
     SolveResponse,
+    primitive,
     solve_response,
 )
 from tuprolog.solve.sideffects import add_dynamic_clauses, set_flags
@@ -36,6 +38,11 @@ def between(request: SolveRequest) -> Iterable[SolveResponse]:
 @pytest.fixture(scope="module")
 def between_solver():
     return solver_with_primitive("py_between", 3, between)
+
+
+def test_primitive_is_a_primitive():
+    p = primitive(between)
+    assert isinstance(p, Primitive)
 
 
 def test_abstract_primitive_cannot_solve():
