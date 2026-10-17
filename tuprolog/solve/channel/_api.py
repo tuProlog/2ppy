@@ -34,7 +34,7 @@ def input_store(
         return InputStore.fromStandard(stdin)
     else:
         cs = {InputStore.STDIN: stdin or std_in()}
-        for k, v in channels:
+        for k, v in channels.items():
             cs[k] = v
         return InputStore.of(jmap(cs))
 
@@ -69,7 +69,7 @@ def output_store(
         )
     else:
         cs = {OutputStore.STDOUT: stdout or std_out(), OutputStore.STDERR: stderr or std_err()}
-        for k, v in channels:
+        for k, v in channels.items():
             cs[k] = v
         return OutputStore.of(jmap(cs), warnings or warn())
 

@@ -25,9 +25,11 @@ def compute_request(
     signature: Signature,
     arguments: list[Term],
     context: ExecutionContext,
-    issuing_instant: int = current_time_instant,  # type: ignore[assignment]
+    issuing_instant: int | None = None,
     max_duration: int = MAX_TIMEOUT,
 ) -> ComputeRequest:
+    if issuing_instant is None:
+        issuing_instant = current_time_instant()
     return ComputeRequest(signature, arguments, context, issuing_instant, max_duration)
 
 
