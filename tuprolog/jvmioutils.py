@@ -79,7 +79,7 @@ class _JvmInputStream:
     def truncate(self, size=None):
         raise OSError("This IOBase is backed by an instance of <java.io.InputStream>")
 
-    def writelines(self):
+    def writelines(self, lines):
         raise OSError("This IOBase is backed by an instance of <java.io.InputStream>")
 
 
