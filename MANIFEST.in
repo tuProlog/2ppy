@@ -1,4 +1,4 @@
-include VERSION
+include pom.xml
 include tuprolog/libs/*.jar
 exclude test/*
 exclude main.py
