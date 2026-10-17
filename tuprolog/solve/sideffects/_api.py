@@ -51,8 +51,10 @@ def reset_static_kb(*clauses: Clause | Iterable[Clause]) -> ResetStaticKb:
     return _forward_iterable_or_varargs(ResetStaticKb, clauses)
 
 
-def add_static_clauses(*clauses: Clause | Iterable[Clause]) -> AddStaticClauses:
-    return _forward_iterable_or_varargs(AddStaticClauses, clauses)
+def add_static_clauses(
+    *clauses: Clause | Iterable[Clause], on_top: bool = False
+) -> AddStaticClauses:
+    return _forward_iterable_or_varargs(AddStaticClauses, clauses, on_top)
 
 
 def remove_static_clauses(*clauses: Clause | Iterable[Clause]) -> RemoveStaticClauses:
@@ -63,8 +65,10 @@ def reset_dynamic_kb(*clauses: Clause | Iterable[Clause]) -> ResetDynamicKb:
     return _forward_iterable_or_varargs(ResetDynamicKb, clauses)
 
 
-def add_dynamic_clauses(*clauses: Clause | Iterable[Clause]) -> AddDynamicClauses:
-    return _forward_iterable_or_varargs(AddDynamicClauses, clauses)
+def add_dynamic_clauses(
+    *clauses: Clause | Iterable[Clause], on_top: bool = False
+) -> AddDynamicClauses:
+    return _forward_iterable_or_varargs(AddDynamicClauses, clauses, on_top)
 
 
 def remove_dynamic_clauses(*clauses: Clause | Iterable[Clause]) -> RemoveDynamicClauses:
