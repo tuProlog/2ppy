@@ -6,9 +6,9 @@ VERSION
 venv/
 .idea/
 .vscode/
-
 *~
 *.jar
+tuprolog/libs/*/
 
 ### Python ###
 # Byte-compiled / optimized / DLL files

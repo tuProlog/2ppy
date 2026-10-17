@@ -1,14 +1,10 @@
-from tuprolog import logger
-# noinspection PyUnresolvedReferences
-import jpype
-# noinspection PyUnresolvedReferences
-import jpype.imports
-# noinspection PyUnresolvedReferences
-import java.io as _jio
-# noinspection PyUnresolvedReferences
-import java.nio.file as _jnio_file
-from io import IOBase, SEEK_SET
 from typing import Union
+from io import IOBase, SEEK_SET
+from tuprolog import logger
+from jpype import JImplementationFor, JOverride
+import jpype.imports  # noqa: F401
+import java.io as _jio  # type: ignore
+import java.nio.file as _jnio_file  # type: ignore
 
 
 InputStream = _jio.InputStream
@@ -24,12 +20,12 @@ Files = _jnio_file.Files
 Paths = _jnio_file.Paths
 
 
-@jpype.JImplementationFor("java.io.InputStream")
+@JImplementationFor("java.io.InputStream")
 class _JvmInputStream:
     def __jclass_init__(cls):
         IOBase.register(cls)
 
-    @jpype.JOverride
+    @JOverride
     def close(self):
         self._closed = True
         self.close_()
@@ -53,10 +49,10 @@ class _JvmInputStream:
     def readable(self):
         return True
 
-    def seekable(self): 
+    def seekable(self):
         return False
 
-    def writable(self): 
+    def writable(self):
         return False
 
     def _buffer(self):

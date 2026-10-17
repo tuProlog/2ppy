@@ -1,20 +1,17 @@
+import os
 import logging
-
-# noinspection PyUnresolvedReferences
 import jpype
-import jpype.imports
+from .libs import CLASSPATH, find_jvm
 
-from .libs import CLASSPATH
-
-logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger('tuprolog')
 
 jars = [str(j.resolve()) for j in CLASSPATH.glob('*.jar')]
 
-jpype.startJVM(classpath=jars)
+if not jpype.isJVMStarted():
+    jpype.startJVM(classpath=jars, jvmpath=str(find_jvm()))
 
-# noinspection PyUnresolvedReferences
-from it.unibo import tuprolog as _tuprolog
+import jpype.imports  # noqa: F401, E402
+from it.unibo import tuprolog as _tuprolog  # type: ignore # noqa: E402
 
 Info = _tuprolog.Info
 

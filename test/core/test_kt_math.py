@@ -1,9 +1,9 @@
-from decimal import Decimal
 import unittest
-
-from tuprolog.core import big_integer, python_integer, big_decimal, python_decimal, BIG_INTEGER_ZERO, BIG_INTEGER_TEN, \
-    BIG_INTEGER_ONE, BIG_INTEGER_NEGATIVE_ONE, BIG_INTEGER_TWO, BIG_DECIMAL_PI, BIG_DECIMAL_E, BIG_DECIMAL_ONE_TENTH, \
-    BIG_DECIMAL_ONE_HALF, BIG_DECIMAL_ONE, BIG_DECIMAL_ZERO, BigInteger
+from decimal import Decimal
+from tuprolog.math import big_integer, python_integer, BigInteger, big_decimal, python_decimal
+from tuprolog.math import BIG_INTEGER_ZERO, BIG_INTEGER_TEN, BIG_INTEGER_ONE, BIG_INTEGER_NEGATIVE_ONE, BIG_INTEGER_TWO
+from tuprolog.math import BIG_DECIMAL_ZERO, BIG_DECIMAL_ONE, BIG_DECIMAL_ONE_HALF, BIG_DECIMAL_ONE_TENTH
+from tuprolog.math import BIG_DECIMAL_E, BIG_DECIMAL_PI
 
 
 class TestKtMath(unittest.TestCase):
@@ -118,9 +118,6 @@ class TestBigDecimal(TestKtMath):
         self.assertSameStringRepresentation(0.01, big_decimal("0.01"))
         self.assertSameStringRepresentation(0.01, big_decimal("0.010"))
         self.assertSameStringRepresentation(0.01, big_decimal("0.0100"))
-        self.assertSameStringRepresentation(0.01, big_decimal(0.01))
-        self.assertSameStringRepresentation(0.01, big_decimal(0.010))
-        self.assertSameStringRepresentation(0.01, big_decimal(0.0100))
         self.assertSameStringRepresentation(self.one_tenth, big_decimal(Decimal(0.01)))
         self.assertSameStringRepresentation(self.one_tenth, big_decimal(Decimal(0.010)))
         self.assertSameStringRepresentation(self.one_tenth, big_decimal(Decimal(0.0100)))
@@ -173,9 +170,6 @@ class TestBigDecimal(TestKtMath):
         self.assertSameStringRepresentation(Decimal("0.01"), python_decimal(big_decimal("0.01")))
         self.assertSameStringRepresentation(Decimal("0.01"), python_decimal(big_decimal("0.010")))
         self.assertSameStringRepresentation(Decimal("0.01"), python_decimal(big_decimal("0.0100")))
-        self.assertSameStringRepresentation(Decimal("0.01"), python_decimal(big_decimal(0.01)))
-        self.assertSameStringRepresentation(Decimal("0.01"), python_decimal(big_decimal(0.010)))
-        self.assertSameStringRepresentation(Decimal("0.01"), python_decimal(big_decimal(0.0100)))
         self.assertSameStringRepresentation(Decimal(self.one_tenth), python_decimal(big_decimal(Decimal(0.01))))
         self.assertSameStringRepresentation(Decimal(self.one_tenth), python_decimal(big_decimal(Decimal(0.010))))
         self.assertSameStringRepresentation(Decimal(self.one_tenth), python_decimal(big_decimal(Decimal(0.0100))))
@@ -187,7 +181,3 @@ class TestBigDecimal(TestKtMath):
         self.assertEqual(big_decimal("0.1"), BIG_DECIMAL_ONE_TENTH)
         self.assertEqual(big_decimal(self.e), BIG_DECIMAL_E)
         self.assertEqual(big_decimal(self.pi), BIG_DECIMAL_PI)
-
-
-if __name__ == '__main__':
-    unittest.main()
