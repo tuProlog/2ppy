@@ -35,7 +35,6 @@ def shell_namespace():
     captured = {}
     patcher = pytest.MonkeyPatch()
     patcher.setattr(code, "interact", lambda local=None, **_: captured.update(local))
-    patcher.setattr(builtins, "input", lambda *_: "")
     try:
         runpy.run_module("tuprolog.__main__", run_name="__main__")
     finally:
@@ -105,4 +104,12 @@ def test_repl_problog_subprocess():
     assert result.returncode == 0, result.stderr
     assert "Welcome to the Problog REPL." in result.stdout
     assert "yes: a" in result.stdout
+    assert "Traceback" not in result.stderr
+
+
+def test_shell_subprocess():
+    result = run_module("tuprolog", "print(prolog_solver().solve_once(parse_struct('X = 1')))\n")
+    assert result.returncode == 0, result.stderr
+    assert "substitution={X_0=1}" in result.stdout
+    assert "now exiting InteractiveConsole" in result.stderr
     assert "Traceback" not in result.stderr

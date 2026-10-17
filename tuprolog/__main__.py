@@ -31,5 +31,3 @@ from tuprolog.unify import *
 from tuprolog.unify.exception import *
 
 code.interact(local=locals())
-
-input()
