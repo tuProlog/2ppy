@@ -54,7 +54,10 @@ class _KtSolveOptions:
         raise KeyError(f"No such option: {item}")
 
     def get(self, item, default=None):
-        return self[item] if item in self else default
+        try:
+            return self[item]
+        except KeyError:
+            return default
 
     def keys(self):
         return list(self)
