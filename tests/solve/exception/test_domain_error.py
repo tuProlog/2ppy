@@ -76,9 +76,7 @@ def test_domain_values(name):
     assert expected.toTerm() == atom(name.lower())
 
 
-@pytest.mark.parametrize(
-    "name", [n for n in DOMAIN_NAMES if n not in {"ATOM_PROPERTY", "DIRECTIVE"}]
-)
+@pytest.mark.parametrize("name", DOMAIN_NAMES)
 def test_domain_constants(name):
     assert getattr(module, f"DOMAIN_{name}") == getattr(Domain, name)
 
