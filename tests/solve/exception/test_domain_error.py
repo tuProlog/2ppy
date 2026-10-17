@@ -167,12 +167,6 @@ def test_domain_error_contexts(context):
     assert isinstance(error.update_last_context(context), DomainError)
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="smart accessors (tuprolog/jvmutils.py) inherit getter properties bound to the "
-    "superclass JMethod, which JPype calls non-virtually: LogicError subclasses' `type` "
-    "property returns LogicError.getType() (bare functor) instead of the overridden one",
-)
 def test_domain_error_type_property_is_the_overridden_one(context):
     error = domain_error_for_term(context, Domain.ORDER, atom("x"))
     assert error.type == error.getType()

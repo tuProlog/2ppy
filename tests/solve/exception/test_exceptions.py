@@ -181,11 +181,5 @@ def test_occur_check_exception():
     )
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="smart accessors (tuprolog/jvmutils.py) bind the `message` property of Throwable "
-    "subclasses to the unbound Throwable.getMessage JMethod, which JPype calls non-virtually: "
-    "overridden getMessage() (as in NoUnifyException) is bypassed and `message` is None",
-)
 def test_no_unify_exception_message_property():
     assert NoUnifyException(atom("a"), atom("b")).message == "Cannot match term `a` with term `b`"

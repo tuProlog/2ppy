@@ -77,6 +77,8 @@ uninstall-hooks = "python scripts/githooks.py uninstall"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+# the JVM handles SIGSEGV internally: faulthandler would intercept it and crash the run
+addopts = "-p no:faulthandler"
 
 [[tool.uv.index]]
 name = "testpypi"

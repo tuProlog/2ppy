@@ -244,11 +244,6 @@ def test_thrown_existence_error_terms_become_logic_errors():
     assert isinstance(solution.getException(), ExistenceError)
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="smart accessors (tuprolog/jvmutils.py) bind Solution.Halt's `exception` property to "
-    "the unbound SolutionImpl.getException JMethod, which JPype calls non-virtually: it is None",
-)
 def test_halt_solution_exception_property(solver):
     solution = solve_once(solver, "syntax")
     assert solution.exception == solution.getException()

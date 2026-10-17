@@ -326,10 +326,6 @@ def test_not_implemented_and_not_supported_raise_system_errors(capturer, reply, 
     assert "some message" in str(info.value.error_struct)
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="tuprolog/solve/exception/error/system/_definitions.py binds SystemError to SyntaxError",
-)
 def test_not_implemented_raises_tuprolog_system_error(capturer):
     from tuprolog.solve.exception.error import SystemError
 
