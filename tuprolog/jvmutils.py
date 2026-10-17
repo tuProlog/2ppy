@@ -1,8 +1,8 @@
 from collections.abc import Callable, Mapping, MutableMapping
-from copy import copy as _copy
-from itertools import tee as _tee
 from collections.abc import Iterable as PyIterable
 from collections.abc import Iterator as PyIterator
+from copy import copy as _copy
+from itertools import tee as _tee
 from typing import Any
 
 import it.unibo.tuprolog.utils as _tuprolog_utils  # type: ignore
