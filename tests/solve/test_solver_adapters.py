@@ -3,8 +3,10 @@
 import pytest
 
 from tuprolog.core import atom, fact, struct, var
+from tuprolog.core.parsing import parse_struct
 from tuprolog.solve import ALL_SOLUTIONS, MAX_TIMEOUT, solve_options
 from tuprolog.solve.prolog import prolog_solver
+from tuprolog.theory import theory
 from tuprolog.theory.parsing import parse_theory
 
 X = var("X")
@@ -122,5 +124,39 @@ Q_B = fact(struct("q", atom("b")))
 
 
 Q_X = struct("q", X)
+
+
+@pytest.mark.parametrize(
+    "make_args",
+    [
+        pytest.param(lambda: (Q_A, Q_B), id="varargs"),
+        pytest.param(lambda: ([Q_A, Q_B],), id="list"),
+        pytest.param(lambda: ((c for c in [Q_A, Q_B]),), id="generator"),
+        pytest.param(lambda: (theory(Q_A, Q_B),), id="theory"),
+    ],
+)
+@pytest.mark.parametrize("kind", ["static", "dynamic"])
+def test_load_clauses(solver, kind, make_args):
+    getattr(solver, f"load_{kind}_clauses")(*make_args())
+    assert list(getattr(solver, f"{kind}_kb")) == [Q_A, Q_B]
+    assert values(solver.solve(Q_X)) == ["a", "b"]
+
+
+@pytest.mark.parametrize("kind", ["static", "dynamic"])
+def test_load_single_clause(solver, kind):
+    getattr(solver, f"load_{kind}_clauses")(Q_A)
+    assert list(getattr(solver, f"{kind}_kb")) == [Q_A]
+
+
+def test_load_static_clauses_replaces_the_static_kb(solver):
+    solver.load_static_clauses(Q_A)
+    assert solver.solve_once(P_X).is_no
+    assert values(solver.solve(Q_X)) == ["a"]
+
+
+def test_load_dynamic_clauses_are_retractable(solver):
+    solver.load_dynamic_clauses(Q_A, Q_B)
+    assert solver.solve_once(parse_struct("retract(q(a))")).is_yes
+    assert values(solver.solve(Q_X)) == ["b"]
 
 

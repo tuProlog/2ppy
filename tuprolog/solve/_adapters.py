@@ -3,6 +3,7 @@ from itertools import chain
 from jpype import JImplementationFor, JOverride
 
 from tuprolog import logger
+from tuprolog.jvmutils import jiterable
 from tuprolog.pyutils import iterable_or_varargs
 
 
@@ -93,10 +94,10 @@ class _KtMutableSolver:
         pass
 
     def load_static_clauses(self, *clauses):
-        return iterable_or_varargs(clauses, lambda cs: self.loadStaticClauses(cs))
+        return iterable_or_varargs(clauses, lambda cs: self.loadStaticClauses(jiterable(list(cs))))
 
     def load_dynamic_clauses(self, *clauses):
-        return iterable_or_varargs(clauses, lambda cs: self.loadDynamicClauses(cs))
+        return iterable_or_varargs(clauses, lambda cs: self.loadDynamicClauses(jiterable(list(cs))))
 
     @property
     def standard_output(self):
