@@ -28,6 +28,8 @@ def operator_set(*operators) -> OperatorSet:
 
 @singledispatch
 def specifier(name: str) -> Specifier:
+    if not isinstance(name, str):
+        raise TypeError(f"Cannot convert {type(name)} into Specifier")
     return Specifier.valueOf(name.upper())
 
 
