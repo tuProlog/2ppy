@@ -29,3 +29,11 @@ def test_instantiation_error_for_goal(context, procedure):
     x = var("X")
     error = instantiation_error_for_goal(context, procedure, x)
     assert_instantiation_error(error, x, "Uninstantiated subgoal X in procedure foo/2")
+
+
+def test_instantiation_error_for_argument_with_index(context, procedure):
+    x = var("X")
+    error = instantiation_error_for_argument(context, procedure, x, 2)
+    assert_instantiation_error(
+        error, x, "The 2-th argument `X` of foo/2 is unexpectedly not instantiated"
+    )

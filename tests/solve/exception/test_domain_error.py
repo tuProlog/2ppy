@@ -133,6 +133,22 @@ def test_domain_error_for_argument_without_index(context, procedure):
     assert "should be `order`, but `x` has been provided instead" in error.message
 
 
+def test_domain_error_for_flag_values_with_index(context, procedure):
+    error = domain_error_for_flag_values(
+        context, procedure, [atom("on"), atom("off")], atom("maybe"), 1
+    )
+    assert error.expected_domain == Domain.FLAG_VALUE
+    assert str(error.message).startswith("The 1-th argument")
+    assert error.getType() == struct("domain_error", atom("flag_value"), atom("maybe"))
+
+
+def test_domain_error_for_argument_with_index(context, procedure):
+    error = domain_error_for_argument(context, procedure, Domain.ORDER, atom("x"), 0)
+    assert error.expected_domain == Domain.ORDER
+    assert str(error.message).startswith("The 0-th argument")
+    assert error.getType() == struct("domain_error", atom("order"), atom("x"))
+
+
 @pytest.mark.xfail(
     strict=True,
     reason="2P-Kt DomainError.forArgument/forFlagValues messages lack a space: 'An argumentof'",

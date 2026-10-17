@@ -1,3 +1,5 @@
+from jpype import JInt
+
 from tuprolog.core import Term
 from tuprolog.solve import ExecutionContext, Signature
 
@@ -15,7 +17,9 @@ def type_error_for_argument_list(
     actual: Term,
     index: int | None = None,
 ) -> TypeError:
-    return TypeError.forArgumentList(context, procedure, expected, actual, index)
+    return TypeError.forArgumentList(
+        context, procedure, expected, actual, None if index is None else JInt(index)
+    )
 
 
 def type_error_for_argument(
@@ -25,7 +29,9 @@ def type_error_for_argument(
     actual: Term,
     index: int | None = None,
 ) -> TypeError:
-    return TypeError.forArgument(context, procedure, expected, actual, index)
+    return TypeError.forArgument(
+        context, procedure, expected, actual, None if index is None else JInt(index)
+    )
 
 
 def type_error_for_term(

@@ -9,6 +9,8 @@ from tuprolog.solve.exception.error.type import (
     TypeError,
     type,
     type_error,
+    type_error_for_argument,
+    type_error_for_argument_list,
     type_error_for_goal,
     type_error_for_term,
 )
@@ -94,6 +96,30 @@ def test_type_error_raised_from_primitive_is_catchable():
     assert caught.substitution.getByName("T") == atom("atom")
     assert caught.substitution.getByName("C") == integer(1)
     assert caught.substitution.getByName("M") == atom("m")
+
+
+@pytest.mark.parametrize("index", [None, 0, 3])
+def test_type_error_for_argument(context, procedure, index):
+    error = type_error_for_argument(context, procedure, Type.ATOM, integer(1), index)
+    prefix = "An argument" if index is None else f"The {index}-th argument"
+    assert_type_error(
+        error,
+        Type.ATOM,
+        integer(1),
+        f"{prefix} of `foo/2` should be a `atom`, but `1` has been provided instead",
+    )
+
+
+@pytest.mark.parametrize("index", [None, 1])
+def test_type_error_for_argument_list(context, procedure, index):
+    error = type_error_for_argument_list(context, procedure, Type.ATOM, integer(1), index)
+    prefix = "An argument" if index is None else f"The {index}-th argument"
+    assert_type_error(
+        error,
+        Type.ATOM,
+        integer(1),
+        f"{prefix} of `foo/2` should be a list of `atom`, but `1` has been provided instead",
+    )
 
 
 def test_type_error_for_goal(context, procedure):
