@@ -10,7 +10,8 @@ def iterable_or_varargs(
     assert isinstance(args, Sequence)
     if len(args) == 1:
         item = args[0]
-        if isinstance(item, Iterable):
+        # strings are iterable, but they are single values rather than collections
+        if isinstance(item, Iterable) and not isinstance(item, (str, bytes)):
             return dispatch(item)
         else:
             return dispatch([item])

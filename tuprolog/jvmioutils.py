@@ -61,14 +61,27 @@ class _JvmInputStream:
 
     def readline(self, size=-1):
         self._buffer()
-        self._buffered.readLine()
+        chars = []
+        while size is None or size < 0 or len(chars) < size:
+            char = self._buffered.read()
+            if char < 0:
+                break
+            chars.append(chr(char))
+            if char == ord("\n"):
+                break
+        return "".join(chars)
 
     def readlines(self, hint=-1):
-        self._buffer()
-        stream = self._buffered.read.lines()
-        if hint >= 0:
-            stream = stream.limit(hint)
-        return list(stream)
+        lines, total = [], 0
+        while line := self.readline():
+            lines.append(line)
+            total += len(line)
+            if hint is not None and 0 < hint <= total:
+                break
+        return lines
+
+    def __iter__(self):
+        return iter(self.readline, "")
 
     def seek(self, offset: int, whence=SEEK_SET):
         raise OSError("This IOBase is backed by an instance of <java.io.InputStream>")
@@ -79,7 +92,7 @@ class _JvmInputStream:
     def truncate(self, size=None):
         raise OSError("This IOBase is backed by an instance of <java.io.InputStream>")
 
-    def writelines(self):
+    def writelines(self, lines):
         raise OSError("This IOBase is backed by an instance of <java.io.InputStream>")
 
 
@@ -93,7 +106,7 @@ def ensure_input_steam(input: str | InputStream) -> InputStream:
     elif isinstance(input, InputStream):
         return input
     else:
-        raise TypeError("Invalid type: " + type(input))
+        raise TypeError(f"Invalid type: {type(input)}")
 
 
 logger.debug("Configure JVM-specific IO extensions")

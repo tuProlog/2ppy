@@ -18,8 +18,7 @@ def __jvm_lib_file_names():
 def __jvmlib():
     for name in __jvm_lib_file_names():
         for path in JAVA_HOME.glob(f"**/{name}"):
-            path.resolve()
-            if path.exists:
+            if path.exists():
                 return path
     return None
 
