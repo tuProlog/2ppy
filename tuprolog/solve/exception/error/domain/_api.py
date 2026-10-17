@@ -1,5 +1,7 @@
 from collections.abc import Iterable
 
+from jpype import JInt
+
 from tuprolog.core import Term
 from tuprolog.solve import ExecutionContext, Signature
 
@@ -13,7 +15,9 @@ def domain_error_for_flag_values(
     actual: Term,
     index: int | None = None,
 ) -> DomainError:
-    return DomainError.forFlagValues(context, procedure, flag_values, actual, index)
+    return DomainError.forFlagValues(
+        context, procedure, flag_values, actual, None if index is None else JInt(index)
+    )
 
 
 def domain_error_for_argument(
@@ -23,7 +27,9 @@ def domain_error_for_argument(
     actual: Term,
     index: int | None = None,
 ) -> DomainError:
-    return DomainError.forArgument(context, procedure, expected, actual, index)
+    return DomainError.forArgument(
+        context, procedure, expected, actual, None if index is None else JInt(index)
+    )
 
 
 def domain_error_for_term(

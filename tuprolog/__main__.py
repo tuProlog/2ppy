@@ -1,5 +1,7 @@
 import code
 
+import tuprolog.core as _core
+import tuprolog.solve.primitive as _primitive
 from tuprolog.core import *
 from tuprolog.core.exception import *
 from tuprolog.core.impl import *
@@ -30,6 +32,9 @@ from tuprolog.theory.parsing import *
 from tuprolog.unify import *
 from tuprolog.unify.exception import *
 
-code.interact(local=locals())
+# stdlib's star-imports shadow some core names with homonymous primitives (Atom, Var, Integer,
+# Clause) or modules (rule, primitive): restore the core ones
+Atom, Clause, Integer, Var, rule = _core.Atom, _core.Clause, _core.Integer, _core.Var, _core.rule
+primitive = _primitive.primitive
 
-input()
+code.interact(local=locals())
