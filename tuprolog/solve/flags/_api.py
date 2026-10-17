@@ -1,7 +1,9 @@
 from collections.abc import Iterable, Mapping
 
+from jpype import JString
+
 from tuprolog.core import Term
-from tuprolog.jvmutils import jarray, jmap, kpair
+from tuprolog.jvmutils import jarray, jmap
 
 from ._definitions import Flag, FlagStore, NotableFlag
 
@@ -12,12 +14,17 @@ def flag(first: str | NotableFlag | Iterable, value: Term = None) -> Flag:
             return first.toPair()
         else:
             return first.to(value)
-    elif isinstance(first, str):
+    elif isinstance(first, (str, JString)):
         if value is None:
             raise ValueError("Argument value is None")
         return Flag(first, value)
+    elif isinstance(first, Flag) and value is None:
+        return first
     elif isinstance(first, Iterable) and value is None:
-        return kpair(first)
+        items = list(first)
+        if len(items) != 2 or not isinstance(items[0], (str, JString)):
+            raise ValueError(f"Expected a (name, value) pair, got {items}")
+        return Flag(*items)
     else:
         raise ValueError("Argument first is not iterable nor str")
 
