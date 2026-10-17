@@ -1,4 +1,4 @@
-from jpype import JImplementationFor
+from jpype import JImplementationFor, JOverride
 
 from tuprolog.core import Substitution
 
@@ -22,3 +22,10 @@ class _KtSolveRequest:
 
     def reply_exception(self, exception, *side_effects):
         return self.replyException(exception, None, *side_effects)
+
+    @JOverride
+    def solve(self, goal, max_duration=None):
+        """Solves goal in a sub-solver, by default within the remaining time of this request."""
+        if max_duration is None:
+            max_duration = self.getMaxDuration()
+        return self._solve(goal, max_duration)
