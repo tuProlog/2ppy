@@ -4,6 +4,7 @@ from collections.abc import Callable, Iterable
 
 from tuprolog.core import Struct, Term, atom, struct
 from tuprolog.core.parsing import parse_struct
+from tuprolog.math import python_integer
 from tuprolog.solve import Signature, Solution, Solver, signature
 from tuprolog.solve.library import Library, library
 from tuprolog.solve.primitive import SolveRequest, SolveResponse, primitive
@@ -33,6 +34,11 @@ class RequestCapturer:
         solutions = list(self.solver.solve(goal))
         assert len(solutions) == 1 and solutions[0].is_yes, solutions
         return self.requests[-1]
+
+
+def python_int(term: Term) -> int:
+    """Converts a logic integer into a Python int (`Integer.to_int()` returns a JVM BigInteger)."""
+    return python_integer(term.getIntValue())
 
 
 def goal_of(goal: str | Struct) -> Struct:
@@ -89,6 +95,7 @@ __all__ = [
     "bindings",
     "error_of",
     "goal_of",
+    "python_int",
     "single_primitive_library",
     "solve_all",
     "solve_once",
