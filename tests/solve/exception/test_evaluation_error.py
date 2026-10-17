@@ -26,6 +26,7 @@ def test_error_type_values(name):
     expected = getattr(ErrorType, name)
     assert getattr(module, f"ERROR_{name}") == expected
     assert error_type(name) == expected
+    assert error_type(name.lower()) == expected
     assert error_type(atom(name.lower())) == expected
     assert str(expected) == name.lower()
     assert expected.toTerm() == atom(name.lower())

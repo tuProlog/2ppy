@@ -10,6 +10,6 @@ def evaluation_error(context: ExecutionContext, type: ErrorType, message: str) -
 
 def error_type(name: str | Term) -> ErrorType:
     if isinstance(name, str):
-        return ErrorType.valueOf(name)
+        return ErrorType.valueOf(name.upper())
     else:
         return ErrorType.fromTerm(name)
