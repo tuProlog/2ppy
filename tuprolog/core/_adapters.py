@@ -1,9 +1,9 @@
-from collections.abc import Callable, Sized
+from collections.abc import Sized
 
-from jpype import JImplementationFor, JOverride
+from jpype import JImplementationFor
 
 from tuprolog import logger
-from tuprolog.jvmutils import jiterable, kfunction
+from tuprolog.jvmutils import jiterable
 from tuprolog.math import (
     BigDecimal,
     BigInteger,
@@ -133,13 +133,6 @@ class _KtSubstitution:
 
     def __sub__(self, other):
         return self.minus(other)
-
-    @JOverride
-    def filter(self, filter):
-        if isinstance(filter, Callable):
-            return self.filter_(kfunction(1)(filter))
-        else:
-            return self.filter_(filter)
 
 
 @JImplementationFor("it.unibo.tuprolog.core.Scope")
