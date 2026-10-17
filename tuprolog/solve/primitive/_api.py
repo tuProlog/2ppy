@@ -24,12 +24,12 @@ def primitive(callable: Callable[[SolveResponse], Iterable[SolveResponse]]) -> P
 
 def solve_request(
     signature: Signature,
-    arguments: list[Term],
+    arguments: Iterable[Term],
     context: ExecutionContext,
     issuing_instant: int = current_time_instant(),
     max_duration: int = MAX_TIMEOUT,
 ) -> SolveRequest:
-    return SolveRequest(signature, arguments, context, issuing_instant, max_duration)
+    return SolveRequest(signature, jlist(arguments), context, issuing_instant, max_duration)
 
 
 def solve_response(solution: Solution, *side_effects) -> SolveResponse:
