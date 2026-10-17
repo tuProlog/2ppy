@@ -1,6 +1,7 @@
-from collections.abc import Callable
+from collections.abc import Callable, Iterable
 
 from tuprolog.core import Term
+from tuprolog.jvmutils import jlist
 from tuprolog.solve import MAX_TIMEOUT, ExecutionContext, Signature, current_time_instant
 from tuprolog.solve.primitive import SolveRequest
 
@@ -23,14 +24,14 @@ def logic_function(callable: Callable[[ComputeRequest], ComputeResponse]) -> Log
 
 def compute_request(
     signature: Signature,
-    arguments: list[Term],
+    arguments: Iterable[Term],
     context: ExecutionContext,
     issuing_instant: int | None = None,
     max_duration: int = MAX_TIMEOUT,
 ) -> ComputeRequest:
     if issuing_instant is None:
         issuing_instant = current_time_instant()
-    return ComputeRequest(signature, arguments, context, issuing_instant, max_duration)
+    return ComputeRequest(signature, jlist(arguments), context, issuing_instant, max_duration)
 
 
 def compute_response(result: Term) -> ComputeResponse:
