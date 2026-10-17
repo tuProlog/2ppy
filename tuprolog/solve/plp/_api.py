@@ -15,8 +15,8 @@ def probability(taggable: Taggable) -> float:
 T = TypeVar("T", bound=Taggable)
 
 
-def set_probability(taggable: T) -> T:
-    return ProbExtensions.setProbability(taggable)
+def set_probability(taggable: T, value: float) -> T:
+    return ProbExtensions.setProbability(taggable, value)
 
 
 def is_probabilistic(solve_opts: SolveOptions) -> bool:
