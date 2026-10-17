@@ -58,7 +58,13 @@ def jvm_rounding_mode(mode):
         raise ValueError(f"Not a rounding mode {mode}")
 
 
-@and_then(lambda bd: bd.stripTrailingZeros())
+def _normalize(value: BigDecimal) -> BigDecimal:
+    value = value.stripTrailingZeros()
+    # a negative scale (e.g. 1E+2) makes 2P-Kt format reals as unparsable text (e.g. 1E+2.0)
+    return value.setScale(0) if value.getScale() < 0 else value
+
+
+@and_then(_normalize)
 def big_decimal(
     value: str | float | decimal.Decimal, precision=0, rounding=RoundingMode.HALF_UP
 ) -> BigDecimal:
