@@ -1,14 +1,18 @@
 import pytest
 
 from tests.solve.primitive._support import RequestCapturer
-from tuprolog.core import integer
+from tuprolog.core import integer, var
+from tuprolog.core.parsing import parse_term
 from tuprolog.solve import MAX_TIMEOUT, current_time_instant, signature
+from tuprolog.solve.exception.error import InstantiationError, TypeError
 from tuprolog.solve.function import (
     Compute,
     ComputeRequest,
     ComputeResponse,
     compute_request,
     compute_response,
+    eval_as_arithmetic_expression,
+    eval_as_expression,
 )
 
 
@@ -53,3 +57,42 @@ def test_compute_request_defaults(context):
     after = current_time_instant()
     assert before <= request.request_issuing_instant <= after
     assert request.execution_max_duration == MAX_TIMEOUT
+
+
+EXPRESSIONS = [("1 + 2 * 3", "7"), ("10 / 4", "2.5"), ("2 ** 3", "8.0"), ("abs(-3) - 1", "2")]
+
+
+@pytest.mark.parametrize("index", [None, 0])
+@pytest.mark.parametrize("expression, expected", EXPRESSIONS)
+def test_eval_as_expression(capturer, expression, expected, index):
+    request = capturer.request(parse_term(expression))
+    result = eval_as_expression(request.arguments[0], request, index)
+    assert str(result) == expected
+
+
+@pytest.mark.parametrize("index", [None, 0])
+@pytest.mark.parametrize("expression, expected", EXPRESSIONS)
+def test_eval_as_arithmetic_expression(capturer, expression, expected, index):
+    request = capturer.request(parse_term(expression))
+    result = eval_as_arithmetic_expression(request.arguments[0], request, index)
+    assert result.is_number
+    assert str(result) == expected
+
+
+def test_eval_as_expression_leaves_variables_alone(capturer):
+    request = capturer.request(var("X"))
+    assert eval_as_expression(request.arguments[0], request, 0).is_var
+
+
+def test_eval_as_arithmetic_expression_of_variable_raises_instantiation_error(capturer):
+    request = capturer.request(var("X"))
+    with pytest.raises(InstantiationError):
+        eval_as_arithmetic_expression(request.arguments[0], request, 0)
+
+
+@pytest.mark.parametrize("evaluate", [eval_as_expression, eval_as_arithmetic_expression])
+def test_eval_of_non_evaluable_raises_type_error(capturer, evaluate):
+    request = capturer.request(parse_term("foo + 1"))
+    with pytest.raises(TypeError) as info:
+        evaluate(request.arguments[0], request, 0)
+    assert "evaluable" in str(info.value.error_struct)

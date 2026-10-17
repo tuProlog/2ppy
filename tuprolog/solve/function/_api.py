@@ -1,5 +1,7 @@
 from collections.abc import Callable, Iterable
 
+from jpype import JClass, JObject
+
 from tuprolog.core import Term
 from tuprolog.jvmutils import jlist
 from tuprolog.solve import MAX_TIMEOUT, ExecutionContext, Signature, current_time_instant
@@ -38,11 +40,15 @@ def compute_response(result: Term) -> ComputeResponse:
     return ComputeResponse(result)
 
 
+def _boxed_index(index: int | None):
+    return None if index is None else JObject(index, JClass("java.lang.Integer"))
+
+
 def eval_as_expression(term: Term, request: SolveRequest, index: int | None = None) -> Term:
-    return ArithmeticUtilsKt.evalAsExpression(term, request, index)
+    return ArithmeticUtilsKt.evalAsExpression(term, request, _boxed_index(index))
 
 
 def eval_as_arithmetic_expression(
     term: Term, request: SolveRequest, index: int | None = None
 ) -> Term:
-    return ArithmeticUtilsKt.evalAsArithmeticExpression(term, request, index)
+    return ArithmeticUtilsKt.evalAsArithmeticExpression(term, request, _boxed_index(index))
