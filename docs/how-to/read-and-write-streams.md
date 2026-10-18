@@ -116,6 +116,7 @@ Python streams as well: 2PPy converts them (see `tuprolog.jvmioutils`).
 
 ## See also
 
+- Example notebook: [Input and output](../examples/05-input-and-output.ipynb).
 - API: `tuprolog.theory.parsing` ([reference](../api/tuprolog/theory/parsing.md)),
   `tuprolog.solve.channel` ([reference](../api/tuprolog/solve/channel.md)),
   `tuprolog.solve.libs` ([reference](../api/tuprolog/solve/libs.md)),

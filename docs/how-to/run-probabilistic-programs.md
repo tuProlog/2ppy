@@ -93,6 +93,7 @@ each solution: see [Use the REPL](use-the-repl.md).
 
 ## See also
 
+- Example notebook: [Probabilistic logic programming](../examples/06-probabilistic-logic-programming.ipynb).
 - API: `tuprolog.solve.problog` ([reference](../api/tuprolog/solve/problog.md)),
   `tuprolog.solve.plp` ([reference](../api/tuprolog/solve/plp.md)).
 - The [ProbLog website](https://dtai.cs.kuleuven.be/problog/), for the language.

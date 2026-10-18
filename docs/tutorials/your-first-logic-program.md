@@ -158,3 +158,6 @@ Read on:
   functions and libraries;
 - [Standard predicates](../reference/standard-predicates.md), for the built-in predicates such as
   `setof/3` and `assertz/1`.
+- the [example notebooks](../examples/index.md), e.g.
+  [Knowledge bases and queries](../examples/02-knowledge-bases-and-queries.ipynb) and
+  [The N-queens puzzle](../examples/07-n-queens.ipynb).

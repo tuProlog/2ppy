@@ -132,5 +132,6 @@ permission_error(access, oop_method, '__len__')
 
 ## See also
 
+- Example notebook: [Python objects from Prolog](../examples/04-python-objects-from-prolog.ipynb).
 - [OOPLib reference](../reference/ooplib.md).
 - API: `tuprolog.solve.libs` ([reference](../api/tuprolog/solve/libs.md)).

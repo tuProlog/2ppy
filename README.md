@@ -50,7 +50,8 @@ Predicates can be written in Python:
 
 Interactive Prolog: `python -m tuprolog.repl.prolog`.
 
-See the [tutorials](https://tuprolog.github.io/2ppy/tutorials/) to get started, and the
+See the [tutorials](https://tuprolog.github.io/2ppy/tutorials/) and the
+[example notebooks](https://github.com/tuProlog/2ppy/tree/master/examples) to get started, and the
 [API reference](https://tuprolog.github.io/2ppy/api/tuprolog/) for the details.
 
 ## Contributing

@@ -1,7 +1,9 @@
-"""Generates a page of the API reference for each public module of the tuprolog package.
+"""Generates the pages not written in docs/: the API reference, and the example notebooks.
 
-Run by the mkdocs-gen-files plugin (see mkdocs.yml): modules are found on the file system, without
-importing them (importing tuprolog starts the JVM).
+Run by the mkdocs-gen-files plugin (see mkdocs.yml). The API reference has a page for each public
+module of the tuprolog package, found on the file system without importing them (importing tuprolog
+starts the JVM). The notebooks of examples/ are copied into examples/, where mkdocs-jupyter renders
+them with their stored outputs.
 """
 
 from pathlib import Path
@@ -31,3 +33,9 @@ for path in sorted(PACKAGE.rglob("*.py")):
 
 with mkdocs_gen_files.open("api/SUMMARY.md", "w") as file:
     file.writelines(nav.build_literate_nav())
+
+for notebook in sorted((ROOT / "examples").glob("*.ipynb")):
+    page = Path("examples", notebook.name)
+    with mkdocs_gen_files.open(page, "wb") as file:
+        file.write(notebook.read_bytes())
+    mkdocs_gen_files.set_edit_path(page, notebook.relative_to(ROOT))

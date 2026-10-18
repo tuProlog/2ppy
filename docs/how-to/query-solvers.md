@@ -157,6 +157,7 @@ Probabilistic solvers (ProbLog) take the same options, plus `probabilistic=True`
 
 ## See also
 
+- Example notebook: [Knowledge bases and queries](../examples/02-knowledge-bases-and-queries.ipynb).
 - API: `tuprolog.solve` ([reference](../api/tuprolog/solve.md)),
   `tuprolog.solve.prolog` ([reference](../api/tuprolog/solve/prolog.md)),
   `tuprolog.solve.flags` ([reference](../api/tuprolog/solve/flags.md)).

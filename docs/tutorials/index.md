@@ -12,3 +12,6 @@ in order if you are new to 2PPy.
 No previous knowledge of Prolog or of 2P-Kt is needed. If you want the concepts behind the code,
 read [Logic programming in a nutshell](../explanation/logic-programming.md) alongside. Once you are
 comfortable, the [how-to guides](../how-to/index.md) show how to accomplish specific tasks.
+
+To learn by example, the [example notebooks](../examples/index.md) show 2PPy at work, from terms to
+probabilistic logic programming.

@@ -151,7 +151,8 @@ that queries yield the probability of being true: see
 
 ## Further reading
 
-- [Your first logic program](../tutorials/your-first-logic-program.md), a hands-on tutorial.
+- [Your first logic program](../tutorials/your-first-logic-program.md), a hands-on tutorial, and the
+  [N-queens puzzle](../examples/07-n-queens.ipynb) notebook, a classic search by backtracking.
 - [Learn Prolog Now!](https://lpn.swi-prolog.org/), a free introductory book on Prolog.
 - 2P-Kt's [term model](https://tuprolog.github.io/2p-kt/explanation/term-model/) and
   [solver design](https://tuprolog.github.io/2p-kt/explanation/solver-design/).
