@@ -1,8 +1,8 @@
+import it.unibo.tuprolog.solve.stdlib.rule as _rule  # type: ignore
+import jpype.imports  # noqa: F401
+
 from tuprolog import logger
 from tuprolog.solve import signature
-import jpype.imports  # noqa: F401
-import it.unibo.tuprolog.solve.stdlib.rule as _rule  # type: ignore
-
 
 _Append = _rule.Append
 

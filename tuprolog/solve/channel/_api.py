@@ -1,7 +1,11 @@
-from typing import Callable, Mapping
+from collections.abc import Callable, Mapping
 from functools import singledispatch
+
+from jpype import JObject, JString
+
 from tuprolog.jvmutils import jmap, kfunction
-from ._definitions import InputChannel, InputStore, OutputChannel, OutputStore, Listener
+
+from ._definitions import InputChannel, InputStore, Listener, OutputChannel, OutputStore
 
 
 def std_in() -> InputChannel:
@@ -9,7 +13,9 @@ def std_in() -> InputChannel:
 
 
 @singledispatch
-def input_channel(generator: Callable, availability_checker: Callable = None) -> InputChannel:
+def input_channel(
+    generator: Callable | str, availability_checker: Callable | None = None
+) -> InputChannel:
     if availability_checker is None:
         return InputChannel.of(kfunction(0)(generator))
     else:
@@ -21,14 +27,16 @@ def input_channel_from_string(string: str) -> InputChannel:
     return InputChannel.of(string)
 
 
-def input_store(stdin: InputChannel = None, channels: Mapping[str, InputChannel] = None) -> InputStore:
+def input_store(
+    stdin: InputChannel | None = None, channels: Mapping[str, InputChannel] | None = None
+) -> InputStore:
     if stdin is None and channels is None:
         return InputStore.fromStandard()
     elif channels is None:
         return InputStore.fromStandard(stdin)
     else:
         cs = {InputStore.STDIN: stdin or std_in()}
-        for k, v in channels:
+        for k, v in channels.items():
             cs[k] = v
         return InputStore.of(jmap(cs))
 
@@ -45,33 +53,32 @@ def warn() -> OutputChannel:
     return OutputChannel.warn()
 
 
+def _pythonic(value):
+    return str(value) if isinstance(value, JString) else value
+
+
 def output_channel(consumer: Callable) -> OutputChannel:
-    return OutputChannel.of(kfunction(1)(consumer))
+    return OutputChannel.of(kfunction(1)(lambda value: consumer(_pythonic(value))))
 
 
 def output_store(
-        stdout: OutputChannel = None,
-        stderr: OutputChannel = None,
-        warnings: OutputChannel = None,
-        channels: Mapping[str, OutputChannel] = None
+    stdout: OutputChannel | None = None,
+    stderr: OutputChannel | None = None,
+    warnings: OutputChannel | None = None,
+    channels: Mapping[str, OutputChannel] | None = None,
 ) -> OutputStore:
-    if all((channel is None for channel in (stdout, stderr, warnings))):
+    if channels is None and all(channel is None for channel in (stdout, stderr, warnings)):
         return OutputStore.fromStandard()
     elif channels is None:
         return OutputStore.fromStandard(
-            stdout or std_out(),
-            stderr or std_err(),
-            warnings or warn()
+            stdout or std_out(), stderr or std_err(), warnings or warn()
         )
     else:
-        cs = {
-            OutputStore.STDOUT: stdout or std_out(),
-            OutputStore.STDERR: stderr or std_err()
-        }
-        for k, v in channels:
+        cs = {OutputStore.STDOUT: stdout or std_out(), OutputStore.STDERR: stderr or std_err()}
+        for k, v in channels.items():
             cs[k] = v
         return OutputStore.of(jmap(cs), warnings or warn())
 
 
 def listener(consumer: Callable) -> Listener:
-    return kfunction(1)(consumer)
+    return JObject(kfunction(1)(consumer), Listener)

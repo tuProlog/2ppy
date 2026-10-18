@@ -1,2 +1,2 @@
-from ._definitions import *
 from ._api import *
+from ._definitions import *

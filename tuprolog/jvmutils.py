@@ -1,14 +1,21 @@
-from typing import Iterable as PyIterable, Iterator as PyIterator, Mapping, MutableMapping, Callable, Any
-from jpype import JImplements, JOverride, JConversion, JImplementationFor, JArray
-from tuprolog import logger
-import jpype.imports  # noqa: F401
-from _jpype import _JObject as JObjectClass, _JMethod as JMethodClass  # type: ignore
-import java.util as _jutils  # type: ignore
+from collections.abc import Callable, Mapping, MutableMapping
+from collections.abc import Iterable as PyIterable
+from collections.abc import Iterator as PyIterator
+from copy import copy as _copy
+from itertools import tee as _tee
+from typing import Any
+
+import it.unibo.tuprolog.utils as _tuprolog_utils  # type: ignore
 import java.lang as _jlang  # type: ignore
+import java.util as _jutils  # type: ignore
+import jpype.imports  # noqa: F401
 import kotlin as _kotlin  # type: ignore
 import kotlin.sequences as _ksequences  # type: ignore
-import it.unibo.tuprolog.utils as _tuprolog_utils  # type: ignore
+from _jpype import _JMethod as JMethodClass
+from _jpype import _JObject as JObjectClass  # type: ignore
+from jpype import JArray, JConversion, JImplementationFor, JImplements, JOverride
 
+from tuprolog import logger
 
 Arrays = _jutils.Arrays
 
@@ -37,12 +44,12 @@ SequencesKt = _ksequences.SequencesKt
 PyUtils = _tuprolog_utils.PyUtils
 
 
-def protect_iterable(iterable: Iterable) -> Iterable:
+def protect_iterable(iterable: Any) -> Any:
     return PyUtils.iterable(iterable)
 
 
 @JImplements("java.util.Iterator", deferred=True)
-class _IteratorAdapter(object):
+class _IteratorAdapter:
     def __init__(self, iterator):
         assert isinstance(iterator, PyIterator)
         self._iterator = iterator
@@ -74,22 +81,26 @@ class _IteratorAdapter(object):
 
 
 @JImplements("java.lang.Iterable", deferred=True)
-class _IterableAdapter(object):
+class _IterableAdapter:
     def __init__(self, iterable):
         assert isinstance(iterable, PyIterable)
+        if isinstance(iterable, PyIterator):
+            # one-shot iterators (e.g. generators) are buffered lazily, as JVM code may iterate
+            # an Iterable more than once
+            iterable = _tee(iterable, 1)[0]
         self._iterable = iterable
 
     @JOverride
     def iterator(self):
+        if isinstance(self._iterable, PyIterator):
+            return _IteratorAdapter(_copy(self._iterable))
         return _IteratorAdapter(iter(self._iterable))
 
 
 def kpair(items: PyIterable) -> Pair:
     if isinstance(items, Pair):
         return items
-    i = iter(items)
-    first = next(i)
-    second = next(i)
+    first, second = items
     return Pair(first, second)
 
 
@@ -101,10 +112,7 @@ def _kt_pair_covert(jcls, obj):
 def ktriple(items: PyIterable) -> Triple:
     if isinstance(items, Triple):
         return items
-    i = iter(items)
-    first = next(i)
-    second = next(i)
-    third = next(i)
+    first, second, third = items
     return Triple(first, second, third)
 
 
@@ -123,7 +131,7 @@ def jlist(iterable: PyIterable) -> Iterable:
     return lst
 
 
-def jiterable(iterable: PyIterable) -> Iterable:
+def jiterable(iterable: PyIterable) -> Any:
     assert isinstance(iterable, PyIterable)
     return _IterableAdapter(iterable)
 
@@ -147,7 +155,7 @@ def jmap(dictionary: Mapping) -> Map:
     return Map @ dictionary
 
 
-def _java_obj_repr(java_object: Object) -> str:
+def _java_obj_repr(java_object: Any) -> str:
     return str(java_object.toString())
 
 
@@ -202,9 +210,24 @@ class _JvmComparable:
 
 def to_snake_case(camel_str: str) -> str:
     return "".join(
-        "_" + x.lower() if x.isupper() and camel_str[i + 1:i + 2].islower() else x
+        "_" + x.lower() if x.isupper() and camel_str[i + 1 : i + 2].islower() else x
         for i, x in enumerate(camel_str)
     ).lstrip("_")
+
+
+def _virtual_getter(name: str) -> Callable:
+    # invoking an unbound JMethod (e.g. as a property fget) is a non-virtual call in JPype,
+    # which would ignore overrides in subclasses: look the method up on the instance instead
+    return lambda obj: getattr(obj, name)()
+
+
+def _virtual_setter(name: str) -> Callable:
+    return lambda obj, value: getattr(obj, name)(value)
+
+
+def _is_defined(cls, name: str) -> bool:
+    # hasattr() is unreliable here, as properties may fail when accessed on JVM classes
+    return any(name in base.__dict__ for base in cls.__mro__)
 
 
 @JImplementationFor("java.lang.Object")
@@ -213,47 +236,47 @@ class _KtObjectWithSmartPythonicAccessors:
     This class provides every Java imported type with Pythonic versions of its methods and properties,
     unless pythonic versions would conflict with existing members.
     """
+
     def __jclass_init__(self):
         members = dir(self)
-        members_set = set(members)
         for name in members:
             member = getattr(self, name, None)
-            if member is None:
+            if member is None or name.startswith("_") or "$" in name or name == "getClass":
                 continue
-            elif name.startswith("_") or '$' in name or name == 'getClass':
-                continue
-            elif isinstance(member, JMethodClass):
-                if len(name) > 3:
-                    snake_case = to_snake_case(name)
-                    method_has_0_args = member.__annotations__.keys() == {"return"}
-                    add_property = None
-                    add_method = (snake_case, member)
-                    # Shorten method name and promote to property if it's a getter
-                    if method_has_0_args and snake_case.startswith("get_"):
-                        property_name = snake_case[4:]
-                        if member._isBeanAccessor():
-                            getter = member
-                            # Attempt to find paired bean setter
-                            setter_name = "set" + name.removeprefix("get")
-                            setter = getattr(self, setter_name, None)
-                            if setter is not None and isinstance(setter, JMethodClass) and setter._isBeanMutator():
-                                add_property = (property_name, property(fget=getter, fset=setter))
-                            else:
-                                add_property = (property_name, property(fget=getter))
+            elif isinstance(member, JMethodClass) and len(name) > 3:
+                snake_case = to_snake_case(name)
+                method_has_0_args = member.__annotations__.keys() == {"return"}
+                add_property = None
+                add_method = (snake_case, member)
+                # Shorten method name and promote to property if it's a getter
+                if method_has_0_args and snake_case.startswith("get_"):
+                    property_name = snake_case[4:]
+                    getter = _virtual_getter(name)
+                    if member._isBeanAccessor():
+                        # Attempt to find paired bean setter
+                        setter_name = "set" + name.removeprefix("get")
+                        setter = getattr(self, setter_name, None)
+                        if (
+                            setter is not None
+                            and isinstance(setter, JMethodClass)
+                            and setter._isBeanMutator()
+                        ):
+                            setter = _virtual_setter(setter_name)
+                            add_property = (property_name, property(fget=getter, fset=setter))
                         else:
-                            add_property = (property_name, property(fget=member))
-                    # Promote method to property if it's a boolean getter
-                    elif method_has_0_args and snake_case.startswith("is_"):
-                        add_property = (snake_case, property(fget=member))
-                        # Do not add method with the same name
-                        add_method = None
-                    # Add method and property
-                    for to_add in (add_property, add_method):
-                        if to_add is not None:
-                            # Avoid conflicts with existing members
-                            if to_add[0] not in members_set or not hasattr(self, to_add[0]):
-                                self._customize(*to_add)
-                                members_set.add(to_add[0])
+                            add_property = (property_name, property(fget=getter))
+                    else:
+                        add_property = (property_name, property(fget=getter))
+                # Promote method to property if it's a boolean getter
+                elif method_has_0_args and snake_case.startswith("is_"):
+                    add_property = (snake_case, property(fget=_virtual_getter(name)))
+                    # Do not add method with the same name
+                    add_method = None
+                # Add method and property
+                for to_add in (add_property, add_method):
+                    # Avoid conflicts with existing members (e.g. those defined by customizers)
+                    if to_add is not None and not _is_defined(self, to_add[0]):
+                        self._customize(*to_add)
 
 
 @JImplementationFor("java.lang.Throwable")
@@ -266,7 +289,7 @@ class _JvmThrowable:
         return self.getMessage()
 
 
-class _KtFunction(Callable):
+class _KtFunction:
     def __init__(self, arity: int, function: Callable):
         self._function = function
         self._arity = arity
@@ -279,11 +302,12 @@ class _KtFunction(Callable):
         return self.invoke(*args)
 
 
-_kt_function_classes: MutableMapping[int, Any] = dict()
+_kt_function_classes: MutableMapping[int, Any] = {}
 
 
 def kfunction(arity: int):
     if arity not in _kt_function_classes:
+
         @JImplements("kotlin.jvm.functions.Function" + str(arity), deferred=True)
         class _KtFunctionN(_KtFunction):
             def __init__(self, f):

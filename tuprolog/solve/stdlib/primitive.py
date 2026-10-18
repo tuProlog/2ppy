@@ -1,7 +1,7 @@
-from tuprolog import logger
-import jpype.imports  # noqa: F401
 import it.unibo.tuprolog.solve.stdlib.primitive as _primitive  # type: ignore
+import jpype.imports  # noqa: F401
 
+from tuprolog import logger
 
 Abolish: _primitive.Abolish = _primitive.Abolish.INSTANCE
 
@@ -15,13 +15,17 @@ ArithmeticEqual: _primitive.ArithmeticEqual = _primitive.ArithmeticEqual.INSTANC
 ArithmeticGreaterThan: _primitive.ArithmeticGreaterThan = _primitive.ArithmeticGreaterThan.INSTANCE
 
 
-ArithmeticGreaterThanOrEqualTo: _primitive.ArithmeticGreaterThanOrEqualTo = _primitive.ArithmeticGreaterThanOrEqualTo.INSTANCE
+ArithmeticGreaterThanOrEqualTo: _primitive.ArithmeticGreaterThanOrEqualTo = (
+    _primitive.ArithmeticGreaterThanOrEqualTo.INSTANCE
+)
 
 
 ArithmeticLowerThan: _primitive.ArithmeticLowerThan = _primitive.ArithmeticLowerThan.INSTANCE
 
 
-ArithmeticLowerThanOrEqualTo: _primitive.ArithmeticLowerThanOrEqualTo = _primitive.ArithmeticLowerThanOrEqualTo.INSTANCE
+ArithmeticLowerThanOrEqualTo: _primitive.ArithmeticLowerThanOrEqualTo = (
+    _primitive.ArithmeticLowerThanOrEqualTo.INSTANCE
+)
 
 
 ArithmeticNotEqual: _primitive.ArithmeticNotEqual = _primitive.ArithmeticNotEqual.INSTANCE
@@ -177,7 +181,9 @@ SubAtom: _primitive.SubAtom = _primitive.SubAtom.INSTANCE
 TermGreaterThan: _primitive.TermGreaterThan = _primitive.TermGreaterThan.INSTANCE
 
 
-TermGreaterThanOrEqualTo: _primitive.TermGreaterThanOrEqualTo = _primitive.TermGreaterThanOrEqualTo.INSTANCE
+TermGreaterThanOrEqualTo: _primitive.TermGreaterThanOrEqualTo = (
+    _primitive.TermGreaterThanOrEqualTo.INSTANCE
+)
 
 
 TermIdentical: _primitive.TermIdentical = _primitive.TermIdentical.INSTANCE
@@ -186,7 +192,9 @@ TermIdentical: _primitive.TermIdentical = _primitive.TermIdentical.INSTANCE
 TermLowerThan: _primitive.TermLowerThan = _primitive.TermLowerThan.INSTANCE
 
 
-TermLowerThanOrEqualTo: _primitive.TermLowerThanOrEqualTo = _primitive.TermLowerThanOrEqualTo.INSTANCE
+TermLowerThanOrEqualTo: _primitive.TermLowerThanOrEqualTo = (
+    _primitive.TermLowerThanOrEqualTo.INSTANCE
+)
 
 
 TermNotIdentical: _primitive.TermNotIdentical = _primitive.TermNotIdentical.INSTANCE

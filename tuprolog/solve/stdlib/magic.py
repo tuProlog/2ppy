@@ -1,7 +1,7 @@
-from tuprolog import logger
-import jpype.imports  # noqa: F401
 import it.unibo.tuprolog.solve.stdlib.magic as _magic  # type: ignore
+import jpype.imports  # noqa: F401
 
+from tuprolog import logger
 
 MagicCut: _magic.MagicCut = _magic.MagicCut.INSTANCE
 

@@ -1,14 +1,16 @@
+node_modules/
 
-# Created by https://www.toptal.com/developers/gitignore/api/python
-# Edit at https://www.toptal.com/developers/gitignore?templates=python
-VERSION
-
-venv/
 .idea/
+.jbeval/
 .vscode/
+.DS_Store
+
+# mlflow
+mlruns/
+mlflow.db
+
 *~
 *.jar
-tuprolog/libs/*/
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
@@ -63,7 +65,6 @@ coverage.xml
 *.py,cover
 .hypothesis/
 .pytest_cache/
-pytestdebug.log
 
 # Translations
 *.mo
@@ -84,7 +85,6 @@ instance/
 
 # Sphinx documentation
 docs/_build/
-doc/_build/
 
 # PyBuilder
 target/
@@ -124,7 +124,6 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-pythonenv*
 
 # Spyder project settings
 .spyderproject
@@ -141,13 +140,12 @@ pythonenv*
 .dmypy.json
 dmypy.json
 
+# ruff
+.ruff_cache
+
 # Pyre type checker
 .pyre/
 
-# pytype static type analyzer
-.pytype/
-
-# profiling data
-.prof
-
-# End of https://www.toptal.com/developers/gitignore/api/python
+# JVM dependencies, fetched by `uv run poe fetch-jars` (see pom.xml)
+tuprolog/libs/*.jar
+tuprolog/libs/*/

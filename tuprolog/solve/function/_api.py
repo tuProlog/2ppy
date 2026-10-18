@@ -1,8 +1,19 @@
-from typing import List, Callable
+from collections.abc import Callable, Iterable
+
+from jpype import JClass, JObject
+
 from tuprolog.core import Term
-from tuprolog.solve import ExecutionContext, Signature, current_time_instant, MAX_TIMEOUT
+from tuprolog.jvmutils import jlist
+from tuprolog.solve import MAX_TIMEOUT, ExecutionContext, Signature, current_time_instant
 from tuprolog.solve.primitive import SolveRequest
-from ._definitions import LogicFunction, ArithmeticUtilsKt, ComputeRequest, ComputeResponse, AbstractLogicFunction
+
+from ._definitions import (
+    AbstractLogicFunction,
+    ArithmeticUtilsKt,
+    ComputeRequest,
+    ComputeResponse,
+    LogicFunction,
+)
 
 
 def logic_function(callable: Callable[[ComputeRequest], ComputeResponse]) -> LogicFunction:
@@ -10,26 +21,34 @@ def logic_function(callable: Callable[[ComputeRequest], ComputeResponse]) -> Log
         def compute(self, request: ComputeRequest) -> ComputeResponse:
             return callable(request)
 
-    return CallableToLogicFunctionAdapter()
+    return JObject(CallableToLogicFunctionAdapter(), LogicFunction)
 
 
 def compute_request(
-        signature: Signature,
-        arguments: List[Term],
-        context: ExecutionContext,
-        issuing_instant: int = current_time_instant,
-        max_duration: int = MAX_TIMEOUT
+    signature: Signature,
+    arguments: Iterable[Term],
+    context: ExecutionContext,
+    issuing_instant: int | None = None,
+    max_duration: int = MAX_TIMEOUT,
 ) -> ComputeRequest:
-    return ComputeRequest(signature, arguments, context, issuing_instant, max_duration)
+    if issuing_instant is None:
+        issuing_instant = current_time_instant()
+    return ComputeRequest(signature, jlist(arguments), context, issuing_instant, max_duration)
 
 
 def compute_response(result: Term) -> ComputeResponse:
     return ComputeResponse(result)
 
 
-def eval_as_expression(term: Term, request: SolveRequest, index: int = None) -> Term:
-    return ArithmeticUtilsKt.evalAsExpression(term, request, index)
+def _boxed_index(index: int | None):
+    return None if index is None else JObject(index, JClass("java.lang.Integer"))
 
 
-def eval_as_arithmetic_expression(term: Term, request: SolveRequest, index: int = None) -> Term:
-    return ArithmeticUtilsKt.evalAsArithmeticExpression(term, request, index)
+def eval_as_expression(term: Term, request: SolveRequest, index: int | None = None) -> Term:
+    return ArithmeticUtilsKt.evalAsExpression(term, request, _boxed_index(index))
+
+
+def eval_as_arithmetic_expression(
+    term: Term, request: SolveRequest, index: int | None = None
+) -> Term:
+    return ArithmeticUtilsKt.evalAsArithmeticExpression(term, request, _boxed_index(index))

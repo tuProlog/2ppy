@@ -1,21 +1,27 @@
 from __future__ import annotations
+
 from cmd import Cmd
 from typing import IO
-from tuprolog.core.parsing import TermParser, ParseException
+
+from jpype import JException
+
+from tuprolog.core.parsing import ParseException, TermParser
+from tuprolog.solve import SolutionFormatter, Solver, TermFormatter, solution_formatter
+from tuprolog.solve.exception import HaltException
 from tuprolog.theory.parsing import ClausesParser
-from tuprolog.solve import solution_formatter, TermFormatter
-from tuprolog.solve import Solver
 
 
 class PrologREPL(Cmd):
     use_rawinput = False
 
-    def __init__(self,
-                 solver: Solver,
-                 name: str,
-                 completekey: str = "tab",
-                 stdin: IO[str] | None = None,
-                 stdout: IO[str] | None = None):
+    def __init__(
+        self,
+        solver: Solver,
+        name: str,
+        completekey: str = "tab",
+        stdin: IO[str] | None = None,
+        stdout: IO[str] | None = None,
+    ):
         super().__init__(completekey, stdin, stdout)
         self.intro = f"""
 Welcome to the {name.title()} REPL.
@@ -30,26 +36,36 @@ Welcome to the {name.title()} REPL.
 """
         self.solver = solver
         self.name = name
-        self.clauses_parser = ClausesParser.withOperators(self.solver.operators)
-        self.query_parser = TermParser.withOperators(self.solver.operators)
-        self.solution_formatter = solution_formatter(TermFormatter.prettyExpressions(self.solver.operators))
         self.multi_line_command = ""
 
+    # parsers and formatter follow the solver's current operators, e.g. after ?- op(...).
     @property
-    def prompt(self) -> str:
+    def clauses_parser(self) -> ClausesParser:
+        return ClausesParser.withOperators(self.solver.operators)
+
+    @property
+    def query_parser(self) -> TermParser:
+        return TermParser.withOperators(self.solver.operators)
+
+    @property
+    def solution_formatter(self) -> SolutionFormatter:
+        return solution_formatter(TermFormatter.prettyExpressions(self.solver.operators))
+
+    @property  # Cmd reads the prompt as an attribute: a property computes it
+    def prompt(self) -> str:  # type: ignore[override]
         return "...>" if self.multi_line_command else f"{self.name}>"
 
     def emptyline(self) -> bool:
-        if self.multi_line_command:
-            return False
-        return super().emptyline()
+        return False  # never repeat the last command, as Cmd does by default
 
     def precmd(self, line: str) -> str:
         if line == "EOF":
             return ":exit"
+        if not line.strip() and not self.multi_line_command:
+            return ""
         if line.startswith(":"):
             return line
-        if line.endswith("."):
+        if line.rstrip().endswith("."):
             command = self.multi_line_command + line
             self.multi_line_command = ""
             return command
@@ -74,6 +90,9 @@ Welcome to the {name.title()} REPL.
             query = self.query_parser.parse_struct(arg)
             solutions = self.solver.solve(query)
             for solution in solutions:
+                if solution.is_halt and isinstance(solution.getException(), HaltException):
+                    self.stdout.write("# goodbye.\n")  # like 2P-Kt's REPL, halt/0,1 exit
+                    return True
                 formatted = str(self.solution_formatter.format(solution))
                 self.stdout.write(formatted)
                 self.stdout.write("\n")
@@ -89,6 +108,8 @@ Welcome to the {name.title()} REPL.
                 self.solver.assertZ(clause)
         except ParseException as e:
             self.on_parsing_error(e)
+        except JException as e:  # e.g. clauses the knowledge base rejects
+            self.stdout.write(f"Error: {e.getMessage()}\n")
         return False
 
     def on_parsing_error(self, err: ParseException) -> None:

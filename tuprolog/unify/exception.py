@@ -1,7 +1,7 @@
-from tuprolog import logger
-import jpype.imports  # noqa: F401
 import it.unibo.tuprolog.unify.exception as _exceptions  # type: ignore
+import jpype.imports  # noqa: F401
 
+from tuprolog import logger
 
 NoUnifyException = _exceptions.NoUnifyException
 

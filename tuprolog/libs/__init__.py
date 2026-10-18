@@ -1,1 +1,1 @@
-from .java import JAVA_HOME, CLASSPATH, find_jvm
+from .java import CLASSPATH, JAVA_HOME, find_jvm

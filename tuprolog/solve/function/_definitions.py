@@ -1,8 +1,8 @@
-from jpype import JImplements, JOverride
-from tuprolog import logger
-import jpype.imports  # noqa: F401
 import it.unibo.tuprolog.solve.function as _function  # type: ignore
+import jpype.imports  # noqa: F401
+from jpype import JImplements, JOverride
 
+from tuprolog import logger
 
 LogicFunction = _function.LogicFunction
 
@@ -16,11 +16,11 @@ ArithmeticUtilsKt = _function.ArithmeticUtilsKt
 ComputeRequest = Compute.Request
 
 
-ComputeResponse = Compute.Request
+ComputeResponse = Compute.Response
 
 
 @JImplements(LogicFunction)
-class AbstractLogicFunction(object):
+class AbstractLogicFunction:
     @JOverride
     def compute(self, request: ComputeRequest) -> ComputeResponse:
         raise NotImplementedError()

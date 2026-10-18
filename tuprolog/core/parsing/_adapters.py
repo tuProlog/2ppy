@@ -1,5 +1,6 @@
-from tuprolog import logger
 from jpype import JImplementationFor
+
+from tuprolog import logger
 from tuprolog.jvmioutils import ensure_input_steam
 
 

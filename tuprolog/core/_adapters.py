@@ -1,9 +1,18 @@
-from typing import Sized, Callable
-from jpype import JOverride, JImplementationFor
+from collections.abc import Sized
+
+from jpype import JImplementationFor
+
 from tuprolog import logger
-from tuprolog.jvmutils import jiterable, kfunction
+from tuprolog.jvmutils import jiterable
+from tuprolog.math import (
+    BigDecimal,
+    BigInteger,
+    big_decimal,
+    big_integer,
+    python_decimal,
+    python_integer,
+)
 from tuprolog.pyutils import iterable_or_varargs
-from tuprolog.math import big_integer, BigInteger, python_integer, python_decimal
 
 
 @JImplementationFor("it.unibo.tuprolog.core.Term")
@@ -11,12 +20,14 @@ class _KtTerm:
     def __jclass_init__(cls):
         pass
 
-    def __getitem__(self, item, *items):
-        return self.get(item, *items)
-
-    @JOverride()
-    def equals(self, other, use_var_complete_name: bool = True):
-        return self.equals_(other, use_var_complete_name)
+    def __getitem__(self, item):
+        if isinstance(item, tuple):
+            # term[i, j, ...] is term[i][j]..., and term[s1, s2, ...] applies many substitutions
+            result = self
+            for index in item:
+                result = result.get(index)
+            return result
+        return self.get(item)
 
     def fresh_copy(self, scope=None):
         if scope is None:
@@ -31,10 +42,10 @@ class _KtStruct:
         pass
 
     def insert_at(self, index, argument):
-        return self.addFirst(index, argument)
+        return self.insertAt(index, argument)
 
     def set_args(self, *args):
-        return iterable_or_varargs(args, lambda xs: self.setArgs(jiterable(args)))
+        return iterable_or_varargs(args, lambda xs: self.setArgs(jiterable(xs)))
 
 
 @JImplementationFor("it.unibo.tuprolog.core.Numeric")
@@ -90,7 +101,6 @@ class _KtRecursive:
     def unfolded(self):
         return self.getUnfoldedList()
 
-    @property
     def __len__(self):
         return self.getSize()
 
@@ -104,13 +114,13 @@ class _KtClause:
         pass
 
     def set_head_args(self, *args):
-        return iterable_or_varargs(args, lambda xs: self.setHeadArgs(jiterable(args)))
+        return iterable_or_varargs(args, lambda xs: self.setHeadArgs(jiterable(xs)))
 
     def insert_head_arg(self, index, argument):
-        return self.setHeadArg(index, argument)
+        return self.insertHeadArg(index, argument)
 
     def set_body_items(self, *args):
-        return iterable_or_varargs(args, lambda xs: self.setBodyItems(jiterable(args)))
+        return iterable_or_varargs(args, lambda xs: self.setBodyItems(jiterable(xs)))
 
 
 @JImplementationFor("it.unibo.tuprolog.core.Substitution")
@@ -123,13 +133,6 @@ class _KtSubstitution:
 
     def __sub__(self, other):
         return self.minus(other)
-
-    @JOverride
-    def filter(self, filter):
-        if isinstance(filter, Callable):
-            return self.filter_(kfunction(1)(filter))
-        else:
-            return self.filter_(filter)
 
 
 @JImplementationFor("it.unibo.tuprolog.core.Scope")
@@ -149,8 +152,9 @@ class _KtScope:
     def block(self, *terms):
         return iterable_or_varargs(terms, lambda ts: self.blockOf(jiterable(ts)))
 
+    # clauseOf, directiveOf and ruleOf only have vararg overloads
     def clause(self, head=None, *body):
-        return iterable_or_varargs(body, lambda bs: self.clauseOf(head, jiterable(bs)))
+        return iterable_or_varargs(body, lambda bs: self.clauseOf(head, *bs))
 
     def cons(self, head, tail=None):
         if tail is None:
@@ -159,7 +163,7 @@ class _KtScope:
             return self.consOf(head, tail)
 
     def directive(self, *goals):
-        return iterable_or_varargs(goals, lambda gs: self.directiveOf(jiterable(gs)))
+        return iterable_or_varargs(goals, lambda gs: self.directiveOf(*gs))
 
     def fact(self, head):
         return self.factOf(head)
@@ -171,17 +175,19 @@ class _KtScope:
         return self.intOf(big_integer(value))
 
     def real(self, value):
-        return self.intOf(big_integer(value))
+        if isinstance(value, BigDecimal):
+            return self.realOf(value)
+        return self.realOf(big_decimal(value))
 
     def numeric(self, value):
         if isinstance(value, str):
             return self.numOf(value)
-        if isinstance(value, int) or isinstance(value, BigInteger):
-            return self.intOf(value)
-        return self.realOf(value)
+        if isinstance(value, (int, BigInteger)):
+            return self.integer(value)
+        return self.real(value)
 
     def rule(self, head, *body):
-        return iterable_or_varargs(body, lambda bs: self.ruleOf(head, jiterable(bs)))
+        return iterable_or_varargs(body, lambda bs: self.ruleOf(head, *bs))
 
     def struct(self, functor, *args):
         return iterable_or_varargs(args, lambda xs: self.structOf(functor, jiterable(xs)))
@@ -199,7 +205,9 @@ class _KtScope:
         return self.listFrom(jiterable(items), last)
 
     def tuple(self, first, second, *others):
-        return iterable_or_varargs(others, lambda os: self.tupleOf(jiterable([first, second] + list(os))))
+        return iterable_or_varargs(
+            others, lambda os: self.tupleOf(jiterable([first, second] + list(os)))
+        )
 
 
 logger.debug("Configure Kotlin adapters for types in it.unibo.tuprolog.core.*")

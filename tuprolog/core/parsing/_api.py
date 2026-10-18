@@ -1,11 +1,15 @@
-from typing import Union, Iterable
+from collections.abc import Iterable
+
+from tuprolog.core import Atom, Clause, Constant, Integer, Numeric, Real, Struct, Term, Var
+from tuprolog.core.operators import DEFAULT_OPERATORS, OperatorSet
 from tuprolog.jvmioutils import InputStream
-from tuprolog.core import Term, Struct, Constant, Var, Atom, Numeric, Integer, Real, Clause
-from tuprolog.core.operators import OperatorSet, DEFAULT_OPERATORS
-from ._definitions import TermParser, TermReader, DEFAULT_TERM_PARSER, DEFAULT_TERM_READER
+
+from ._definitions import DEFAULT_TERM_PARSER, DEFAULT_TERM_READER, TermParser, TermReader
 
 
-def parser_factory(source, with_default_operators: bool = True, operators: OperatorSet = None):
+def parser_factory(
+    source, with_default_operators: bool = True, operators: OperatorSet | None = None
+):
     if operators is None:
         if with_default_operators:
             return source.withDefaultOperators()
@@ -13,7 +17,7 @@ def parser_factory(source, with_default_operators: bool = True, operators: Opera
             return source.withNoOperator()
     else:
         if with_default_operators:
-            return source.withOperators(DEFAULT_OPERATORS.plus(operators))
+            return source.withOperators(DEFAULT_OPERATORS.plus(operators))  # type: ignore[attr-defined]
         else:
             return source.withOperators(operators)
 
@@ -62,9 +66,9 @@ def parse_clause(string: str, operators: OperatorSet = None) -> Clause:
     return DEFAULT_TERM_PARSER.parse_clause(string, operators)
 
 
-def read_term(input: Union[InputStream, str], operators: OperatorSet = None) -> Term:
+def read_term(input: InputStream | str, operators: OperatorSet = None) -> Term:
     return DEFAULT_TERM_READER.read_term(input, operators)
 
 
-def read_terms(input: Union[InputStream, str], operators: OperatorSet = None) -> Iterable[Term]:
+def read_terms(input: InputStream | str, operators: OperatorSet = None) -> Iterable[Term]:
     return DEFAULT_TERM_READER.read_terms(input, operators)

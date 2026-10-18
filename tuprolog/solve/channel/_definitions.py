@@ -1,8 +1,8 @@
-from tuprolog import logger
-import jpype.imports  # noqa: F401
 import it.unibo.tuprolog.solve.channel as _channel  # type: ignore
+import jpype.imports  # noqa: F401
 import kotlin.jvm.functions as _kfunctions  # type: ignore
 
+from tuprolog import logger
 
 Channel = _channel.Channel
 

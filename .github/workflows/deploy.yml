@@ -1,0 +1,70 @@
+name: deploy
+on:
+  workflow_call:
+  workflow_dispatch:
+permissions:
+  contents: write
+  packages: write
+jobs:
+  release:
+    name: Release
+    concurrency:
+      # Only one release job at a time. Strictly sequential.
+      group: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # all history
+
+      - name: Get All Tags
+        run: git fetch --tags -f
+
+      - name: Dry-run Release for Initial Commit
+        id: skip_release
+        run: |
+          if git rev-parse HEAD^1 >/dev/null 2>&1; then
+            echo "skip=false" >> $GITHUB_OUTPUT
+          else
+            echo "skip=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v10.3.0
+        with:
+          enable-cache: true
+
+      - name: Restore Development Environment
+        run: uv sync
+
+      - name: Set up Java (Maven fetches 2P-Kt's JARs)
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Fetch JARs
+        run: uv run poe fetch-jars
+
+      - name: Get Node Version
+        id: get-node-version
+        run: echo version=$(jq -r .engines.node package.json) >> $GITHUB_OUTPUT
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ steps.get-node-version.outputs.version }}
+
+      - name: Release
+        shell: bash
+        run: |
+          npm install
+          npx semantic-release
+        env:
+          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
+          TEST_PYPI_TOKEN: ${{ secrets.TEST_PYPI_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          RELEASE_TEST_PYPI: ${{ github.event.repository.is_template || contains(github.repository, 'template') }}
+          # dry run if not on main/master branch, or if initial commit
+          RELEASE_DRY_RUN: ${{ steps.skip_release.outputs.skip == 'true' || (github.ref_name != 'master' && github.ref_name != 'main') }}

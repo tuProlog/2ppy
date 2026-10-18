@@ -1,21 +1,25 @@
-import os
 import logging
+from importlib.metadata import version
+
 import jpype
+
 from .libs import CLASSPATH, find_jvm
 
-logger = logging.getLogger('tuprolog')
+__version__ = version("2ppy")  # pyproject.toml is the only source
 
-jars = [str(j.resolve()) for j in CLASSPATH.glob('*.jar')]
+logger = logging.getLogger("tuprolog")
+
+jars = [str(j.resolve()) for j in CLASSPATH.glob("*.jar")]
 
 if not jpype.isJVMStarted():
-    jpype.startJVM(classpath=jars, jvmpath=str(find_jvm()))
+    jpype.startJVM("--enable-native-access=ALL-UNNAMED", classpath=jars, jvmpath=str(find_jvm()))
 
-import jpype.imports  # noqa: F401, E402
-from it.unibo import tuprolog as _tuprolog  # type: ignore # noqa: E402
+import jpype.imports
+from it.unibo import tuprolog as _tuprolog  # type: ignore
 
 Info = _tuprolog.Info
 
-JVM_VERSION = '.'.join(map(str, jpype.getJVMVersion()))
+JVM_VERSION = ".".join(map(str, jpype.getJVMVersion()))
 
 logger.info("Started JVM v" + JVM_VERSION + " with classpath: " + str(jars))
 

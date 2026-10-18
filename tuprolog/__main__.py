@@ -1,36 +1,40 @@
-from tuprolog import Info
+import code
+
+import tuprolog.core as _core
+import tuprolog.solve.primitive as _primitive
 from tuprolog.core import *
 from tuprolog.core.exception import *
 from tuprolog.core.impl import *
 from tuprolog.core.operators import *
 from tuprolog.core.parsing import *
-from tuprolog.unify import *
-from tuprolog.unify.exception import *
-from tuprolog.theory import *
-from tuprolog.theory.parsing import *
 from tuprolog.solve import *
+from tuprolog.solve.channel import *
+from tuprolog.solve.data import *
 from tuprolog.solve.exception import *
 from tuprolog.solve.exception.error import *
 from tuprolog.solve.exception.warning import *
-from tuprolog.solve.channel import *
 from tuprolog.solve.flags import *
 from tuprolog.solve.function import *
-from tuprolog.solve.primitive import *
-from tuprolog.solve.sideffects import *
 from tuprolog.solve.library import *
 from tuprolog.solve.library.exception import *
-from tuprolog.solve.data import *
+from tuprolog.solve.plp import *  # type: ignore[assignment]  # plp's solve_options wins
+from tuprolog.solve.primitive import *
+from tuprolog.solve.problog import *
+from tuprolog.solve.prolog import *
+from tuprolog.solve.sideffects import *
 from tuprolog.solve.stdlib import *
-from tuprolog.solve.stdlib.primitive import *
-from tuprolog.solve.stdlib.rule import *
 from tuprolog.solve.stdlib.function import *
 from tuprolog.solve.stdlib.magic import *
-from tuprolog.solve.prolog import *
-from tuprolog.solve.plp import *
-from tuprolog.solve.problog import *
+from tuprolog.solve.stdlib.primitive import *
+from tuprolog.solve.stdlib.rule import *
+from tuprolog.theory import *
+from tuprolog.theory.parsing import *
+from tuprolog.unify import *
+from tuprolog.unify.exception import *
 
-import code
+# stdlib's star-imports shadow some core names with homonymous primitives (Atom, Var, Integer,
+# Clause) or modules (rule, primitive): restore the core ones
+Atom, Clause, Integer, Var, rule = _core.Atom, _core.Clause, _core.Integer, _core.Var, _core.rule
+primitive = _primitive.primitive
 
 code.interact(local=locals())
-
-input()

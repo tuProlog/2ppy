@@ -1,7 +1,7 @@
-from tuprolog import logger
-import jpype.imports  # noqa: F401
 import it.unibo.tuprolog.core.operators as _operators  # type: ignore
+import jpype.imports  # noqa: F401
 
+from tuprolog import logger
 
 Operator = _operators.Operator
 

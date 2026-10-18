@@ -1,0 +1,114 @@
+name: CI/CD
+on:
+  push:
+    branches-ignore:
+      - 'dependabot/**'
+      - 'renovate/**'
+    paths-ignore:
+      - '.gitignore'
+      - '.mergify.yml'
+      - 'CHANGELOG.md'
+      - 'LICENSE'
+      - 'README.md'
+      - 'renovate.json'
+  pull_request:
+  workflow_dispatch:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    name: Preliminary Checks
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # all history
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v10.3.0
+        with:
+          enable-cache: true
+
+      - name: Restore Development Environment
+        run: uv sync
+
+      - name: Set up Java (Maven fetches 2P-Kt's JARs)
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Fetch JARs
+        run: uv run poe fetch-jars
+
+      - name: Static Checks
+        shell: bash
+        run: uv run poe static-checks
+
+      - name: Test with Coverage
+        shell: bash
+        run: |
+          uv run poe coverage
+          uv run poe coverage-report
+          uv run poe coverage-html
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: coverage-report-${{ github.sha }}
+          path: htmlcov
+          if-no-files-found: ignore
+          overwrite: true
+
+  test:
+    needs: check
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
+        python-version: # modify accordingly to the minimum Python version specified in pyproject.toml
+          - '3.10'
+          - '3.11'
+          - '3.12'
+          - '3.13'
+    runs-on: ${{ matrix.os }}
+    name: Test on Python ${{ matrix.python-version }}, on ${{ matrix.os }}
+    timeout-minutes: 45
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v10.3.0
+        with:
+          python-version: ${{ matrix.python-version }}
+          enable-cache: true
+
+      - name: Restore Development Environment
+        run: uv sync
+
+      - name: Set up Java (Maven fetches 2P-Kt's JARs)
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Fetch JARs
+        run: uv run poe fetch-jars
+
+      - name: Test
+        shell: bash
+        run: uv run poe test
+
+  deploy:
+    name: Deploy
+    permissions: 
+      contents: write
+      packages: write
+    needs:
+      - test
+    uses: ./.github/workflows/deploy.yml
+    secrets: inherit

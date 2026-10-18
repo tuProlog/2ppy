@@ -1,7 +1,7 @@
-from tuprolog import logger
-import jpype.imports  # noqa: F401
 import it.unibo.tuprolog.solve.exception.error as errors  # type: ignore
+import jpype.imports  # noqa: F401
 
+from tuprolog import logger
 
 DomainError = errors.DomainError
 
@@ -9,7 +9,7 @@ DomainError = errors.DomainError
 Domain = DomainError.Expected
 
 
-DOMAIN_wATOM_PROPERTY = Domain.ATOM_PROPERTY
+DOMAIN_ATOM_PROPERTY = Domain.ATOM_PROPERTY
 
 
 DOMAIN_BUFFERING_MODE = Domain.BUFFERING_MODE
@@ -123,7 +123,7 @@ DOMAIN_RULE = Domain.RULE
 DOMAIN_FACT = Domain.FACT
 
 
-DIRECTIVE = Domain.DIRECTIVE
+DOMAIN_DIRECTIVE = Domain.DIRECTIVE
 
 
 logger.debug("Loaded JVM classes from it.unibo.tuprolog.solve.exception.error.DomainError.*")

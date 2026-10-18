@@ -1,28 +1,13 @@
+import it.unibo.tuprolog.solve.flags as _flags  # type: ignore
+import jpype.imports  # noqa: F401
+
 from tuprolog import logger
 from tuprolog.jvmutils import Pair
-import jpype.imports  # noqa: F401
-import it.unibo.tuprolog.solve.flags as _flags  # type: ignore
-
-
-DoubleQuotes = _flags.DoubleQuotes
-
 
 FlagStore = _flags.FlagStore
 
 
-LastCallOptimization = _flags.LastCallOptimization
-
-
-MaxArity = _flags.MaxArity
-
-
 NotableFlag = _flags.NotableFlag
-
-
-TrackVariables = _flags.TrackVariables
-
-
-Unknown = _flags.Unknown
 
 
 Flag = Pair
@@ -34,19 +19,19 @@ EMPTY_FLAG_STORE: FlagStore = FlagStore.EMPTY
 DEFAULT_FLAG_STORE: FlagStore = FlagStore.DEFAULT
 
 
-DoubleQuotes: NotableFlag = DoubleQuotes.INSTANCE
+DoubleQuotes: NotableFlag = _flags.DoubleQuotes.INSTANCE
 
 
-LastCallOptimization: NotableFlag = LastCallOptimization.INSTANCE
+LastCallOptimization: NotableFlag = _flags.LastCallOptimization.INSTANCE
 
 
-MaxArity: NotableFlag = MaxArity.INSTANCE
+MaxArity: NotableFlag = _flags.MaxArity.INSTANCE
 
 
-TrackVariables: NotableFlag = TrackVariables.INSTANCE
+TrackVariables: NotableFlag = _flags.TrackVariables.INSTANCE
 
 
-Unknown: NotableFlag = Unknown.INSTANCE
+Unknown: NotableFlag = _flags.Unknown.INSTANCE
 
 
 logger.debug("Loaded JVM classes from it.unibo.tuprolog.solve.flags.*")

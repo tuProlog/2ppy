@@ -1,13 +1,15 @@
 from itertools import chain
+
 from jpype import JImplementationFor, JOverride
+
 from tuprolog import logger
+from tuprolog.jvmutils import jiterable
 from tuprolog.pyutils import iterable_or_varargs
 
 
 @JImplementationFor("it.unibo.tuprolog.solve.SolveOptions")
 class _KtSolveOptions:
-
-    _static_keys = {'lazy', 'is_lazy', 'eager', 'is_eager', 'timeout', 'limit'}
+    _static_keys = ("lazy", "is_lazy", "eager", "is_eager", "timeout", "limit")
 
     @property
     def is_lazy(self):
@@ -30,28 +32,41 @@ class _KtSolveOptions:
         return self.getCustomOptions()
 
     def __len__(self):
-        return 4 + len(self.options)
+        return len(_KtSolveOptions._static_keys) + len(self.options)
 
     def __iter__(self):
-        return chain(_KtSolveOptions._static_keys, self.options)
+        return chain(_KtSolveOptions._static_keys, (str(key) for key in self.options))
 
     def __contains__(self, item):
-        return item in _KtSolveOptions._static_keys
+        return item in _KtSolveOptions._static_keys or item in self.options
 
-    def __getitem__(self, item, default=None):
-        if item in {'lazy', 'is_lazy'}:
+    def __getitem__(self, item):
+        if item in {"lazy", "is_lazy"}:
             return self.is_lazy
-        elif item in {'eager', 'is_eager'}:
+        elif item in {"eager", "is_eager"}:
             return self.is_eager
-        elif item == 'timeout':
+        elif item == "timeout":
             return self.timeout
-        elif item == 'limit':
+        elif item == "limit":
             return self.limit
         elif item in self.options:
             return self.options[item]
-        elif default is not None:
-            return default
         raise KeyError(f"No such option: {item}")
+
+    def get(self, item, default=None):
+        try:
+            return self[item]
+        except KeyError:
+            return default
+
+    def keys(self):
+        return list(self)
+
+    def values(self):
+        return [self[key] for key in self]
+
+    def items(self):
+        return [(key, self[key]) for key in self]
 
 
 @JImplementationFor("it.unibo.tuprolog.solve.Solver")
@@ -82,38 +97,38 @@ class _KtMutableSolver:
         pass
 
     def load_static_clauses(self, *clauses):
-        return iterable_or_varargs(clauses, lambda cs: self.loadStaticClauses(cs))
+        return iterable_or_varargs(clauses, lambda cs: self.loadStaticClauses(jiterable(list(cs))))
 
     def load_dynamic_clauses(self, *clauses):
-        return iterable_or_varargs(clauses, lambda cs: self.loadDynamicClauses(cs))
+        return iterable_or_varargs(clauses, lambda cs: self.loadDynamicClauses(jiterable(list(cs))))
 
     @property
     def standard_output(self):
         return self.getStandardOutput()
 
+    @standard_output.setter
+    def standard_output(self, channel):
+        return self.setStandardOutput(channel)
+
     @property
     def standard_input(self):
         return self.getStandardInput()
-
-    @property
-    def standard_error(self):
-        return self.getStandardError()
-
-    @property
-    def warnings(self):
-        return self.getWarnings()
 
     @standard_input.setter
     def standard_input(self, channel):
         return self.setStandardInput(channel)
 
-    @standard_output.setter
-    def standard_output(self, channel):
-        return self.setStandardOutput(channel)
+    @property
+    def standard_error(self):
+        return self.getStandardError()
 
     @standard_error.setter
     def standard_error(self, channel):
         return self.setStandardError(channel)
+
+    @property
+    def warnings(self):
+        return self.getWarnings()
 
     @warnings.setter
     def warnings(self, channel):
