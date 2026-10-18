@@ -3,6 +3,9 @@ import jpype.imports  # noqa: F401
 
 from tuprolog import logger
 
+__all__ = ["Castable", "Taggable"]
+
+
 Castable = _utils.Castable
 
 Taggable = _utils.Taggable

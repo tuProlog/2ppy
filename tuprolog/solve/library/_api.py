@@ -1,13 +1,15 @@
 from collections.abc import Iterable, Mapping
 from functools import reduce
 
+from tuprolog.core import Clause
 from tuprolog.core.operators import Operator, OperatorSet, operator_set
 from tuprolog.solve import Signature
 from tuprolog.solve.function import LogicFunction
 from tuprolog.solve.primitive import Primitive
-from tuprolog.theory import Clause
 
-from ._definititions import Library, Pluggable, Runtime
+from ._definitions import Library, Pluggable, Runtime
+
+__all__ = ["aliased", "libraries", "library"]
 
 
 def library(

@@ -3,6 +3,9 @@ import jpype.imports  # noqa: F401
 
 from tuprolog import logger
 
+__all__ = ["DEFAULT_CLAUSES_PARSER", "DEFAULT_CLAUSES_READER", "ClausesParser", "ClausesReader"]
+
+
 ClausesParser = _parsing.ClausesParser
 
 

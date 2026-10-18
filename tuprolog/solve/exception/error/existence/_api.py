@@ -3,6 +3,15 @@ from tuprolog.solve import ExecutionContext, Signature
 
 from ._definitions import ExistenceError, ObjectType
 
+__all__ = [
+    "existence_error",
+    "existence_error_for_procedure",
+    "existence_error_for_resource",
+    "existence_error_for_source_sink",
+    "existence_error_for_stream",
+    "object_type",
+]
+
 
 def existence_error(
     context: ExecutionContext, type: ObjectType, culprit: Term, message: str

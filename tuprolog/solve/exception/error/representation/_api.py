@@ -3,6 +3,8 @@ from tuprolog.solve import ExecutionContext, Signature
 
 from ._definitions import Limit, RepresentationError
 
+__all__ = ["limit", "representation_error"]
+
 
 def representation_error(
     context: ExecutionContext, procedure: Signature, limit: Limit, cause=None

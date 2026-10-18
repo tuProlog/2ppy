@@ -13,6 +13,15 @@ from ._definitions import (
     ClausesReader,
 )
 
+__all__ = [
+    "clauses_parser",
+    "clauses_reader",
+    "parse_clauses",
+    "parse_theory",
+    "read_clauses",
+    "read_theory",
+]
+
 
 def clauses_parser(
     with_default_operators: bool = True, operators: OperatorSet = None

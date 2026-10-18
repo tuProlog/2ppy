@@ -34,6 +34,41 @@ from ._definitions import (
     Var,
 )
 
+__all__ = [
+    "EMPTY_UNIFIER",
+    "FAILED_SUBSTITUTION",
+    "atom",
+    "block",
+    "canonical_formatter",
+    "clause",
+    "cons",
+    "default_formatter",
+    "directive",
+    "empty_block",
+    "empty_logic_list",
+    "fact",
+    "failed",
+    "indicator",
+    "integer",
+    "logic_list",
+    "logic_list_from",
+    "logic_tuple",
+    "numeric",
+    "pretty_expressions_formatter",
+    "pretty_variables_formatter",
+    "readable_formatter",
+    "real",
+    "rule",
+    "scope",
+    "struct",
+    "substitution",
+    "to_term",
+    "truth",
+    "unifier",
+    "var",
+    "variables",
+]
+
 
 def atom(string: str) -> Atom:
     return Atom.of(string)

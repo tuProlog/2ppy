@@ -3,6 +3,20 @@ import jpype.imports  # noqa: F401
 
 from tuprolog import logger
 
+__all__ = [
+    "OBJECT_OOP_ALIAS",
+    "OBJECT_OOP_CONSTRUCTOR",
+    "OBJECT_OOP_METHOD",
+    "OBJECT_OOP_PROPERTY",
+    "OBJECT_PROCEDURE",
+    "OBJECT_RESOURCE",
+    "OBJECT_SOURCE_SINK",
+    "OBJECT_STREAM",
+    "ExistenceError",
+    "ObjectType",
+]
+
+
 ExistenceError = errors.ExistenceError
 
 

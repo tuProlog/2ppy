@@ -58,7 +58,7 @@ def test_star_import_names_exist(name):
 def own_star_sources(package: ModuleType) -> list[ModuleType]:
     """The sibling modules a package re-exports via `from ._x import *`."""
     sources = []
-    for part in ("_definitions", "_definititions", "_api"):
+    for part in ("_definitions", "_api"):
         try:
             sources.append(importlib.import_module(f"{package.__name__}.{part}"))
         except ModuleNotFoundError:
@@ -109,12 +109,25 @@ def test_repl_modules_do_not_collide():
     assert collisions(modules) == {}
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="star-imports collide across tuprolog (no __all__): tuprolog.solve.stdlib.primitive "
-    "exports primitives named Atom, Callable, Clause, Integer, Var (clashing with tuprolog.core "
-    "and jvmutils), tuprolog.solve.plp and tuprolog.solve both define solve_options, and helper "
-    "imports leak (Iterable: core vs jvmutils, Sequence: jvmutils vs pyutils, T: pyutils vs plp)",
-)
 def test_public_modules_do_not_collide():
     assert collisions(PUBLIC_MODULES) == {}
+
+
+@pytest.mark.parametrize(
+    "name", PUBLIC_MODULES + [m for m in MODULES if m.endswith(("._api", "._definitions"))]
+)
+def test_modules_declare_all(name):
+    module = importlib.import_module(name)
+    assert isinstance(getattr(module, "__all__", None), list), f"{name} has no __all__"
+
+
+@pytest.mark.parametrize(
+    "name", [m for m in PUBLIC_MODULES if hasattr(importlib.import_module(m), "__path__")]
+)
+def test_package_all_is_the_union_of_its_sources(name):
+    package = importlib.import_module(name)
+    sources = own_star_sources(package)
+    if not sources:
+        return
+    expected = {n for source in sources for n in star_names(source)}
+    assert set(package.__all__) == expected

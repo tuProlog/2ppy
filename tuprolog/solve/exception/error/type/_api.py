@@ -5,6 +5,15 @@ from tuprolog.solve import ExecutionContext, Signature
 
 from ._definitions import Type, TypeError
 
+__all__ = [
+    "expected_type",
+    "type_error",
+    "type_error_for_argument",
+    "type_error_for_argument_list",
+    "type_error_for_goal",
+    "type_error_for_term",
+]
+
 
 def type_error(context: ExecutionContext, expected: Type, actual: Term, message: str) -> TypeError:
     return TypeError.of(context, expected, actual, message)
@@ -51,7 +60,7 @@ def type_error_for_goal(
     return TypeError.forGoal(context, procedure, expected, actual)
 
 
-def type(name: str | Term) -> Type:
+def expected_type(name: str | Term) -> Type:
     if isinstance(name, str):
         return Type.of(name)
     else:

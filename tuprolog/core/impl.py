@@ -4,6 +4,9 @@ import jpype.imports  # noqa: F401
 from tuprolog import logger
 from tuprolog.core import TermFormatter
 
+__all__ = ["DefaultTermFormatter"]
+
+
 DefaultTermFormatter = _impl.SimpleTermFormatter
 
 logger.debug(

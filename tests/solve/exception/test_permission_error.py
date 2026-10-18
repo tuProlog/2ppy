@@ -9,11 +9,10 @@ from tuprolog.solve.exception.error.permission import (
     Permission,
     PermissionError,
     operation,
-    permission,
     permission_error,
+    permission_type,
 )
 
-# `error.permission` is shadowed by the permission() factory: get the sub-package from sys.modules
 module = importlib.import_module("tuprolog.solve.exception.error.permission")
 
 OPERATION_NAMES = [
@@ -64,15 +63,15 @@ def test_operation_values(name):
 def test_permission_values(name):
     expected = getattr(Permission, name)
     assert getattr(module, f"PERMISSION_{name}") == expected
-    assert permission(name.lower()) == expected
-    assert permission(atom(name.lower())) == expected
+    assert permission_type(name.lower()) == expected
+    assert permission_type(atom(name.lower())) == expected
     assert expected.permission == name.lower()
     assert expected.toTerm() == atom(name.lower())
 
 
 def test_operation_and_permission_from_non_atom_terms_are_none():
     assert operation(integer(1)) is None
-    assert permission(integer(1)) is None
+    assert permission_type(integer(1)) is None
 
 
 def test_permission_error(context, procedure):

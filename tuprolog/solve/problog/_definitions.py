@@ -4,6 +4,15 @@ import jpype.imports  # noqa: F401
 from tuprolog import logger
 from tuprolog.solve import Solver, SolverFactory
 
+__all__ = [
+    "ANNOTATION_OPERATOR",
+    "PROBLOG_OPERATORS",
+    "PROBLOG_SOLVER_FACTORY",
+    "PROBLOG_SPECIFIC_OPERATORS",
+    "Operators",
+]
+
+
 PROBLOG_SOLVER_FACTORY: SolverFactory = Solver.problog()
 
 

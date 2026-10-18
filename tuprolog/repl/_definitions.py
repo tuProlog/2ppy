@@ -11,6 +11,8 @@ from tuprolog.solve import SolutionFormatter, Solver, solution_formatter
 from tuprolog.solve.exception import HaltException
 from tuprolog.theory.parsing import ClausesParser
 
+__all__ = ["PrologREPL"]
+
 
 class PrologREPL(Cmd):
     use_rawinput = False

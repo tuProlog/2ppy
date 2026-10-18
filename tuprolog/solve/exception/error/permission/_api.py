@@ -3,6 +3,8 @@ from tuprolog.solve import ExecutionContext, Signature
 
 from ._definitions import Operation, Permission, PermissionError
 
+__all__ = ["operation", "permission_error", "permission_type"]
+
 
 def permission_error(
     context: ExecutionContext,
@@ -21,7 +23,7 @@ def operation(name: str | Term) -> Operation:
         return Operation.fromTerm(name)
 
 
-def permission(name: str | Term) -> Permission:
+def permission_type(name: str | Term) -> Permission:
     if isinstance(name, str):
         return Permission.of(name)
     else:

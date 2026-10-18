@@ -7,6 +7,8 @@ from tuprolog.jvmutils import jmap
 
 from ._definitions import Flag, FlagStore, NotableFlag
 
+__all__ = ["flag", "flag_store"]
+
 
 def flag(first: str | NotableFlag | Iterable, value: Term | str | float | None = None) -> Flag:
     if isinstance(first, NotableFlag):

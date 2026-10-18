@@ -4,6 +4,17 @@ import kotlin.jvm.functions as _kfunctions  # type: ignore
 
 from tuprolog import logger
 
+__all__ = [
+    "Channel",
+    "ChannelStore",
+    "InputChannel",
+    "InputStore",
+    "Listener",
+    "OutputChannel",
+    "OutputStore",
+]
+
+
 Channel = _channel.Channel
 
 

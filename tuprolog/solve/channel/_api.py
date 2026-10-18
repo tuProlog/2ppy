@@ -7,6 +7,19 @@ from tuprolog.jvmutils import jmap, kfunction
 
 from ._definitions import InputChannel, InputStore, Listener, OutputChannel, OutputStore
 
+__all__ = [
+    "input_channel",
+    "input_channel_from_string",
+    "input_store",
+    "listener",
+    "output_channel",
+    "output_store",
+    "std_err",
+    "std_in",
+    "std_out",
+    "warn",
+]
+
 
 def std_in() -> InputChannel:
     return InputChannel.stdIn()

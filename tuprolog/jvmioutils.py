@@ -9,6 +9,18 @@ from jpype import JImplementationFor, JOverride
 from tuprolog import logger
 from tuprolog.jvmutils import customize_derived
 
+__all__ = [
+    "BufferedReader",
+    "Files",
+    "InputStream",
+    "InputStreamReader",
+    "Paths",
+    "Reader",
+    "ensure_input_steam",
+    "open_file",
+]
+
+
 InputStream = _jio.InputStream
 
 Reader = _jio.Reader

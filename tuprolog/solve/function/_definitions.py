@@ -4,6 +4,16 @@ from jpype import JImplements, JOverride
 
 from tuprolog import logger
 
+__all__ = [
+    "AbstractLogicFunction",
+    "ArithmeticUtilsKt",
+    "Compute",
+    "ComputeRequest",
+    "ComputeResponse",
+    "LogicFunction",
+]
+
+
 LogicFunction = _function.LogicFunction
 
 

@@ -6,6 +6,8 @@ from tuprolog.pyutils import iterable_or_varargs
 
 from ._definitions import Operator, OperatorSet, Specifier
 
+__all__ = ["operator", "operator_set", "specifier"]
+
 
 @singledispatch
 def operator(functor: str, specifier: Specifier, priority: int) -> Operator:

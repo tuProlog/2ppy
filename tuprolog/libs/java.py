@@ -3,6 +3,8 @@ from pathlib import Path
 
 from jdk4py import JAVA_HOME
 
+__all__ = ["CLASSPATH", "JAVA_HOME", "find_jvm"]
+
 CLASSPATH = Path(__file__).parent
 
 

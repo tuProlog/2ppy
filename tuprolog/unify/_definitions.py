@@ -3,6 +3,9 @@ import jpype.imports  # noqa: F401
 
 from tuprolog import logger
 
+__all__ = ["DEFAULT_UNIFICATOR", "Unificator"]
+
+
 Unificator = _unify.Unificator
 
 

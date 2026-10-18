@@ -4,6 +4,23 @@ import jpype.imports  # noqa: F401
 from tuprolog import logger
 from tuprolog.jvmutils import Pair
 
+__all__ = [
+    "DEFAULT_FLAG_STORE",
+    "EMPTY_FLAG_STORE",
+    "DoubleQuotes",
+    "Flag",
+    "FlagStore",
+    "GroundQueriesHaveBooleanSolution",
+    "LastCallOptimization",
+    "MaxArity",
+    "NotableFlag",
+    "ShowWildCardVariablesInSolutions",
+    "TrackVariables",
+    "UniqueSolutions",
+    "Unknown",
+]
+
+
 FlagStore = _flags.FlagStore
 
 

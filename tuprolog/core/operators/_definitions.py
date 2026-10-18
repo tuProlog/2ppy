@@ -3,6 +3,23 @@ import jpype.imports  # noqa: F401
 
 from tuprolog import logger
 
+__all__ = [
+    "DEFAULT_OPERATORS",
+    "EMPTY_OPERATORS",
+    "FX",
+    "FY",
+    "STANDARD_OPERATORS",
+    "XF",
+    "XFX",
+    "XFY",
+    "YF",
+    "YFX",
+    "Operator",
+    "OperatorSet",
+    "Specifier",
+]
+
+
 Operator = _operators.Operator
 
 
