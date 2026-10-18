@@ -194,7 +194,7 @@ def _java_iterable_convert(jcls, obj):
     return jiterable(obj)
 
 
-def jarray(type, rank: int = 1):
+def jarray(type: Any, rank: int = 1) -> Any:
     return JArray(type, rank)
 
 
@@ -438,7 +438,7 @@ class _KtFunction:
 _kt_function_classes: MutableMapping[int, Any] = {}
 
 
-def kfunction(arity: int):
+def kfunction(arity: int) -> Callable[[Any], Any]:
     if arity not in _kt_function_classes:
 
         @JImplements("kotlin.jvm.functions.Function" + str(arity), deferred=True)

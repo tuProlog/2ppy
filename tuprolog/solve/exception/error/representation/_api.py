@@ -1,3 +1,5 @@
+from typing import Any
+
 from tuprolog.core import Term
 from tuprolog.solve import ExecutionContext, Signature
 
@@ -7,7 +9,7 @@ __all__ = ["limit", "representation_error"]
 
 
 def representation_error(
-    context: ExecutionContext, procedure: Signature, limit: Limit, cause=None
+    context: ExecutionContext, procedure: Signature, limit: Limit, cause: Any = None
 ) -> RepresentationError:
     return RepresentationError.of(context, procedure, limit, cause)
 

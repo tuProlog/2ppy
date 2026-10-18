@@ -1,3 +1,5 @@
+from typing import Any
+
 from tuprolog.core import Term
 from tuprolog.solve import ExecutionContext
 
@@ -6,7 +8,7 @@ from ._definitions import MessageError
 __all__ = ["message_error"]
 
 
-def message_error(content: Term, context: ExecutionContext, cause=None) -> MessageError:
+def message_error(content: Term, context: ExecutionContext, cause: Any = None) -> MessageError:
     # MessageError.of is not @JvmStatic: MessageError.of would resolve to the static LogicError.of,
     # and JPype resolves MessageError.Companion to the companion class, not to its instance
     companion = MessageError.class_.getField("Companion").get(None)

@@ -49,9 +49,9 @@ def dict_or_keyword_args(
     return dispatch(all_data)
 
 
-def and_then(continuation):
-    def call_and_then_continue(function):
-        def wrapper(*args, **kwargs):
+def and_then(continuation: Callable[[Any], Any]) -> Callable[[Callable], Callable]:
+    def call_and_then_continue(function: Callable) -> Callable:
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
             result = function(*args, **kwargs)
             return continuation(result)
 
@@ -60,9 +60,9 @@ def and_then(continuation):
     return call_and_then_continue
 
 
-def apply_to_result(consumer):
-    def call_and_then_apply(function):
-        def wrapper(*args, **kwargs):
+def apply_to_result(consumer: Callable[[Any], Any]) -> Callable[[Callable], Callable]:
+    def call_and_then_apply(function: Callable) -> Callable:
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
             result = function(*args, **kwargs)
             consumer(result)
             return result

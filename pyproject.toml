@@ -103,3 +103,9 @@ disable_error_code = ["valid-type"]
 # JPype ships no type information; JVM packages (it.unibo..., java..., kotlin...) are only known at runtime
 module = ["jpype", "jpype.*", "_jpype", "jdk4py", "it.*", "java.*", "kotlin.*"]
 ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+# the Python API (factories and helpers) is fully annotated: keep it so, for users type-checking their code
+module = ["tuprolog.*._api", "tuprolog.pyutils"]
+disallow_untyped_defs = true
+disallow_incomplete_defs = true

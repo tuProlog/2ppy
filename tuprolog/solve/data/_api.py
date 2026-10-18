@@ -9,7 +9,7 @@ from ._definitions import EMPTY_DATA, CustomData, CustomDataStore
 __all__ = ["custom_data", "custom_data_store"]
 
 
-def custom_data(data: Mapping[str, Any] = {}, **kwargs) -> CustomData:
+def custom_data(data: Mapping[str, Any] = {}, **kwargs: Any) -> CustomData:
     return dict_or_keyword_args(data, kwargs, lambda ds: jmap(ds))
 
 

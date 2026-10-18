@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 from functools import singledispatch
 
 from tuprolog.core import Atom, Integer, Struct, Term
@@ -24,7 +25,7 @@ def _(term: Struct) -> Operator:
     return Operator.fromTerm(term)
 
 
-def operator_set(*operators) -> OperatorSet:
+def operator_set(*operators: Operator | Iterable[Operator]) -> OperatorSet:
     return iterable_or_varargs(operators, lambda os: OperatorSet(jiterable(os)))
 
 
