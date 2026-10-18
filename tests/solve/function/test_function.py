@@ -5,6 +5,7 @@ from tuprolog.core import integer, var
 from tuprolog.core.parsing import parse_term
 from tuprolog.solve import MAX_TIMEOUT, current_time_instant, signature
 from tuprolog.solve.exception.error import InstantiationError, TypeError
+from tuprolog.solve.exception.error.type import expected_type, type_error_for_argument
 from tuprolog.solve.function import (
     AbstractLogicFunction,
     Compute,
@@ -176,10 +177,25 @@ def test_subclassing_abstract_logic_function():
     assert bindings(solve_all(solver, "X is triple(3)"), "X") == ["9"]
 
 
-def test_python_exceptions_in_logic_functions_propagate():
+def test_python_exceptions_in_logic_functions_become_system_errors():
     def broken(request):
         raise ValueError("boom")
 
     solver = _solver_with_functions(broken=(0, logic_function(broken)))
-    with pytest.raises(ValueError, match="boom"):
-        solve_all(solver, "X is broken")
+    solution = solver.solve_once("X is broken")
+    assert solution.is_halt
+    assert "boom" in str(solution.exception.extra_data or solution.exception.message)
+    caught = solver.solve_once("catch(X is broken, error(E, _), true)")
+    assert str(caught["E"]) == "system_error"
+
+
+def test_logic_errors_in_logic_functions_are_kept():
+    def picky(request):
+        raise type_error_for_argument(
+            request.context, request.signature, expected_type("integer"), integer(0), 0
+        )
+
+    solver = _solver_with_functions(picky=(0, logic_function(picky)))
+    assert str(solver.solve_once("catch(X is picky, error(E, _), true)")["E"]).startswith(
+        "type_error(integer"
+    )
