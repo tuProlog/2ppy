@@ -1,3 +1,9 @@
+## [1.5.0](https://github.com/tuProlog/2ppy/compare/1.4.0...1.5.0) (2026-10-18)
+
+### Features
+
+* **solve.libs:** OOPLib's Prolog API over Python objects ([#102](https://github.com/tuProlog/2ppy/issues/102)) ([5a5df20](https://github.com/tuProlog/2ppy/commit/5a5df206f18586f36a2bfbccac58a8cb7e94d32f))
+
 ## [1.4.0](https://github.com/tuProlog/2ppy/compare/1.3.0...1.4.0) (2026-10-18)
 
 ### Features
