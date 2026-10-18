@@ -81,33 +81,41 @@ class _KtStruct:
 
         Args:
             index: the position of the new argument (0 for the first).
-            argument: the new argument (a term).
+            argument: the new argument (a term, or a Python value converted by
+                `tuprolog.core.to_term`).
 
         Returns:
             The new structure.
 
         Examples:
             >>> from tuprolog.core import atom, struct
-            >>> struct("f", "a", "b").insert_at(1, atom("z"))
-            f(a, z, b)
+            >>> struct("f", "a", "b").insert_at(1, atom("z")), struct("f", "a").insert_at(0, 1)
+            (f(a, z, b), f(1, a))
         """
-        return self.insertAt(index, argument)
+        from tuprolog.core import to_term
+
+        return self.insertAt(index, to_term(argument))
 
     def set_args(self, *args):
         """Returns a copy of the structure with other arguments (and the same functor).
 
         Args:
-            *args: the new arguments (terms), either as many arguments or as a single iterable.
+            *args: the new arguments (terms, or Python values converted by `tuprolog.core.to_term`),
+                either as many arguments or as a single iterable.
 
         Returns:
             The new structure.
 
         Examples:
             >>> from tuprolog.core import atom, struct
-            >>> struct("f", "a").set_args(atom("x"), atom("y"))
+            >>> struct("f", "a").set_args(atom("x"), "y")
             f(x, y)
         """
-        return iterable_or_varargs(args, lambda xs: self.setArgs(jiterable(xs)))
+        from tuprolog.core import to_term
+
+        return iterable_or_varargs(
+            args, lambda xs: self.setArgs(jiterable([to_term(x) for x in xs]))
+        )
 
 
 @JImplementationFor("it.unibo.tuprolog.core.Numeric")
@@ -222,7 +230,8 @@ class _KtClause:
         """Returns a copy of the clause, whose head has other arguments (and the same functor).
 
         Args:
-            *args: the new arguments (terms), either as many arguments or as a single iterable.
+            *args: the new arguments (terms, or Python values converted by `tuprolog.core.to_term`),
+                either as many arguments or as a single iterable.
 
         Returns:
             The new clause.
@@ -240,7 +249,8 @@ class _KtClause:
 
         Args:
             index: the position of the new argument (0 for the first).
-            argument: the new argument (a term).
+            argument: the new argument (a term, or a Python value converted by
+                `tuprolog.core.to_term`).
 
         Returns:
             The new clause.

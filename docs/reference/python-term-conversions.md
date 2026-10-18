@@ -71,6 +71,7 @@ round-trip through their shortest representation, and `Decimal`s become `float`s
 | Where | Direction | What is converted |
 |---|---|---|
 | Term factories `struct`, `logic_list`, `logic_list_from`, `logic_tuple` (`tuprolog.core`) | Python → term | their arguments/items, e.g. `struct("f", "a", 1)` is `f(a, 1)` |
+| Substitutions `substitution`, `unifier` (`tuprolog.core`), and `Struct.set_args`, `Struct.insert_at` | Python → term | the assigned values, and the new arguments, e.g. `substitution({X: 1})` |
 | Flags: `flag`, `flag_store`, `store + {...}` (`tuprolog.solve.flags`) | Python → term | flag values, e.g. `flag_store(unknown="fail")` |
 | `Solver.query` and `Solution.to_dict` (`tuprolog.solve`) | term → Python | the bindings of the query's variables, e.g. `{'X': 1}` |
 | `predicate` (`tuprolog.solve.primitive`) | both | the goal's arguments are passed through `to_python`; returned tuples of values are converted by `to_term` and unified with the arguments |

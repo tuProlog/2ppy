@@ -582,36 +582,36 @@ def var(name: str) -> Var:
     return Var.of(name)
 
 
-def unifier(assignments: Mapping[Var, Term] | None = None) -> Substitution.Unifier:
+def unifier(assignments: Mapping[Var, Any] | None = None) -> Substitution.Unifier:
     """Creates a unifier, i.e. a successful substitution, from variable-term assignments.
 
     Args:
-        assignments: a mapping from variables to terms (terms, not Python values). If `None`, the
-            empty unifier.
+        assignments: a mapping from variables to terms (or Python values, converted by `to_term`).
+            If `None`, the empty unifier.
 
     Returns:
         The unifier.
 
     Examples:
         >>> X = var("X")
-        >>> unifier({X: atom("a")})[X], unifier()
-        (a, {})
+        >>> unifier({X: atom("a")})[X], unifier({X: 1})[X], unifier()
+        (a, 1, {})
 
     Note:
         Wraps 2P-Kt's `Substitution.unifier`.
     """
-    return Substitution.unifier(jmap(assignments or {}))
+    return Substitution.unifier(_assignments(assignments))
 
 
-def substitution(assignments: Mapping[Var, Term] | None = None) -> Substitution:
+def substitution(assignments: Mapping[Var, Any] | None = None) -> Substitution:
     """Creates a substitution from variable-term assignments.
 
     Unlike `unifier`, the assignments are checked: variables assigned to other assigned variables
     are resolved, and contradicting assignments give the failed substitution.
 
     Args:
-        assignments: a mapping from variables to terms (terms, not Python values). If `None`, the
-            empty substitution.
+        assignments: a mapping from variables to terms (or Python values, converted by `to_term`).
+            If `None`, the empty substitution.
 
     Returns:
         The substitution: a `tuprolog.core.Substitution.Unifier`, or a
@@ -626,7 +626,11 @@ def substitution(assignments: Mapping[Var, Term] | None = None) -> Substitution:
     Note:
         Wraps 2P-Kt's `Substitution.of`.
     """
-    return Substitution.of(jmap(assignments or {}))
+    return Substitution.of(_assignments(assignments))
+
+
+def _assignments(assignments: Mapping[Var, Any] | None) -> Any:
+    return jmap({v: to_term(t) for v, t in (assignments or {}).items()})
 
 
 def failed() -> Substitution.Fail:
