@@ -1,3 +1,9 @@
+## [1.1.1](https://github.com/tuProlog/2ppy/compare/1.1.0...1.1.1) (2026-10-18)
+
+### Bug Fixes
+
+* **deps:** update dependency it.unibo.tuprolog:solve-problog-jvm to v3.0.3 ([#94](https://github.com/tuProlog/2ppy/issues/94)) ([649cc34](https://github.com/tuProlog/2ppy/commit/649cc34af6eae96e76a6668e1f1cd331520bbe99))
+
 ## [1.1.0](https://github.com/tuProlog/2ppy/compare/1.0.0...1.1.0) (2026-10-18)
 
 ### Features
