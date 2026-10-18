@@ -128,12 +128,8 @@ def test_type_error_for_goal(context, procedure):
     )
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="type_error_for_term wraps TypeError.forTerm, which 2P-Kt does not define "
-    "(neither in 0.31.16 nor later)",
-)
 def test_type_error_for_term(context):
     error = type_error_for_term(context, Type.ATOM, integer(1))
     assert isinstance(error, TypeError)
     assert error.getType() == struct("type_error", atom("atom"), integer(1))
+    assert error.message == "Term `1` is not a valid atom term"

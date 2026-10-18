@@ -1,6 +1,7 @@
 from typing import TypeVar
 
 from tuprolog.solve import (
+    Solution,
     SolveOptions,
     solve_options,  # re-exported, see its probabilistic argument
 )
@@ -9,9 +10,12 @@ from tuprolog.utils import Taggable
 from ._definitions import ProbExtensions
 
 __all__ = [
+    "binary_decision_diagram",
+    "has_binary_decision_diagram",
     "is_probabilistic",
     "probabilistic",
     "probability",
+    "set_binary_decision_diagram",
     "set_probabilistic",
     "set_probability",
     "solve_options",
@@ -39,3 +43,16 @@ def set_probabilistic(solve_opts: SolveOptions, value: bool) -> SolveOptions:
 
 def probabilistic(solve_opts: SolveOptions) -> SolveOptions:
     return ProbExtensions.probabilistic(solve_opts)
+
+
+def has_binary_decision_diagram(solution: Solution) -> bool:
+    return ProbExtensions.getHasBinaryDecisionDiagram(solution)
+
+
+def binary_decision_diagram(solution: Solution):
+    """The binary decision diagram (it.unibo.tuprolog.bdd.BinaryDecisionDiagram) of a solution."""
+    return ProbExtensions.getBinaryDecisionDiagram(solution)
+
+
+def set_binary_decision_diagram(solution: Solution, bdd) -> Solution:
+    return ProbExtensions.setBinaryDecisionDiagram(solution, bdd)

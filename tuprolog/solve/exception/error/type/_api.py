@@ -48,7 +48,10 @@ def type_error_for_term(
     expected: Type,
     actual_value: Term,
 ) -> TypeError:
-    return TypeError.forTerm(context, expected, actual_value)
+    # 2P-Kt has no TypeError.forTerm (unlike DomainError.forTerm): its message format is mirrored
+    return TypeError.of(
+        context, expected, actual_value, f"Term `{actual_value}` is not a valid {expected} term"
+    )
 
 
 def type_error_for_goal(
