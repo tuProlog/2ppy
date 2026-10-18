@@ -26,7 +26,7 @@ __all__ = [
 
 
 def clauses_parser(
-    with_default_operators: bool = True, operators: OperatorSet = None
+    with_default_operators: bool = True, operators: OperatorSet | None = None
 ) -> ClausesParser:
     """Creates a parser of clauses and theories from strings.
 
@@ -52,7 +52,7 @@ def clauses_parser(
 
 
 def clauses_reader(
-    with_default_operators: bool = True, operators: OperatorSet = None
+    with_default_operators: bool = True, operators: OperatorSet | None = None
 ) -> ClausesReader:
     """Creates a reader of clauses and theories from files or streams.
 
@@ -76,7 +76,7 @@ def clauses_reader(
     return parser_factory(ClausesReader, with_default_operators, operators)
 
 
-def parse_theory(string: str, operators: OperatorSet = None) -> Theory:
+def parse_theory(string: str, operators: OperatorSet | None = None) -> Theory:
     """Parses Prolog source code into a theory.
 
     Args:
@@ -107,7 +107,7 @@ def parse_theory(string: str, operators: OperatorSet = None) -> Theory:
 
 
 def parse_clauses(
-    string: str, operators: OperatorSet = None, lazy: bool = True
+    string: str, operators: OperatorSet | None = None, lazy: bool = True
 ) -> Iterable[Clause]:
     """Parses Prolog source code into clauses.
 
@@ -135,7 +135,7 @@ def parse_clauses(
         return DEFAULT_CLAUSES_PARSER.parse_clauses(string, operators)
 
 
-def read_theory(input: InputStream | str, operators: OperatorSet = None) -> Theory:
+def read_theory(input: InputStream | str, operators: OperatorSet | None = None) -> Theory:
     """Reads a theory from a file or stream.
 
     Args:
@@ -162,7 +162,7 @@ def read_theory(input: InputStream | str, operators: OperatorSet = None) -> Theo
 
 
 def read_clauses(
-    input: InputStream | str, operators: OperatorSet = None, lazy: bool = True
+    input: InputStream | str, operators: OperatorSet | None = None, lazy: bool = True
 ) -> Iterable[Clause]:
     """Reads clauses from a file or stream.
 

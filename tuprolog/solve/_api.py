@@ -167,7 +167,7 @@ def halt_solution(
 
 
 @halt_solution.register
-def _halt_solution_from_query(query: Struct, exception: ResolutionException) -> Solution.No:
+def _halt_solution_from_query(query: Struct, exception: ResolutionException) -> Solution.Halt:
     return Solution.halt(query, exception)
 
 

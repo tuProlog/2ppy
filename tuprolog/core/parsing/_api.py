@@ -52,7 +52,9 @@ def parser_factory(
             return source.withOperators(operators)
 
 
-def term_parser(with_default_operators: bool = True, operators: OperatorSet = None) -> TermParser:
+def term_parser(
+    with_default_operators: bool = True, operators: OperatorSet | None = None
+) -> TermParser:
     """Creates a term parser with a given default operator set.
 
     Args:
@@ -71,7 +73,9 @@ def term_parser(with_default_operators: bool = True, operators: OperatorSet = No
     return parser_factory(TermParser, with_default_operators, operators)
 
 
-def term_reader(with_default_operators: bool = True, operators: OperatorSet = None) -> TermParser:
+def term_reader(
+    with_default_operators: bool = True, operators: OperatorSet | None = None
+) -> TermReader:
     """Creates a term reader with a given default operator set.
 
     Args:
@@ -90,7 +94,7 @@ def term_reader(with_default_operators: bool = True, operators: OperatorSet = No
     return parser_factory(TermReader, with_default_operators, operators)
 
 
-def parse_term(string: str, operators: OperatorSet = None) -> Term:
+def parse_term(string: str, operators: OperatorSet | None = None) -> Term:
     """Parses a term from a string, with the default parser (`DEFAULT_TERM_PARSER`).
 
     Args:
@@ -117,7 +121,7 @@ def parse_term(string: str, operators: OperatorSet = None) -> Term:
     return DEFAULT_TERM_PARSER.parse_term(string, operators)
 
 
-def parse_struct(string: str, operators: OperatorSet = None) -> Struct:
+def parse_struct(string: str, operators: OperatorSet | None = None) -> Struct:
     """Parses a structure from a string, with the default parser (`DEFAULT_TERM_PARSER`).
 
     Args:
@@ -139,7 +143,7 @@ def parse_struct(string: str, operators: OperatorSet = None) -> Struct:
     return DEFAULT_TERM_PARSER.parse_struct(string, operators)
 
 
-def parse_constant(string: str, operators: OperatorSet = None) -> Constant:
+def parse_constant(string: str, operators: OperatorSet | None = None) -> Constant:
     """Parses a constant (an atom or a number) from a string, with the default parser
     (`DEFAULT_TERM_PARSER`).
 
@@ -162,7 +166,7 @@ def parse_constant(string: str, operators: OperatorSet = None) -> Constant:
     return DEFAULT_TERM_PARSER.parse_constant(string, operators)
 
 
-def parse_var(string: str, operators: OperatorSet = None) -> Var:
+def parse_var(string: str, operators: OperatorSet | None = None) -> Var:
     """Parses a variable from a string, with the default parser (`DEFAULT_TERM_PARSER`).
 
     Args:
@@ -184,7 +188,7 @@ def parse_var(string: str, operators: OperatorSet = None) -> Var:
     return DEFAULT_TERM_PARSER.parse_var(string, operators)
 
 
-def parse_atom(string: str, operators: OperatorSet = None) -> Atom:
+def parse_atom(string: str, operators: OperatorSet | None = None) -> Atom:
     """Parses an atom from a string, with the default parser (`DEFAULT_TERM_PARSER`).
 
     Args:
@@ -206,7 +210,7 @@ def parse_atom(string: str, operators: OperatorSet = None) -> Atom:
     return DEFAULT_TERM_PARSER.parse_atom(string, operators)
 
 
-def parse_numeric(string: str, operators: OperatorSet = None) -> Numeric:
+def parse_numeric(string: str, operators: OperatorSet | None = None) -> Numeric:
     """Parses a number from a string, with the default parser (`DEFAULT_TERM_PARSER`).
 
     Args:
@@ -228,7 +232,7 @@ def parse_numeric(string: str, operators: OperatorSet = None) -> Numeric:
     return DEFAULT_TERM_PARSER.parse_numeric(string, operators)
 
 
-def parse_integer(string: str, operators: OperatorSet = None) -> Integer:
+def parse_integer(string: str, operators: OperatorSet | None = None) -> Integer:
     """Parses an integer from a string, with the default parser (`DEFAULT_TERM_PARSER`).
 
     Args:
@@ -250,7 +254,7 @@ def parse_integer(string: str, operators: OperatorSet = None) -> Integer:
     return DEFAULT_TERM_PARSER.parse_integer(string, operators)
 
 
-def parse_real(string: str, operators: OperatorSet = None) -> Real:
+def parse_real(string: str, operators: OperatorSet | None = None) -> Real:
     """Parses a real number from a string, with the default parser (`DEFAULT_TERM_PARSER`).
 
     Args:
@@ -272,7 +276,7 @@ def parse_real(string: str, operators: OperatorSet = None) -> Real:
     return DEFAULT_TERM_PARSER.parse_real(string, operators)
 
 
-def parse_clause(string: str, operators: OperatorSet = None) -> Clause:
+def parse_clause(string: str, operators: OperatorSet | None = None) -> Clause:
     """Parses a clause from a string, with the default parser (`DEFAULT_TERM_PARSER`).
 
     The text must be a rule or a fact with an explicit `:-` (e.g. `"p :- true"`), or a directive
@@ -300,7 +304,7 @@ def parse_clause(string: str, operators: OperatorSet = None) -> Clause:
     return DEFAULT_TERM_PARSER.parse_clause(string, operators)
 
 
-def read_term(input: InputStream | str, operators: OperatorSet = None) -> Term:
+def read_term(input: InputStream | str, operators: OperatorSet | None = None) -> Term:
     """Reads the first term from a stream, with the default reader (`DEFAULT_TERM_READER`).
 
     Args:
@@ -323,7 +327,7 @@ def read_term(input: InputStream | str, operators: OperatorSet = None) -> Term:
     return DEFAULT_TERM_READER.read_term(input, operators)
 
 
-def read_terms(input: InputStream | str, operators: OperatorSet = None) -> Iterable[Term]:
+def read_terms(input: InputStream | str, operators: OperatorSet | None = None) -> Iterable[Term]:
     """Reads all the terms from a stream, lazily, with the default reader (`DEFAULT_TERM_READER`).
 
     Args:
