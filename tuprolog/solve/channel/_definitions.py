@@ -12,6 +12,8 @@ __all__ = [
     "Listener",
     "OutputChannel",
     "OutputStore",
+    "ReaderChannel",
+    "WriterChannel",
 ]
 
 
@@ -34,6 +36,12 @@ OutputStore = _channel.OutputStore
 
 
 Listener = _kfunctions.Function1
+
+
+ReaderChannel = _channel.ReaderChannel
+
+
+WriterChannel = _channel.WriterChannel
 
 
 logger.debug("Loaded JVM classes from it.unibo.tuprolog.solve.channel.*")

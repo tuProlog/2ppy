@@ -16,6 +16,7 @@ from tuprolog.solve.flags import *
 from tuprolog.solve.function import *
 from tuprolog.solve.library import *
 from tuprolog.solve.library.exception import *
+from tuprolog.solve.libs import *
 from tuprolog.solve.plp import *
 from tuprolog.solve.primitive import *
 from tuprolog.solve.problog import *

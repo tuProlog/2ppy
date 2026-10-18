@@ -21,6 +21,7 @@ Object-oriented and modular ecosystem for symbolic AI and logic programming, cur
 * a module providing generic API for resolution of logic queries, namely `tuprolog.solve`
     * a module that implements deterministic logic programming and solving, namely `tuprolog.solve.prolog`
     * a module that implements probabilistic logic programming and solving, namely `tuprolog.solve.problog`
+    * a module exposing 2P-Kt's IO and OOP libraries (e.g. `read/1`, `open/3`, `new_object/3`), namely `tuprolog.solve.libs`
 
 * two parsing modules: one aimed at parsing terms, namely `tuprolog.core.parsing`, and the other aimed at parsing theories, namely `tuprolog.theory.parsing`
 
@@ -44,6 +45,10 @@ The JVM is started when `tuprolog` is first imported.
 1. Use the Pythonic API to write, parse or solve your logic programs. You can find some examples in the [tests folder](tests).
 1. Python values are converted where terms are expected (e.g. `struct("f", "a", 1)` is `f(a, 1)`, see `tuprolog.core.to_term`).
     Methods without a Pythonic counterpart are forwarded to the underlying JVM objects, so they may return JVM types (e.g. `java.lang.String`).
+1. Python streams (`io.IOBase`, e.g. files, `sys.stdin`, `io.StringIO`, `io.BytesIO`) are accepted wherever 2P-Kt reads or writes:
+    parsers (`read_theory(open("kb.pl"))`), solvers' channels (`prolog_solver(std_in=io.StringIO("..."), std_out=buffer)`),
+    and JVM methods expecting streams (binary), readers or writers (text). Binary streams are UTF-8 encoded.
+    By default, solvers read from and write on Python's current `sys.stdin`, `sys.stdout` and `sys.stderr`.
 
 ### Use 2PPy as an interactive REPL
 
