@@ -1,3 +1,35 @@
+"""Bridging Python and the JVM, on which 2P-Kt runs.
+
+2P-Kt is written in Kotlin and runs on the Java Virtual Machine (JVM): the `tuprolog` package
+reaches its classes through [JPype](https://jpype.readthedocs.io/), which lets Python call JVM
+methods and pass Python values to them. Importing this module makes JVM objects more Pythonic:
+
+- every JVM method `fooBar` gets the snake_case alias `foo_bar`; a getter `getFoo()` without
+  arguments becomes the property `foo` (writable if a `setFoo` setter exists), and a boolean
+  getter `isFoo()` becomes the property `is_foo` (e.g. `term.is_atom`, `struct.args`);
+- the `repr` of JVM objects is their `toString()`;
+- JVM `Comparable`s support `<`, `<=`, `>` and `>=`; JVM exceptions have a `message` property;
+- Kotlin sequences and Java streams are Python iterables;
+- Python iterables are accepted wherever JVM code expects a `java.lang.Iterable`, a Kotlin
+  `Sequence`, a Kotlin `Pair` or a Kotlin `Triple` (strings excepted).
+
+It also re-exports a few JVM types, and offers the functions converting Python values into JVM
+ones (`jlist`, `jiterable`, `jmap`, `ksequence`, `kpair`, `kfunction`, ...). Most users never need
+them: the factories of the `tuprolog` packages convert their arguments themselves.
+
+Examples:
+    >>> from tuprolog.core import atom, struct
+    >>> struct("f", "a").args
+    [a]
+    >>> atom("a") < atom("b")
+    True
+    >>> jmap({"a": 1})
+    {a=1}
+
+See Also:
+    `tuprolog.jvmioutils`, for streams, readers and writers.
+"""
+
 import re
 from collections.abc import Callable, Mapping, MutableMapping
 from collections.abc import Iterable as PyIterable
@@ -49,30 +81,55 @@ __all__ = [
 
 
 Arrays = _jutils.Arrays
+"""Java's `java.util.Arrays` utility class (e.g. `Arrays.asList(items)`)."""
 
 ArrayList = _jutils.ArrayList
+"""Java's resizable list, `java.util.ArrayList`."""
 
 Iterator = _jutils.Iterator
+"""Java's iterator interface, `java.util.Iterator` (methods `hasNext()` and `next()`)."""
 
 Map = _jutils.Map
+"""Java's map interface, `java.util.Map` (see `jmap`)."""
 
 NoSuchElementException = _jutils.NoSuchElementException
+"""Java's exception for iterators with no more elements, `java.util.NoSuchElementException`."""
 
 Iterable = _jlang.Iterable
+"""Java's iterable interface, `java.lang.Iterable` (see `jiterable`).
+
+Not to be confused with Python's `collections.abc.Iterable`.
+"""
 
 JavaSystem = _jlang.System
+"""Java's `java.lang.System` class (e.g. `JavaSystem.getProperty("java.version")`)."""
 
 Object = _jlang.Object
+"""Java's `java.lang.Object`, the root of the JVM class hierarchy."""
 
 Pair = _kotlin.Pair
+"""Kotlin's pair of values, `kotlin.Pair` (properties `first` and `second`; see `kpair`)."""
 
 Triple = _kotlin.Triple
+"""Kotlin's triple of values, `kotlin.Triple` (properties `first`, `second` and `third`; see
+`ktriple`)."""
 
 Sequence = _ksequences.Sequence
+"""Kotlin's lazy sequence, `kotlin.sequences.Sequence`: computes its items on demand.
+
+Kotlin sequences are Python iterables; many 2P-Kt methods return them (see `ksequence`).
+"""
 
 SequencesKt = _ksequences.SequencesKt
+"""Kotlin's static utilities for sequences, `kotlin.sequences.SequencesKt` (e.g.
+`SequencesKt.toList(sequence)`)."""
 
 PyUtils = _tuprolog_utils.PyUtils
+"""2P-Kt's helpers for Python interoperability, `it.unibo.tuprolog.utils.PyUtils`.
+
+Its `iterable(...)` wraps JVM iterables and sequences as public JVM objects (see
+`protect_iterable`).
+"""
 
 
 _ITERABLE_ITERATOR = Iterable.class_.getMethod("iterator")
@@ -96,6 +153,19 @@ def _iterate_reflectively(iterable: Any) -> PyIterator:
 
 
 def protect_iterable(iterable: Any) -> Any:
+    """Wraps a JVM iterable so that Python can call its `iterator()` method.
+
+    JPype hides the interfaces of instances of non-public JVM classes (such as many iterables
+    returned by Kotlin code): wrapping them via `PyUtils.iterable` exposes them again. Instances
+    of non-public classes which JPype shows as `java.lang.Object$Anonymous` are returned as they
+    are, as this module makes them Python iterables already.
+
+    Args:
+        iterable: A JVM `Iterable` or Kotlin `Sequence`.
+
+    Returns:
+        A JVM iterable with the same items, whose `iterator()` is callable from Python.
+    """
     if _is_anonymous(iterable):
         return iterable  # Python-iterable, see _KtObjectWithSmartPythonicAccessors
     return PyUtils.iterable(iterable)
@@ -151,6 +221,22 @@ class _IterableAdapter:
 
 
 def kpair(items: PyIterable) -> Pair:
+    """Converts two items into a Kotlin `Pair`.
+
+    Args:
+        items: A `Pair`, returned as it is, or a Python iterable of exactly two items.
+
+    Returns:
+        The pair.
+
+    Raises:
+        ValueError: If `items` does not contain exactly two items.
+
+    Examples:
+        >>> pair = kpair((1, "a"))
+        >>> pair.first, pair.second
+        (1, 'a')
+    """
     if isinstance(items, Pair):
         return items
     first, second = items
@@ -163,6 +249,21 @@ def _kt_pair_covert(jcls, obj):
 
 
 def ktriple(items: PyIterable) -> Triple:
+    """Converts three items into a Kotlin `Triple`.
+
+    Args:
+        items: A `Triple`, returned as it is, or a Python iterable of exactly three items.
+
+    Returns:
+        The triple.
+
+    Raises:
+        ValueError: If `items` does not contain exactly three items.
+
+    Examples:
+        >>> ktriple([1, 2, 3]).third
+        3
+    """
     if isinstance(items, Triple):
         return items
     first, second, third = items
@@ -175,6 +276,19 @@ def _kt_triple_covert(jcls, obj):
 
 
 def jlist(iterable: PyIterable) -> Iterable:
+    """Copies the items of a Python iterable into a JVM `java.util.List`.
+
+    Args:
+        iterable: The items. A Python list is wrapped rather than copied (via `Arrays.asList`),
+            giving a fixed-size JVM list.
+
+    Returns:
+        The JVM list.
+
+    Examples:
+        >>> jlist(x * x for x in range(3))
+        [0, 1, 4]
+    """
     assert isinstance(iterable, PyIterable)
     if isinstance(iterable, list):
         return Arrays.asList(iterable)
@@ -185,6 +299,22 @@ def jlist(iterable: PyIterable) -> Iterable:
 
 
 def jiterable(iterable: PyIterable) -> Any:
+    """Wraps a Python iterable as a JVM `java.lang.Iterable`, without copying it.
+
+    JVM code may iterate an `Iterable` more than once: one-shot Python iterators (e.g.
+    generators) are thus buffered, lazily, while being consumed.
+
+    Args:
+        iterable: The items.
+
+    Returns:
+        A JVM proxy implementing `java.lang.Iterable`, meant to be passed to JVM methods.
+
+    Examples:
+        >>> iterator = jiterable(x * x for x in range(3)).iterator()
+        >>> iterator.hasNext(), iterator.next()
+        (True, 0)
+    """
     assert isinstance(iterable, PyIterable)
     return _IterableAdapter(iterable)
 
@@ -195,15 +325,38 @@ def _java_iterable_convert(jcls, obj):
 
 
 def jarray(type: Any, rank: int = 1) -> Any:
+    """The JVM array type with items of type `type`, and `rank` dimensions.
+
+    Calling the returned type with a Python sequence creates a JVM array.
+
+    Examples:
+        >>> jarray(Object)
+        <java class 'java.lang.Object[]'>
+        >>> list(jarray(Object)([None, None]))
+        [None, None]
+    """
     return JArray(type, rank)
 
 
 def jiterator(iterator: PyIterator) -> Iterator:
+    """Wraps a Python iterator as a JVM `java.util.Iterator`, consuming it lazily.
+
+    Examples:
+        >>> iterator = jiterator(iter([1, 2]))
+        >>> iterator.next(), iterator.next(), iterator.hasNext()
+        (1, 2, False)
+    """
     assert isinstance(iterator, PyIterator)
     return _IteratorAdapter(iterator)
 
 
 def jmap(dictionary: Mapping) -> Map:
+    """Converts a Python mapping into a JVM `java.util.Map`.
+
+    Examples:
+        >>> jmap({"a": 1})["a"]
+        1
+    """
     assert isinstance(dictionary, Mapping)
     return Map @ dictionary
 
@@ -226,6 +379,14 @@ class _KtSequence:
 
 
 def ksequence(iterable: PyIterable) -> Sequence:
+    """Wraps a Python iterable as a Kotlin `Sequence`, consuming it lazily.
+
+    The sequence can be iterated only once.
+
+    Examples:
+        >>> list(ksequence(x * x for x in range(3)))
+        [0, 1, 4]
+    """
     return SequencesKt.asSequence(jiterable(iterable).iterator())
 
 
@@ -265,7 +426,12 @@ _CAMEL_BOUNDARY = re.compile(r"(?<=[a-z0-9])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])")
 
 
 def to_snake_case(camel_str: str) -> str:
-    """E.g. getHTTPCode -> get_http_code, toURI -> to_uri, assertA -> assert_a."""
+    """Converts a camelCase name into snake_case, as done for the aliases of JVM methods.
+
+    Examples:
+        >>> to_snake_case("getHTTPCode"), to_snake_case("toURI"), to_snake_case("assertA")
+        ('get_http_code', 'to_uri', 'assert_a')
+    """
     return _CAMEL_BOUNDARY.sub("_", camel_str).lower()
 
 
@@ -312,23 +478,43 @@ def _jvm_methods(cls, name: str, *aliases: str) -> list:
 
 
 def jvm_method(obj: Any, name: str) -> Callable:
-    """The JVM method `name` of `obj`, with all the overloads declared along its class hierarchy,
-    even when Python members (e.g. customizers, or auto-generated snake_case properties) shadow it."""
+    """The JVM method `name` of `obj`, even when Python members shadow it.
+
+    Customizers and the auto-generated snake_case properties may hide JVM methods having the same
+    name: this finds all the overloads named `name` declared along the class hierarchy of `obj`.
+
+    Args:
+        obj: A JVM object.
+        name: The name of the JVM method.
+
+    Returns:
+        The method bound to `obj`, trying each overload in turn when called.
+
+    Examples:
+        >>> import java.lang
+        >>> jvm_method(java.lang.StringBuilder("ab"), "reverse")()
+        ba
+    """
     return _dispatch_overloads(_jvm_methods(type(obj), name, "_jvm_" + name, "_" + name)).__get__(
         obj
     )
 
 
 def customize_derived(*names: str) -> Callable:
-    """
-    Class decorator for customizers (to be put below `@JImplementationFor`): applies the members
-    `names` of the customizer to every class deriving from the customized one, too.
+    """Applies some members of a customizer to the classes deriving from the customized one, too.
 
-    JPype copies a customizer's members onto the customized class only: a derived class (re)declaring
-    a JVM method with the same name would shadow them. Here the JVM methods are kept as `_<name>`, as
-    `@JOverride` does on the customized class itself. As JPype splits overloads among the classes
-    declaring them (e.g. MutableTheory.equals(Object) vs AbstractTheory.equals(Theory, Boolean)),
-    `_<name>` tries all the JVM methods named `name` along the MRO.
+    A class decorator, to be put below `@jpype.JImplementationFor`. JPype copies the members of a
+    customizer onto the customized class only: a derived class (re)declaring a JVM method with the
+    same name would shadow them. Here the JVM methods are kept as `_<name>`, as `@JOverride` does
+    on the customized class itself. As JPype splits overloads among the classes declaring them
+    (e.g. `MutableTheory.equals(Object)` vs `AbstractTheory.equals(Theory, Boolean)`), `_<name>`
+    tries all the JVM methods named `name` along the MRO.
+
+    Args:
+        *names: The names of the members of the customizer to apply to derived classes.
+
+    Returns:
+        The class decorator.
     """
 
     def decorator(proto):
@@ -362,9 +548,10 @@ def _anonymous_iter(self):
 
 @JImplementationFor("java.lang.Object")
 class _KtObjectWithSmartPythonicAccessors:
-    """
-    This class provides every Java imported type with Pythonic versions of its methods and properties,
-    unless pythonic versions would conflict with existing members.
+    """Gives every JVM type Pythonic versions of its methods and properties.
+
+    It adds snake_case aliases of methods, and properties for getters, unless they would conflict
+    with existing members.
     """
 
     def __jclass_init__(self):
@@ -418,6 +605,7 @@ class _JvmThrowable:
 
     @property
     def message(self):
+        """The message of the exception, as a Python string, or None."""
         message = self.getMessage()
         return None if message is None else str(message)
 
@@ -439,6 +627,23 @@ _kt_function_classes: MutableMapping[int, Any] = {}
 
 
 def kfunction(arity: int) -> Callable[[Any], Any]:
+    """The class wrapping Python callables as Kotlin functions of the given arity.
+
+    Kotlin functions (`kotlin.jvm.functions.FunctionN`) are what 2P-Kt expects wherever it takes
+    callbacks, e.g. the listeners of channels.
+
+    Args:
+        arity: The number of arguments of the functions.
+
+    Returns:
+        A class whose constructor takes a Python callable with `arity` arguments, and whose
+        instances implement `kotlin.jvm.functions.Function<arity>`.
+
+    Examples:
+        >>> increment = kfunction(1)(lambda x: x + 1)
+        >>> increment.invoke(1)
+        2
+    """
     if arity not in _kt_function_classes:
 
         @JImplements("kotlin.jvm.functions.Function" + str(arity), deferred=True)
