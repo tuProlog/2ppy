@@ -717,3 +717,11 @@ def test_clause_type_hierarchy(X):
     assert isinstance(rule(struct("p", X), atom("a")), Clause)
     assert isinstance(fact(struct("p", X)), Clause)
     assert isinstance(directive(atom("a")), Clause)
+
+
+def test_substitutions_convert_python_values():
+    from tuprolog.core import integer, substitution, unifier, var
+
+    X = var("X")
+    assert substitution({X: 1})[X] == integer(1)
+    assert unifier({X: "a"})[X] == atom("a")

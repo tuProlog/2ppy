@@ -563,3 +563,11 @@ def test_scope_snake_case_accessors(s):
     assert isinstance(s, Scope)
     assert s.empty_logic_list == empty_logic_list()
     assert {str(k) for k in s.variables} == {"X", "Y"}
+
+
+def test_set_args_and_insert_at_convert_python_values():
+    from tuprolog.core import atom, integer, struct
+
+    assert struct("f", "a").set_args("b", 2)[0] == atom("b")
+    assert struct("f", "a").set_args("b", 2)[1] == integer(2)
+    assert struct("f", "a").insert_at(0, "z")[0] == atom("z")
