@@ -46,7 +46,7 @@ def test_iterable_or_varargs_dispatch():
 
 
 def test_iterable_or_varargs_requires_a_sequence():
-    with pytest.raises(AssertionError):
+    with pytest.raises(TypeError):
         iterable_or_varargs(x for x in [1])  # type: ignore[arg-type]
 
 
