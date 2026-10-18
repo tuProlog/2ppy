@@ -107,11 +107,6 @@ def test_solve_options_explicitly_non_probabilistic():
     assert solve_options(probabilistic=False) == base_solve_options()
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="the binary decision diagram helpers of ProbExtensions "
-    "(hasBinaryDecisionDiagram, binaryDecisionDiagram, setBinaryDecisionDiagram) are not wrapped",
-)
 def test_binary_decision_diagram_helpers_are_wrapped():
     for name in (
         "has_binary_decision_diagram",
@@ -119,3 +114,17 @@ def test_binary_decision_diagram_helpers_are_wrapped():
         "set_binary_decision_diagram",
     ):
         assert callable(getattr(plp, name))
+
+
+def test_binary_decision_diagrams_of_probabilistic_solutions():
+    from tuprolog.core.parsing import parse_struct
+    from tuprolog.solve.problog import problog_solver
+    from tuprolog.theory.parsing import parse_theory
+
+    solver = problog_solver(mutable=True)
+    solver.load_static_kb(parse_theory("0.6::heads.", solver.operators))
+    solution = solver.solve_once(parse_struct("heads"), solve_options(probabilistic=True))
+    assert plp.has_binary_decision_diagram(solution)
+    bdd = plp.binary_decision_diagram(solution)
+    assert bdd is not None
+    assert plp.has_binary_decision_diagram(plp.set_binary_decision_diagram(solution, bdd))

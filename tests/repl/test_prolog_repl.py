@@ -234,10 +234,6 @@ def test_problog_repl():
     assert "yes: heads" in output
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="the ProbLog REPL solves queries non-probabilistically and never shows probabilities",
-)
 def test_problog_repl_shows_probabilities():
     output = run("0.6::heads.\n?- heads.\n", problog_solver(mutable=True), "problog")
     assert "0.6" in output
@@ -264,10 +260,6 @@ def test_ground_solution_has_no_blank_line():
     assert all(line.strip() for line in output.splitlines()[1:])
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="directives (':- goal.') are taken as ':'-prefixed REPL commands ('Unknown syntax')",
-)
 def test_directive():
     output = run(":- op(700, xfx, ===>).\na ===> b.\n?- X ===> Y.\n")
     assert "Unknown syntax" not in output

@@ -7,11 +7,19 @@ from jpype import JException
 
 from tuprolog.core import pretty_expressions_formatter
 from tuprolog.core.parsing import ParseException, TermParser
-from tuprolog.solve import SolutionFormatter, Solver, solution_formatter
+from tuprolog.solve import SolutionFormatter, Solver, solution_formatter, solve_options
 from tuprolog.solve.exception import HaltException
+from tuprolog.solve.plp import probability
 from tuprolog.theory.parsing import ClausesParser
 
 __all__ = ["PrologREPL"]
+
+
+_PROBLOG_PACKAGE = "it.unibo.tuprolog.solve.problog."
+
+
+def _is_command(line: str) -> bool:
+    return line.startswith(":") and not line.startswith(":-")
 
 
 class PrologREPL(Cmd):
@@ -24,7 +32,9 @@ class PrologREPL(Cmd):
         completekey: str = "tab",
         stdin: IO[str] | None = None,
         stdout: IO[str] | None = None,
+        probabilistic: bool | None = None,
     ):
+        """`probabilistic` queries show their probability; by default, it holds for ProbLog solvers."""
         super().__init__(completekey, stdin, stdout)
         self.intro = f"""
 Welcome to the {name.title()} REPL.
@@ -33,6 +43,7 @@ Welcome to the {name.title()} REPL.
         Query the theory by typing ?- followed by a query.
         Clauses and queries must end with a period, otherwise they will be
             considered incomplete and you will be prompted for more input.
+        Run a directive by typing :- followed by a goal.
         Type ":help" for more information, including the list of available
             commands that can be used by prefixing a colon ":".
         Type ":exit" to exit.
@@ -40,6 +51,9 @@ Welcome to the {name.title()} REPL.
         self.solver = solver
         self.name = name
         self.multi_line_command = ""
+        if probabilistic is None:
+            probabilistic = str(solver.getClass().getName()).startswith(_PROBLOG_PACKAGE)
+        self.probabilistic = probabilistic
 
     # parsers and formatter follow the solver's current operators, e.g. after ?- op(...).
     @property
@@ -66,7 +80,7 @@ Welcome to the {name.title()} REPL.
             return ":exit"
         if not line.strip() and not self.multi_line_command:
             return ""
-        if line.startswith(":"):
+        if _is_command(line):
             return line
         if line.rstrip().endswith("."):
             command = self.multi_line_command + line
@@ -81,23 +95,42 @@ Welcome to the {name.title()} REPL.
 
     def parseline(self, line: str) -> tuple[str | None, str | None, str]:
         line = line.strip()
-        if line.startswith(":"):
+        if _is_command(line):
             return super().parseline(line[1:])
         if line.startswith("?-"):
             return "query", line[2:].strip(), line
+        if line.startswith(":-"):
+            return "directive", line[2:].strip(), line
         return "assert", line, line
 
     def do_query(self, arg: str) -> bool:
         """Query the theory."""
         try:
             query = self.query_parser.parse_struct(arg)
-            solutions = self.solver.solve(query)
-            for solution in solutions:
+            options = solve_options(probabilistic=self.probabilistic)
+            for solution in self.solver.solve(query, options):
                 if solution.is_halt and isinstance(solution.getException(), HaltException):
                     self.stdout.write("# goodbye.\n")  # like 2P-Kt's REPL, halt/0,1 exit
                     return True
                 formatted = str(self.solution_formatter.format(solution))
                 self.stdout.write(formatted)
+                if self.probabilistic and solution.is_yes:
+                    self.stdout.write(f"\n    probability: {probability(solution)}")
+                self.stdout.write("\n")
+        except ParseException as e:
+            self.on_parsing_error(e)
+        return False
+
+    def do_directive(self, arg: str) -> bool:
+        """Runs a directive (:- goal.), reporting only its failures."""
+        try:
+            goal = self.query_parser.parse_struct(arg)
+            solution = self.solver.solve_once(goal)
+            if solution.is_halt and isinstance(solution.getException(), HaltException):
+                self.stdout.write("# goodbye.\n")
+                return True
+            if not solution.is_yes:
+                self.stdout.write(str(self.solution_formatter.format(solution)))
                 self.stdout.write("\n")
         except ParseException as e:
             self.on_parsing_error(e)
