@@ -165,9 +165,22 @@ def canonical_formatter() -> TermFormatter:
     return TermFormatter.canonical()
 
 
-def default_formatter(
-    operators=None, tags: TagsFormattingOptions = DEFAULT_TAGS_FORMATTING_OPTIONS
-) -> TermFormatter:
+def _showing_tags(tags: TagsFormattingOptions) -> TagsFormattingOptions:
+    return tags.copy(
+        True,
+        tags.getDelimiters(),
+        tags.getSeparator(),
+        tags.getShowKeys(),
+        tags.getShowDelimitersIfEmpty(),
+        tags.getKeyFilter(),
+        tags.getTagFormatter(),
+    )
+
+
+def default_formatter(operators=None, tags: TagsFormattingOptions | None = None) -> TermFormatter:
+    # unlike the other factories, 2P-Kt's TermFormatter.default shows tags by default
+    if tags is None:
+        tags = _showing_tags(DEFAULT_TAGS_FORMATTING_OPTIONS)
     return TermFormatter.default(_operators_or_default(operators), tags)
 
 

@@ -10,6 +10,7 @@ from tuprolog.core import (
     TagsFormattingOptions,
     TermFormatter,
     Var,
+    atom,
     canonical_formatter,
     default_formatter,
     integer,
@@ -20,6 +21,7 @@ from tuprolog.core import (
 )
 from tuprolog.core.impl import DefaultTermFormatter
 from tuprolog.core.operators import EMPTY_OPERATORS
+from tuprolog.jvmutils import jmap
 
 
 class TestFormatters(unittest.TestCase):
@@ -56,6 +58,13 @@ def test_pretty_expressions_formatter_without_pretty_variables():
 def test_default_formatter_uses_the_given_operators():
     assert " + 1 * " in default_formatter().format(EXPRESSION)
     assert str(default_formatter(EMPTY_OPERATORS).format(EXPRESSION)).startswith("+(")
+
+
+def test_default_formatter_shows_tags_like_2pkt():
+    tagged = atom("a").replaceTags(jmap({"k": "v"}))
+    assert str(default_formatter().format(tagged)) == "a<k=v>"
+    assert str(default_formatter(tags=DEFAULT_TAGS_FORMATTING_OPTIONS).format(tagged)) == "a"
+    assert str(pretty_expressions_formatter().format(tagged)) == "a"
 
 
 def test_formatter_factories_accept_tags_options():
