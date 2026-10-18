@@ -61,17 +61,17 @@ def test_open_missing_file(tmp_path):
 
 
 def test_ensure_input_stream_from_path(path):
-    assert isinstance(ensure_input_steam(path), InputStream)
+    assert isinstance(ensure_input_stream(path), InputStream)
 
 
 def test_ensure_input_stream_from_stream(stream):
-    assert ensure_input_steam(stream) is stream
+    assert ensure_input_stream(stream) is stream
 
 
 @pytest.mark.parametrize("value", [42, None, b"bytes"])
 def test_ensure_input_stream_rejects_other_types(value):
     with pytest.raises(TypeError, match="Invalid type"):
-        ensure_input_steam(value)
+        ensure_input_stream(value)
 
 
 # --- InputStream as Python IOBase -----------------------------------------------------------------
