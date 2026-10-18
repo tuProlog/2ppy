@@ -22,8 +22,17 @@ class _KtFlagStore:
         return self.getSize()
 
     def __getitem__(self, notableFlag):
-        """Returns the value of the flag with the given name (or notable flag), or `None`."""
-        return self.get(notableFlag)
+        """Returns the value of the flag with the given name (or notable flag).
+
+        Raises:
+            KeyError: If there is no such flag.
+        """
+        value = self.get(notableFlag)
+        if value is None:
+            raise KeyError(
+                notableFlag.name if isinstance(notableFlag, NotableFlag) else notableFlag
+            )
+        return value
 
     def __contains__(self, flag):
         """Returns whether there is a flag with the given name (or notable flag)."""
@@ -36,10 +45,12 @@ class _KtFlagStore:
 
         Args:
             other: A `Flag`, a `NotableFlag` (set to its default value), a `FlagStore`, or a
-                mapping from names to terms.
+                mapping from names to terms (or Python values, see `tuprolog.core.to_term`).
         """
         if isinstance(other, Mapping):
-            return self.plus(jmap(other))
+            from tuprolog.core import to_term
+
+            return self.plus(jmap({k: to_term(v) for k, v in other.items()}))
         return self.plus(other)
 
     def __sub__(self, other):

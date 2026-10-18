@@ -106,9 +106,11 @@ def test_getitem_by_notable_flag_or_name():
     assert store["unknown"] == Unknown.FAIL
 
 
-def test_getitem_of_missing_flag_is_none():
-    assert EMPTY_FLAG_STORE["missing"] is None
-    assert EMPTY_FLAG_STORE[Unknown] is None
+def test_getitem_of_missing_flag_raises_key_error():
+    with pytest.raises(KeyError, match="missing"):
+        EMPTY_FLAG_STORE["missing"]
+    with pytest.raises(KeyError, match="unknown"):
+        EMPTY_FLAG_STORE[Unknown]
 
 
 def test_iteration_yields_flag_names():
