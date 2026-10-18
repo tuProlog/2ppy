@@ -18,11 +18,14 @@ def test_definitions():
     assert (IOLib.alias, OOPLib.alias) == ("prolog.io", "prolog.oop")
 
 
+# file URIs: 2P-Kt 3.0.3 crashes on relative paths, and on absolute Windows ones (D:/...)
+
+
 def test_io_lib_reads_files(tmp_path):
     path = tmp_path / "terms.pl"
     path.write_text("f(a). g(b).")
     solver = prolog_solver(libraries=libraries(IOLib))
-    goal = f"open('{path.as_posix()}', read, S), read(S, X), read(S, Y), close(S)"
+    goal = f"open('{path.as_uri()}', read, S), read(S, X), read(S, Y), close(S)"
     solution = solve_all(solver, goal)[0]
     assert solution.is_yes
     assert (bindings([solution], "X"), bindings([solution], "Y")) == (["f(a)"], ["g(b)"])
@@ -31,7 +34,7 @@ def test_io_lib_reads_files(tmp_path):
 def test_io_lib_writes_files(tmp_path):
     path = tmp_path / "out.txt"
     solver = prolog_solver(libraries=libraries(IOLib))
-    goal = f"open('{path.as_posix()}', write, S), write(S, 'è'), close(S)"
+    goal = f"open('{path.as_uri()}', write, S), write(S, 'è'), close(S)"
     assert solve_all(solver, goal)[0].is_yes
     assert path.read_text(encoding="utf-8") == "è"
 
