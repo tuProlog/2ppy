@@ -322,12 +322,16 @@ def numeric(value: BigInteger | BigDecimal | str | float | Decimal) -> Numeric:
         (3, 1.5, 2, 2.5)
         >>> numeric("2").is_integer, numeric("2.5").is_real
         (True, True)
+        >>> numeric("1e3")  # reals are normalized as by `real`
+        1000.0
 
     Note:
         Wraps 2P-Kt's `Numeric.of`.
     """
     if isinstance(value, str):
-        return Numeric.of(JString @ value)
+        number = Numeric.of(JString @ value)
+        # a real from a string skips big_decimal's normalization: e.g. 1e3 would format as 1E+3.0
+        return real(value) if isinstance(number, Real) else number
     if isinstance(value, (int, BigInteger)):
         return integer(value)
     return real(value)

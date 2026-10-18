@@ -209,3 +209,11 @@ class TestBigDecimal(TestKtMath):
         self.assertEqual(big_decimal("0.1"), BIG_DECIMAL_ONE_TENTH)
         self.assertEqual(big_decimal(self.e), BIG_DECIMAL_E)
         self.assertEqual(big_decimal(self.pi), BIG_DECIMAL_PI)
+
+
+def test_numeric_from_exponent_strings_is_normalized():
+    from tuprolog.core import numeric
+    from tuprolog.core.parsing import parse_term
+
+    assert str(numeric("1e3")) == "1000.0"
+    assert parse_term(str(numeric("1.5E+2"))) == numeric("150.0")
