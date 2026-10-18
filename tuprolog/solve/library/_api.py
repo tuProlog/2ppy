@@ -1,3 +1,5 @@
+"""The factory functions of libraries and runtimes, re-exported by `tuprolog.solve.library`."""
+
 from collections.abc import Iterable, Mapping
 from functools import reduce
 from typing import Any
@@ -20,7 +22,28 @@ def library(
     operators: OperatorSet | Iterable[Operator] | None = None,
     functions: Mapping[Signature | str, LogicFunction] = {},
 ) -> Library | Pluggable:
-    """A library: primitives and functions are keyed by signature, or by `name/arity` string."""
+    """Creates a library of primitives, functions, clauses and operators.
+
+    Args:
+        alias: The alias of the library, i.e. dot-separated words (e.g. `my.lib`); `default` if
+            `None`.
+        primitives: The primitives (see `tuprolog.solve.primitive`), keyed by signature or by
+            `name/arity` string.
+        clauses: The clauses (`tuprolog.core.Clause`), as a list or another JVM-convertible
+            collection (not a lazy sequence, like that of `tuprolog.theory.parsing.parse_clauses`).
+        operators: The operators, as an `OperatorSet` or an iterable of operators.
+        functions: The functions (see `tuprolog.solve.function`), keyed by signature or by
+            `name/arity` string.
+
+    Returns:
+        The library.
+
+    Examples:
+        >>> from tuprolog.core import atom, fact
+        >>> lib = library("my.facts", clauses=[fact(atom("sunny"))])
+        >>> lib.alias, lib.clauses
+        ('my.facts', [sunny :- true])
+    """
     primitives = {_signature(k): v for k, v in primitives.items()}
     functions = {_signature(k): v for k, v in functions.items()}
     if operators is None:
@@ -38,10 +61,42 @@ def _signature(key: Signature | str) -> Signature:
 
 
 def aliased(alias: str, library: Library) -> Library:
+    """Returns a copy of a library with another alias.
+
+    Args:
+        alias: The new alias.
+        library: The library, left unchanged.
+
+    Returns:
+        The library with the new alias.
+
+    Examples:
+        >>> aliased("new.name", library("old.name")).alias
+        'new.name'
+    """
     return Library.of(alias, library)
 
 
 def libraries(*libs: Library | Runtime | Iterable[Library], **kwargs: Library) -> Runtime:
+    """Creates a runtime, i.e. a set of libraries with distinct aliases.
+
+    Args:
+        *libs: Libraries, runtimes (contributing their libraries), or iterables of them.
+        **kwargs: More libraries, loaded under the keyword as alias.
+
+    Returns:
+        The runtime; empty without arguments.
+
+    Raises:
+        TypeError: If an argument is none of the above.
+        tuprolog.solve.library.exception.AlreadyLoadedLibraryException: If two libraries have
+            the same alias.
+
+    Examples:
+        >>> runtime = libraries(library("a.lib"), [library("b.lib")], c=library("whatever"))
+        >>> list(runtime.aliases)
+        ['a.lib', 'b.lib', 'c']
+    """
     all_libraries: list[Library] = []
 
     def collect(item: Any) -> None:
