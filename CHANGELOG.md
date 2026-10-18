@@ -1,3 +1,43 @@
+## [1.6.0](https://github.com/tuProlog/2ppy/compare/1.5.0...1.6.0) (2026-10-18)
+
+### Features
+
+* **solve.library:** runtime - library removes libraries, by library, alias, or aliases ([e6f4797](https://github.com/tuProlog/2ppy/commit/e6f479726994d841a87da0c9ae6a8ab934f7f2e0))
+
+### Bug Fixes
+
+* check arguments with exceptions instead of assert, which python -O strips ([e960207](https://github.com/tuProlog/2ppy/commit/e9602076fdf51aebb076f84146e7d77370fbd235))
+* classes implementing JVM interfaces keep their docstrings, module and name ([32c08e4](https://github.com/tuProlog/2ppy/commit/32c08e47330cd8e3e4f10dbd6fdd96b0f398f523))
+* **core:** numeric normalizes reals parsed from strings, e.g. "1e3" is 1000.0, not the unparsable 1E+3.0 ([f0de996](https://github.com/tuProlog/2ppy/commit/f0de9961d9e1e9f32de9c2d7e6393c193b3911b8))
+* **core:** substitutions, set_args and insert_at convert Python values into terms ([45503c8](https://github.com/tuProlog/2ppy/commit/45503c8aa2df006b60218477a2e7cc7d66b5c6ae))
+* **errors:** let help() and doc tools read the docstrings of tuprolog.errors' classes ([b252f59](https://github.com/tuProlog/2ppy/commit/b252f599dbd3067f17b0e4e1157f7e6705519a6c))
+* **errors:** the repr of errors without a message shows their error term, instead of None ([6c34028](https://github.com/tuProlog/2ppy/commit/6c34028657ef48d24210af1322bad44fc1e3464a))
+* **repl:** no whitespace-only line after solutions without bindings ([0c508d9](https://github.com/tuProlog/2ppy/commit/0c508d9bc665d4db4a7418296484424fe0c50a0c))
+* **solve.flags:** flag stores convert the Python values added as dicts, and raise KeyError for missing flags ([2694320](https://github.com/tuProlog/2ppy/commit/26943209f71cd0366571f621ba96597fac001253))
+* **solve.function:** exceptions raised by Python functions become logic errors, as in primitives ([7ec19ed](https://github.com/tuProlog/2ppy/commit/7ec19ed0d115e198a851056b9de02cc389f91652))
+* **solve.library:** library accepts any iterable of clauses, e.g. the lazy sequences of parse_clauses ([ad0a6f1](https://github.com/tuProlog/2ppy/commit/ad0a6f1b50caaf5768a6fd3e4c261ee331a4d451))
+* **solve.libs:** OOPLib calls method-wrappers named by atoms on Python 3.10 too ([43ffced](https://github.com/tuProlog/2ppy/commit/43ffced4791e857155a65d5f6307eb2dfadd5bae))
+* **theory:** abolish accepts "name/arity" strings, and explains that a bare name lacks an arity ([0328b30](https://github.com/tuProlog/2ppy/commit/0328b30fc094693f826965bed4d3eae1aa18d8da))
+* **typing:** correct the annotations of term_reader, fact and halt_solution, and make optional parameters explicit ([94e631d](https://github.com/tuProlog/2ppy/commit/94e631d87c91abfe1378cf6ac44aa61d6ca05c07))
+
+### Documentation
+
+* a concise README, and a documentation site organized as 2P-Kt's ([4eaf9f1](https://github.com/tuProlog/2ppy/commit/4eaf9f1d536fd76a53404d428e75ef03c16e5f70))
+* document primitives, IOLib and OOPLib (with a user guide), and logic errors ([6973078](https://github.com/tuProlog/2ppy/commit/69730788faa9a75c39e4973852af385a6b0e4a80))
+* document the solver API, Prolog and ProbLog solvers, flags, channels, side effects, libraries and the standard library ([710f6cb](https://github.com/tuProlog/2ppy/commit/710f6cbea007f6844519e8d776c373790906bc8f))
+* document the tuprolog package, core (terms, operators, parsing), math and utils ([bdf17d4](https://github.com/tuProlog/2ppy/commit/bdf17d4f6e96065ecc0e1d6f7b91dba6464cbdb1))
+* document unify, theory, collections, errors, the JVM/IO bridges and the REPLs ([5f4c213](https://github.com/tuProlog/2ppy/commit/5f4c21372d6a60431cdfd296c7fed48ae865ad44))
+* example Jupyter notebooks, from terms to probabilistic logic programming ([94549d4](https://github.com/tuProlog/2ppy/commit/94549d4738df1e6352757f29737f54afbfd63f24))
+* **examples:** open files by URI in the IOLib example, as Windows paths are not URIs ([8461911](https://github.com/tuProlog/2ppy/commit/8461911662c2379142625e8f7324b9d36057051c))
+* **jvmioutils:** annotate the returns of the stream adapters, which griffe requires for Returns sections ([cdd70e8](https://github.com/tuProlog/2ppy/commit/cdd70e87667bbc11e3089929bd6b05856b97fa18))
+* publish a documentation site on GitHub Pages, with the API reference generated from the docstrings ([87300f6](https://github.com/tuProlog/2ppy/commit/87300f66e4448732387b5072e12f51b2701e25cb))
+* render the example notebooks in the documentation site, and link them from the guides ([9824295](https://github.com/tuProlog/2ppy/commit/9824295b01157effed016e0cee547409f5d2b3f6))
+* rewrite the README as a guide with tested examples, and set the docstring conventions ([29c6acf](https://github.com/tuProlog/2ppy/commit/29c6acf2a19013a490c58d62fcbec71cad5ee1f5))
+
+### Refactoring
+
+* use ensure_input_stream instead of its misspelled alias ensure_input_steam, kept for compatibility ([02dcd4d](https://github.com/tuProlog/2ppy/commit/02dcd4d2fba59ed45c535b75cdd930b4f7410179))
+
 ## [1.5.0](https://github.com/tuProlog/2ppy/compare/1.4.0...1.5.0) (2026-10-18)
 
 ### Features
