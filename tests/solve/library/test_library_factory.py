@@ -146,3 +146,13 @@ def test_library_accepts_lazy_sequences_of_clauses():
 
     lib = library("lazy", clauses=parse_clauses("p(1). p(2)."))
     assert len(list(lib.clauses)) == 2
+
+
+def test_runtime_minus_removes_libraries():
+    a, b, c = library("a"), library("b"), library("c")
+    runtime = libraries(a, b, c)
+    assert list((runtime - "a").aliases) == ["b", "c"]
+    assert list((runtime - ["a", "b"]).aliases) == ["c"]
+    assert list((runtime - c).aliases) == ["a", "b"]
+    with pytest.raises(KeyError, match="d"):
+        runtime - "d"
