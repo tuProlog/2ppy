@@ -38,7 +38,9 @@ def existence_error_for_resource(context: ExecutionContext, name: str) -> Existe
 
 
 def object_type(name: str | Term) -> ObjectType:
+    # 2P-Kt's ObjectType.of/fromTerm, unlike other error enums, reject lower-case (Prolog) names
+    if isinstance(name, Atom):
+        name = str(name.value)
     if isinstance(name, str):
-        return ObjectType.of(name)
-    else:
-        return ObjectType.fromTerm(name)
+        return ObjectType.of(name.upper())
+    return ObjectType.fromTerm(name)
