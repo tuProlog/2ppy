@@ -35,10 +35,12 @@ Members: `primitives` and `functions` (JVM maps from signatures), `clauses` (a l
 Runtime = _library.Runtime
 """A runtime: the set of libraries loaded by a solver, a read-only JVM map from aliases.
 
-Members: `aliases`, `libraries`, `runtime[alias]`, `minus(alias)` (a runtime without that
-library), and those of `Pluggable`, merging the contents of all the libraries. Python additions:
+Members: `aliases`, `libraries`, `runtime[alias]`, and those of `Pluggable`, merging the contents
+of all the libraries. Python additions:
 `runtime + other` merges a library or another runtime, raising
-`tuprolog.solve.library.exception.AlreadyLoadedLibraryException` if an alias is already loaded.
+`tuprolog.solve.library.exception.AlreadyLoadedLibraryException` if an alias is already loaded;
+`runtime - other` removes a library, given as such, by alias, or as an iterable of aliases
+(2P-Kt's own `minus` is broken: it raises exactly when the library is loaded).
 Create runtimes with `libraries`.
 
 Examples:
@@ -46,6 +48,8 @@ Examples:
     >>> runtime = libraries(library("a.lib")) + library("b.lib")
     >>> list(runtime.aliases)
     ['a.lib', 'b.lib']
+    >>> list((runtime - "a.lib").aliases)
+    ['b.lib']
 """
 
 
