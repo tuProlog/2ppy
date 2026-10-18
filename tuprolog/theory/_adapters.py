@@ -105,19 +105,24 @@ class _KtTheory:
         """Removes all the clauses of a predicate, as Prolog's `abolish/1` does.
 
         The predicate is given either as `name` and `arity`, or as an indicator (e.g. `f/2`,
-        see `tuprolog.core.indicator`), passed as `indicator` or as `name`.
+        see `tuprolog.core.indicator`, or the string `"f/2"`), passed as `indicator` or as `name`.
 
         Returns:
             The resulting theory: a new one for immutable theories, this one for mutable ones.
 
         Raises:
             ValueError: If neither a name nor an indicator is given.
+            TypeError: If `name` is a string with no arity, given as `arity` or as `"name/arity"`.
         """
         if name is not None:
             if arity is not None:
                 return self._abolish(new_indicator(name, arity))
-            else:
-                return self._abolish(name)
+            if isinstance(name, str):
+                functor, slash, digits = name.rpartition("/")
+                if not (slash and functor and digits.isdigit()):
+                    raise TypeError("abolish(name) requires an arity, or a `name/arity` string")
+                return self._abolish(new_indicator(functor, int(digits)))
+            return self._abolish(name)
         elif indicator is not None:
             return self._abolish(indicator)
         raise ValueError("You should provide at least either a name-arity couple or an indicator")

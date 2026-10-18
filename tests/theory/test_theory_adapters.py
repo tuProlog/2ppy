@@ -226,6 +226,15 @@ def test_abolish_by_name_and_arity(kb):
     assert list(kb.abolish("p", 1)) == [Q_X]
 
 
+def test_abolish_by_indicator_string(kb):
+    assert list(kb.abolish("p/1")) == [Q_X]
+
+
+def test_abolish_by_name_without_arity_raises_type_error(kb):
+    with pytest.raises(TypeError, match="arity"):
+        kb.abolish("p")
+
+
 def test_abolish_by_indicator_keyword(kb):
     assert list(kb.abolish(indicator=indicator("p", 1))) == [Q_X]
 
