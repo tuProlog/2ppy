@@ -3,6 +3,41 @@ import jpype.imports  # noqa: F401
 
 from tuprolog import logger
 
+__all__ = [
+    "DEFAULT_SIDE_EFFECT_FACTORY",
+    "AddDynamicClauses",
+    "AddLibraries",
+    "AddStaticClauses",
+    "ClearFlags",
+    "CloseInputChannels",
+    "CloseOutputChannels",
+    "LoadLibrary",
+    "OpenInputChannels",
+    "OpenOutputChannels",
+    "RemoveDynamicClauses",
+    "RemoveOperators",
+    "RemoveStaticClauses",
+    "ResetDynamicKb",
+    "ResetFlags",
+    "ResetInputChannels",
+    "ResetOperators",
+    "ResetOutputChannels",
+    "ResetRuntime",
+    "ResetStaticKb",
+    "SetDurableData",
+    "SetEphemeralData",
+    "SetFlags",
+    "SetOperators",
+    "SetPersistentData",
+    "SideEffect",
+    "SideEffectFactory",
+    "SideEffectManager",
+    "SideEffectsBuilder",
+    "UnloadLibraries",
+    "UpdateLibrary",
+]
+
+
 SideEffect = _sideffects.SideEffect
 
 

@@ -7,14 +7,13 @@ from tuprolog.solve.exception import LogicError
 from tuprolog.solve.exception.error.domain import (
     Domain,
     DomainError,
-    domain,
     domain_error_for_argument,
     domain_error_for_flag_values,
     domain_error_for_goal,
     domain_error_for_term,
+    expected_domain,
 )
 
-# `error.domain` is shadowed by the domain() factory: get the sub-package from sys.modules
 module = importlib.import_module("tuprolog.solve.exception.error.domain")
 
 DOMAIN_NAMES = [
@@ -68,9 +67,9 @@ def test_domain_is_the_expected_enum():
 @pytest.mark.parametrize("name", DOMAIN_NAMES)
 def test_domain_values(name):
     expected = getattr(Domain, name)
-    assert domain(name.lower()) == expected
-    assert domain(name) == expected
-    assert domain(atom(name.lower())) == expected
+    assert expected_domain(name.lower()) == expected
+    assert expected_domain(name) == expected
+    assert expected_domain(atom(name.lower())) == expected
     assert str(expected) == name.lower()
     assert expected.domain == name.lower()
     assert expected.toTerm() == atom(name.lower())
@@ -82,13 +81,13 @@ def test_domain_constants(name):
 
 
 def test_domain_from_non_atom_term_is_none():
-    assert domain(struct("order", atom("x"))) is None
-    assert domain(integer(1)) is None
+    assert expected_domain(struct("order", atom("x"))) is None
+    assert expected_domain(integer(1)) is None
 
 
 def test_domain_of_unknown_name_raises():
     with pytest.raises(Exception, match="No enum constant"):
-        domain("not_a_domain")
+        expected_domain("not_a_domain")
 
 
 def assert_domain_error(error, expected, culprit, message):

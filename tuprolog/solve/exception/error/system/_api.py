@@ -5,6 +5,8 @@ from tuprolog.solve.exception import LogicError
 
 from ._definitions import SystemError
 
+__all__ = ["system_error"]
+
 
 def system_error(context: ExecutionContext, exception: Any) -> SystemError:
     """Wraps an uncaught LogicError, JVM Throwable, or error Term into a SystemError."""

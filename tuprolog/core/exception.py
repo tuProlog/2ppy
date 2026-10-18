@@ -3,6 +3,9 @@ import jpype.imports  # noqa: F401
 
 from tuprolog import logger
 
+__all__ = ["SubstitutionApplicationException", "SubstitutionException", "TuPrologException"]
+
+
 TuPrologException = _exceptions.TuPrologException
 
 SubstitutionException = _exceptions.SubstitutionException

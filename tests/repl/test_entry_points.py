@@ -71,11 +71,6 @@ def test_shell_can_solve(shell_namespace):
     assert solver.solve_once(ns["parse_struct"]("p(X)")).is_yes
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="the `python -m tuprolog` shell star-imports tuprolog.solve.exception(.error), "
-    "shadowing the builtins type, TypeError, SyntaxError, SystemError, PermissionError, Warning",
-)
 @pytest.mark.parametrize(
     "name", ["type", "TypeError", "SyntaxError", "SystemError", "PermissionError", "Warning"]
 )

@@ -7,6 +7,14 @@ from tuprolog.solve import ExecutionContext, Signature
 
 from ._definitions import Domain, DomainError
 
+__all__ = [
+    "domain_error_for_argument",
+    "domain_error_for_flag_values",
+    "domain_error_for_goal",
+    "domain_error_for_term",
+    "expected_domain",
+]
+
 
 def domain_error_for_flag_values(
     context: ExecutionContext,
@@ -49,7 +57,7 @@ def domain_error_for_goal(
     return DomainError.forGoal(context, procedure, expected, actual)
 
 
-def domain(name: str | Term) -> Domain:
+def expected_domain(name: str | Term) -> Domain:
     if isinstance(name, str):
         return Domain.of(name)
     else:

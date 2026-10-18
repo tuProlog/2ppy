@@ -3,6 +3,9 @@ import jpype.imports  # noqa: F401
 
 from tuprolog import logger
 
+__all__ = ["MagicCut"]
+
+
 MagicCut: _magic.MagicCut = _magic.MagicCut.INSTANCE
 
 

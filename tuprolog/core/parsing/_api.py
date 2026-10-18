@@ -6,6 +6,23 @@ from tuprolog.jvmioutils import InputStream
 
 from ._definitions import DEFAULT_TERM_PARSER, DEFAULT_TERM_READER, TermParser, TermReader
 
+__all__ = [
+    "parse_atom",
+    "parse_clause",
+    "parse_constant",
+    "parse_integer",
+    "parse_numeric",
+    "parse_real",
+    "parse_struct",
+    "parse_term",
+    "parse_var",
+    "parser_factory",
+    "read_term",
+    "read_terms",
+    "term_parser",
+    "term_reader",
+]
+
 
 def parser_factory(
     source, with_default_operators: bool = True, operators: OperatorSet | None = None

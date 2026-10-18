@@ -1,7 +1,16 @@
 from collections.abc import Callable, Iterable, Mapping, Sequence
 from typing import Any, TypeVar
 
-T = TypeVar("T")
+__all__ = [
+    "and_then",
+    "apply_to_result",
+    "dict_or_keyword_args",
+    "iterable_or_varargs",
+    "register_single_value_type",
+]
+
+
+_T = TypeVar("_T")
 
 
 # types whose instances are single values even if iterable (e.g. strings, logic lists)
@@ -28,11 +37,11 @@ def iterable_or_varargs(
 
 
 def dict_or_keyword_args(
-    dictionary: Mapping[str, T],
-    kwargs: Mapping[str, T],
-    dispatch: Callable[[Mapping[str, T]], Any] = lambda x: x,
+    dictionary: Mapping[str, _T],
+    kwargs: Mapping[str, _T],
+    dispatch: Callable[[Mapping[str, _T]], Any] = lambda x: x,
 ) -> Any:
-    all_data: dict[str, T] = {}
+    all_data: dict[str, _T] = {}
     for k in dictionary:
         all_data[k] = dictionary[k]
     for k in kwargs:

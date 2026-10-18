@@ -5,6 +5,8 @@ from tuprolog.solve import ExecutionContext, Signature
 
 from ._definitions import InstantiationError
 
+__all__ = ["instantiation_error_for_argument", "instantiation_error_for_goal"]
+
 
 def instantiation_error_for_argument(
     context: ExecutionContext, procedure: Signature, variable: Var, index: int | None = None

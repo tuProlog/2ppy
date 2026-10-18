@@ -3,6 +3,24 @@ import jpype.imports  # noqa: F401
 
 from tuprolog import logger
 
+__all__ = [
+    "ALL_SOLUTIONS",
+    "MAX_TIMEOUT",
+    "Durable",
+    "ExecutionContext",
+    "ExecutionContextAware",
+    "MutableSolver",
+    "Signature",
+    "Solution",
+    "SolutionFormatter",
+    "SolveOptions",
+    "Solver",
+    "SolverBuilder",
+    "SolverFactory",
+    "Time",
+]
+
+
 Durable = _solve.Durable
 
 

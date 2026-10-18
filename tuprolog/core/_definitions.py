@@ -4,6 +4,50 @@ from jpype import JImplements, JOverride
 
 from tuprolog import logger
 
+__all__ = [
+    "DEFAULT_TAGS_FORMATTING_OPTIONS",
+    "FAIL",
+    "FALSE",
+    "TRUE",
+    "AbstractTermComparator",
+    "AbstractTermConvertible",
+    "AbstractTermVisitor",
+    "Applicable",
+    "Atom",
+    "Block",
+    "Clause",
+    "Cons",
+    "Constant",
+    "Directive",
+    "Empty",
+    "EmptyBlock",
+    "EmptyList",
+    "Fact",
+    "Formatter",
+    "Indicator",
+    "Integer",
+    "List",
+    "Numeric",
+    "Real",
+    "Recursive",
+    "Rule",
+    "Scope",
+    "Struct",
+    "Substitution",
+    "TagsFormattingOptions",
+    "Term",
+    "TermComparator",
+    "TermConvertible",
+    "TermFormatter",
+    "TermVisitor",
+    "Terms",
+    "Truth",
+    "Tuple",
+    "Var",
+    "Variabled",
+]
+
+
 Applicable = _core.Applicable
 
 

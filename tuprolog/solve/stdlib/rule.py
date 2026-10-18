@@ -4,6 +4,18 @@ import jpype.imports  # noqa: F401
 from tuprolog import logger
 from tuprolog.solve import signature
 
+__all__ = [
+    "Append",
+    "Arrow",
+    "CurrentPrologFlag",
+    "Member",
+    "Not",
+    "Once",
+    "Semicolon",
+    "SetPrologFlag",
+]
+
+
 _Append = _rule.Append
 
 

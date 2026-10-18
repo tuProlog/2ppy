@@ -3,6 +3,32 @@ import jpype.imports  # noqa: F401
 
 from tuprolog import logger
 
+__all__ = [
+    "TYPE_ATOM",
+    "TYPE_ATOMIC",
+    "TYPE_BOOLEAN",
+    "TYPE_BYTE",
+    "TYPE_CALLABLE",
+    "TYPE_CHARACTER",
+    "TYPE_COMPOUND",
+    "TYPE_DEALIASING_EXPRESSION",
+    "TYPE_EVALUABLE",
+    "TYPE_FLOAT",
+    "TYPE_INTEGER",
+    "TYPE_IN_CHARACTER",
+    "TYPE_LIST",
+    "TYPE_NUMBER",
+    "TYPE_OBJECT_REFERENCE",
+    "TYPE_PAIR",
+    "TYPE_PREDICATE_INDICATOR",
+    "TYPE_REFERENCE",
+    "TYPE_TYPE_REFERENCE",
+    "TYPE_URL",
+    "TYPE_VARIABLE",
+    "Type",
+]
+
+
 TypeError = _errors.TypeError
 
 

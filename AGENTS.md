@@ -60,6 +60,12 @@ uv run poe install-hooks [HOOK...]    # local hooks in .git/hooks (default: all)
 - Tests must not hit the network (fetching the JARs is a setup step, not part of the tests).
 - The JVM can be started only once per process: tests share it, and must not depend on
   JVM options.
+- Every module declares a literal `__all__` (packages: the union of their `_definitions` and
+  `_api`, checked by `tests/test_imports.py`). Names shadowing Python builtins (e.g. the JVM
+  `TypeError`) or other tuprolog modules' names stay importable by name but out of `__all__`.
+- Customizers (`@JImplementationFor`) of interfaces or base classes: add
+  `@customize_derived(...)` (from `tuprolog.jvmutils`) for members overriding JVM methods,
+  otherwise derived classes redeclaring those methods shadow them.
 
 ## Releases
 

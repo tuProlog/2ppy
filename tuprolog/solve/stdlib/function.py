@@ -3,6 +3,39 @@ import jpype.imports  # noqa: F401
 
 from tuprolog import logger
 
+__all__ = [
+    "AbsoluteValue",
+    "Addition",
+    "ArcTangent",
+    "BitwiseAnd",
+    "BitwiseComplement",
+    "BitwiseLeftShift",
+    "BitwiseOr",
+    "BitwiseRightShift",
+    "Ceiling",
+    "Cosine",
+    "Exponential",
+    "Exponentiation",
+    "FloatFractionalPart",
+    "FloatIntegerPart",
+    "FloatingPointDivision",
+    "Floor",
+    "IntegerDivision",
+    "Modulo",
+    "Multiplication",
+    "NaturalLogarithm",
+    "Remainder",
+    "Round",
+    "Sign",
+    "SignReversal",
+    "Sine",
+    "SquareRoot",
+    "Subtraction",
+    "ToFloat",
+    "Truncate",
+]
+
+
 AbsoluteValue = _function.AbsoluteValue.INSTANCE
 
 

@@ -3,6 +3,8 @@ from tuprolog.solve import ExecutionContext
 
 from ._definitions import ErrorType, EvaluationError
 
+__all__ = ["error_type", "evaluation_error"]
+
 
 def evaluation_error(context: ExecutionContext, type: ErrorType, message: str) -> EvaluationError:
     return EvaluationError(message, None, context, type, atom(message))

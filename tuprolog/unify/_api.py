@@ -2,6 +2,16 @@ from tuprolog.core import Substitution, Term
 
 from ._definitions import DEFAULT_UNIFICATOR, Unificator
 
+__all__ = [
+    "cached_unificator",
+    "match",
+    "mgu",
+    "naive_unificator",
+    "strict_unificator",
+    "unificator",
+    "unify",
+]
+
 
 def strict_unificator(context: Substitution = None) -> Unificator:
     if context is None:

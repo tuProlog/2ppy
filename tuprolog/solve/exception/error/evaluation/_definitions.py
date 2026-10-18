@@ -3,6 +3,17 @@ import jpype.imports  # noqa: F401
 
 from tuprolog import logger
 
+__all__ = [
+    "ERROR_FLOAT_OVERFLOW",
+    "ERROR_INT_OVERFLOW",
+    "ERROR_UNDEFINED",
+    "ERROR_UNDERFLOW",
+    "ERROR_ZERO_DIVISOR",
+    "ErrorType",
+    "EvaluationError",
+]
+
+
 EvaluationError = errors.EvaluationError
 
 

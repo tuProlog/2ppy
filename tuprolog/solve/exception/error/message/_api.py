@@ -3,6 +3,8 @@ from tuprolog.solve import ExecutionContext
 
 from ._definitions import MessageError
 
+__all__ = ["message_error"]
+
 
 def message_error(content: Term, context: ExecutionContext, cause=None) -> MessageError:
     # MessageError.of is not @JvmStatic: MessageError.of would resolve to the static LogicError.of,

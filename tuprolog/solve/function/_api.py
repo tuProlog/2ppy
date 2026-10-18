@@ -15,6 +15,14 @@ from ._definitions import (
     LogicFunction,
 )
 
+__all__ = [
+    "compute_request",
+    "compute_response",
+    "eval_as_arithmetic_expression",
+    "eval_as_expression",
+    "logic_function",
+]
+
 
 def logic_function(callable: Callable[[ComputeRequest], ComputeResponse]) -> LogicFunction:
     class CallableToLogicFunctionAdapter(AbstractLogicFunction):

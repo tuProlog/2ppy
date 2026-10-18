@@ -90,30 +90,12 @@ def test_star_import_of_submodule(name):
         assert namespace[factory_name] is factory
 
 
-SHADOWED = pytest.mark.xfail(
-    strict=True,
-    reason="the domain(), permission() and type() factories shadow the sub-packages of the same "
-    "name in tuprolog.solve.exception.error: `import ...error.type as m` yields the function",
-)
-
-
-@pytest.mark.parametrize(
-    "name",
-    [
-        pytest.param(n, marks=SHADOWED) if n in {"domain", "permission", "type"} else n
-        for n in SUBMODULES
-    ],
-)
+@pytest.mark.parametrize("name", SUBMODULES)
 def test_submodules_are_not_shadowed(name):
     error = importlib.import_module(ERROR)
     assert getattr(error, name) is submodule(name)
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="star-imports of tuprolog.solve.exception(.error) shadow Python builtins: Warning, "
-    "TypeError, SyntaxError, SystemError, PermissionError (JVM classes) and type (a factory)",
-)
 @pytest.mark.parametrize("module", ["tuprolog.solve.exception", ERROR])
 def test_star_imports_do_not_shadow_builtins(module):
     namespace = star_import(f"{module}")
@@ -121,11 +103,6 @@ def test_star_imports_do_not_shadow_builtins(module):
     assert shadowed == set()
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="no __all__ in tuprolog.solve.exception.error.*: star-imports leak helper imports "
-    "(jpype, logger, errors, Term, ExecutionContext, Iterable, atom, ...)",
-)
 def test_star_import_exposes_only_error_names():
     namespace = star_import(f"{ERROR}")
     leaked = set()

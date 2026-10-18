@@ -3,6 +3,20 @@ import jpype.imports  # noqa: F401
 
 from tuprolog import logger
 
+__all__ = [
+    "LIMIT_CHARACTER",
+    "LIMIT_CHARACTER_CODE",
+    "LIMIT_IN_CHARACTER_CODE",
+    "LIMIT_MAX_ARITY",
+    "LIMIT_MAX_INTEGER",
+    "LIMIT_MIN_INTEGER",
+    "LIMIT_OOP_OBJECT",
+    "LIMIT_TOO_MANY_VARIABLES",
+    "Limit",
+    "RepresentationError",
+]
+
+
 RepresentationError = _errors.RepresentationError
 
 

@@ -6,6 +6,16 @@ from jpype import JImplements, JOverride
 
 from tuprolog import logger
 
+__all__ = [
+    "AbstractPrimitive",
+    "Primitive",
+    "PrimitiveWrapper",
+    "Solve",
+    "SolveRequest",
+    "SolveResponse",
+]
+
+
 Primitive = _primitive.Primitive
 
 

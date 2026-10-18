@@ -38,6 +38,38 @@ from ._definitions import (
     UpdateLibrary,
 )
 
+__all__ = [
+    "add_dynamic_clauses",
+    "add_libraries",
+    "add_static_clauses",
+    "clear_flags",
+    "close_input_channels",
+    "close_output_channels",
+    "load_library",
+    "open_input_channels",
+    "open_output_channels",
+    "remove_dynamic_clauses",
+    "remove_operators",
+    "remove_static_clauses",
+    "reset_durable_data",
+    "reset_dynamic_kb",
+    "reset_ephemeral_data",
+    "reset_flags",
+    "reset_input_channels",
+    "reset_libraries",
+    "reset_operators",
+    "reset_output_channels",
+    "reset_persistent_data",
+    "reset_static_kb",
+    "set_durable_data",
+    "set_ephemeral_data",
+    "set_flags",
+    "set_operators",
+    "set_persistent_data",
+    "unload_libraries",
+    "update_library",
+]
+
 
 def _forward_iterable_or_varargs(callable, args, *callable_args):
     return iterable_or_varargs(args, lambda xs: callable(jlist(xs), *callable_args))

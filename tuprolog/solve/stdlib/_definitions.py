@@ -3,6 +3,9 @@ import jpype.imports  # noqa: F401
 
 from tuprolog import logger
 
+__all__ = ["CommonBuiltins", "CommonFunctions", "CommonPrimitives", "CommonRules"]
+
+
 CommonBuiltins: _stdlib.CommonBuiltins = _stdlib.CommonBuiltins.INSTANCE
 
 

@@ -7,6 +7,8 @@ from tuprolog.unify import Unificator
 
 from ._definitions import MutableTheory, Theory
 
+__all__ = ["mutable_theory", "theory"]
+
 
 def theory(*clauses: Clause | Iterable[Clause]) -> Theory:
     return iterable_or_varargs(clauses, lambda ts: Theory.of(jiterable(ts)))

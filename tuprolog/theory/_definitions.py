@@ -3,6 +3,9 @@ import jpype.imports  # noqa: F401
 
 from tuprolog import logger
 
+__all__ = ["MutableTheory", "RetractResult", "Theory"]
+
+
 Theory = _theory.Theory
 
 MutableTheory = _theory.MutableTheory

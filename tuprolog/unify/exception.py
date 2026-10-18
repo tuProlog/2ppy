@@ -3,6 +3,9 @@ import jpype.imports  # noqa: F401
 
 from tuprolog import logger
 
+__all__ = ["NoUnifyException", "OccurCheckException"]
+
+
 NoUnifyException = _exceptions.NoUnifyException
 
 OccurCheckException = _exceptions.OccurCheckException

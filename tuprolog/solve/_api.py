@@ -22,6 +22,17 @@ from ._definitions import (
 )
 from .exception import ResolutionException
 
+__all__ = [
+    "current_time_instant",
+    "halt_solution",
+    "no_solution",
+    "signature",
+    "solution_formatter",
+    "solve_options",
+    "yes_solution",
+]
+
+
 # JPype resolves `Signature.Companion` to the nested class, not to the companion instance
 _SIGNATURE_COMPANION = Signature.class_.getField("Companion").get(None)
 
@@ -91,12 +102,20 @@ def solve_options(
     timeout: int = MAX_TIMEOUT,
     limit: int = ALL_SOLUTIONS,
     custom: Mapping[str, Any] = {},
+    *,
+    probabilistic: bool = False,
     **kwargs: Any,
 ) -> SolveOptions:
+    """Custom options come from `custom` and `kwargs`; `probabilistic` is for probabilistic solvers
+    (e.g. ProbLog ones), see tuprolog.solve.plp."""
     opts = dict(kwargs)
     for key in custom:
         opts[key] = custom[key]
     temp = SolveOptions.of(lazy, timeout, limit)
     if len(opts) > 0:
-        return temp.setOptions(jmap(opts))
+        temp = temp.setOptions(jmap(opts))
+    if probabilistic:
+        from tuprolog.solve.plp import set_probabilistic
+
+        temp = set_probabilistic(temp, True)
     return temp

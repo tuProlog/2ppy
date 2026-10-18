@@ -2,9 +2,12 @@ from tuprolog.solve import Solver, channel
 from tuprolog.solve.channel import InputChannel, OutputChannel
 from tuprolog.solve.flags import DEFAULT_FLAG_STORE, FlagStore
 from tuprolog.solve.library import Library, Runtime, libraries
-from tuprolog.theory import Theory, Unificator, mutable_theory, theory
+from tuprolog.theory import Theory, mutable_theory, theory
+from tuprolog.unify import Unificator
 
 from ._definitions import PROLOG_SOLVER_FACTORY
+
+__all__ = ["prolog_solver"]
 
 
 def prolog_solver(

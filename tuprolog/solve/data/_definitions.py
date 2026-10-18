@@ -5,6 +5,9 @@ import jpype.imports  # noqa: F401
 from tuprolog import logger
 from tuprolog.jvmutils import Map
 
+__all__ = ["EMPTY_DATA", "EMPTY_DATA_STORE", "CustomData", "CustomDataStore"]
+
+
 CustomDataStore = _data.CustomDataStore
 
 

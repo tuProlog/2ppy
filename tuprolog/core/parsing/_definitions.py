@@ -3,6 +3,16 @@ import jpype.imports  # noqa: F401
 
 from tuprolog import logger
 
+__all__ = [
+    "DEFAULT_TERM_PARSER",
+    "DEFAULT_TERM_READER",
+    "InvalidTermTypeException",
+    "ParseException",
+    "TermParser",
+    "TermReader",
+]
+
+
 TermParser = _parsing.TermParser
 
 
