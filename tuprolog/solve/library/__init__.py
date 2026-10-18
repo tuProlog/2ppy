@@ -29,7 +29,7 @@ Examples:
     ...     "my.strings",
     ...     primitives={"upper/2": predicate(lambda text, _: [(text, text.upper())])},
     ...     functions={"half/1": function(lambda x: x / 2)},
-    ...     clauses=list(parse_clauses("shout(X, Y) :- upper(X, Y).")),
+    ...     clauses=parse_clauses("shout(X, Y) :- upper(X, Y)."),
     ... )
     >>> solver = prolog_solver(libraries=strings)
     >>> list(solver.query("shout(hello, Y), H is half(3)"))

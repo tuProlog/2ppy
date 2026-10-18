@@ -139,3 +139,10 @@ def test_solver_load_library_at_runtime():
 def test_library_operators_from_python_iterables(operators):
     lib = library("lib.ops", operators=operators())
     assert list(lib.operators) == [ARROW]
+
+
+def test_library_accepts_lazy_sequences_of_clauses():
+    from tuprolog.theory.parsing import parse_clauses
+
+    lib = library("lazy", clauses=parse_clauses("p(1). p(2)."))
+    assert len(list(lib.clauses)) == 2
