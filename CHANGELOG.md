@@ -1,3 +1,9 @@
+## [1.1.0](https://github.com/tuProlog/2ppy/compare/1.0.0...1.1.0) (2026-10-18)
+
+### Features
+
+* **collections:** wrap it.unibo.tuprolog.collections ([5fdf5c0](https://github.com/tuProlog/2ppy/commit/5fdf5c07fc2ef30ec301f90fe44cbbbffd235379)), closes [#14](https://github.com/tuProlog/2ppy/issues/14)
+
 ## [1.0.0](https://github.com/tuProlog/2ppy/compare/0.4.1...1.0.0) (2026-10-18)
 
 ### ⚠ BREAKING CHANGES
