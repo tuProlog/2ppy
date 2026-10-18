@@ -96,12 +96,30 @@ def numeric(value: BigInteger | BigDecimal | str | float | Decimal) -> Numeric:
     return real(value)
 
 
+def to_term(value: Term | str | bool | float | Decimal) -> Term:
+    """Converts a Python value into a term: strings become atoms, numbers numerics, and
+    booleans truths (true/false); terms are returned as they are."""
+    if isinstance(value, Term):
+        return value
+    if isinstance(value, (str, JString)):
+        return atom(value)
+    if isinstance(value, bool):
+        return truth(value)
+    if isinstance(value, (int, float, Decimal, BigInteger, BigDecimal)):
+        return numeric(value)
+    raise TypeError(f"Cannot convert {type(value).__name__} into a term: {value!r}")
+
+
+def _terms(values: Iterable) -> list[Term]:
+    return [to_term(v) for v in values]
+
+
 def rule(head: Struct, *body: Term | Iterable[Term]) -> Rule:
     return iterable_or_varargs(body, lambda bs: Rule.of(head, jiterable(bs)))
 
 
 def struct(functor: str, *args: Term | Iterable[Term]) -> Struct:
-    return iterable_or_varargs(args, lambda xs: Struct.of(functor, jiterable(xs)))
+    return iterable_or_varargs(args, lambda xs: Struct.of(functor, jiterable(_terms(xs))))
 
 
 def truth(boolean: bool) -> Truth:
@@ -109,15 +127,15 @@ def truth(boolean: bool) -> Truth:
 
 
 def logic_list(*items: Term | Iterable[Term]) -> List:
-    return iterable_or_varargs(items, lambda xs: List.of(jiterable(xs)))
+    return iterable_or_varargs(items, lambda xs: List.of(jiterable(_terms(xs))))
 
 
 def logic_list_from(items: Iterable[Term], last: Term = None) -> List:
-    return List.from_(jiterable(items), last)
+    return List.from_(jiterable(_terms(items)), None if last is None else to_term(last))
 
 
 def logic_tuple(first: Term, second: Term, *others: Term | Iterable[Term]) -> Tuple:
-    return iterable_or_varargs(others, lambda os: Tuple.of(jiterable([first, second] + list(os))))
+    return iterable_or_varargs(others, lambda os: Tuple.of(jiterable(_terms([first, second, *os]))))
 
 
 def var(name: str) -> Var:

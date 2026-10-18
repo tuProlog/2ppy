@@ -118,11 +118,6 @@ def test_logic_error_of_custom_type(context):
     assert error.error_struct == struct("error", struct("my_error", atom("x")), atom(""))
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="JVM strings are not converted: Throwable.message (tuprolog/jvmutils.py) returns a "
-    "java.lang.String instead of a Python str",
-)
 def test_message_is_a_python_string(context):
     assert isinstance(ResolutionException("boom", None, context).message, str)
 

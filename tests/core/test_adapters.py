@@ -297,12 +297,6 @@ def test_recursive_to_iterable_partial_list_includes_the_tail(a, X):
     assert list(cons(a, X).to_iterable()) == [a, X]
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="Python iteration over a Recursive term yields the Struct arguments (head and tail), "
-    "inconsistently with len(); adding __iter__ would also make iterable_or_varargs split "
-    "single list arguments (e.g. struct('f', [a, b]-as-logic-list))",
-)
 def test_recursive_iteration_is_consistent_with_len(a, b, c):
     term = logic_list(a, b, c)
     assert len(list(term)) == len(term)
@@ -361,12 +355,6 @@ def test_clause_snake_case_accessors(a_rule, X):
     assert directive(atom("d")).is_directive
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="JVM methods returning anonymous java.lang.Iterable implementations (e.g. "
-    "Clause.getBodyItems) yield java.lang.Object$Anonymous objects that are neither "
-    "Python-iterable nor accepted by protect_iterable (the workaround documented in README)",
-)
 @pytest.mark.parametrize("wrap", [lambda x: x, protect_iterable], ids=["plain", "protected"])
 def test_clause_body_items_is_python_iterable(wrap, a_rule, X):
     assert list(wrap(a_rule.body_items)) == [struct("q", X), struct("r", X)]

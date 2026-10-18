@@ -338,11 +338,6 @@ def test_to_snake_case(camel, snake):
     assert to_snake_case(camel) == snake
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="to_snake_case mishandles acronyms and trailing capitals "
-    "(toURI -> toURI, getHTTPCode -> getHTTP_code, getX -> getX)",
-)
 @pytest.mark.parametrize(
     "camel, snake", [("toURI", "to_uri"), ("getHTTPCode", "get_http_code"), ("getX", "get_x")]
 )
