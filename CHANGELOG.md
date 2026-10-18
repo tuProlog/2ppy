@@ -1,3 +1,9 @@
+## [1.4.0](https://github.com/tuProlog/2ppy/compare/1.3.0...1.4.0) (2026-10-18)
+
+### Features
+
+* **typing:** ship py.typed and fully annotate the Python API ([#100](https://github.com/tuProlog/2ppy/issues/100)) ([88410c5](https://github.com/tuProlog/2ppy/commit/88410c549cb6fd6b7d5ab8e229c974eed97906b6))
+
 ## [1.3.0](https://github.com/tuProlog/2ppy/compare/1.2.0...1.3.0) (2026-10-18)
 
 ### Features
