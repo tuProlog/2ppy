@@ -45,6 +45,15 @@ nav:
       - how-to/run-probabilistic-programs.md
       - how-to/use-the-repl.md
       - how-to/contribute.md
+  - Examples:
+      - examples/index.md
+      - Terms and unification: examples/01-terms-and-unification.ipynb
+      - Knowledge bases and queries: examples/02-knowledge-bases-and-queries.ipynb
+      - Predicates and functions in Python: examples/03-predicates-and-functions-in-python.ipynb
+      - Python objects from Prolog: examples/04-python-objects-from-prolog.ipynb
+      - Input and output: examples/05-input-and-output.ipynb
+      - Probabilistic logic programming: examples/06-probabilistic-logic-programming.ipynb
+      - The N-queens puzzle: examples/07-n-queens.ipynb
   - Reference:
       - reference/index.md
       - reference/package-map.md
@@ -82,6 +91,9 @@ plugins:
         - docs/gen_ref_pages.py
   - literate-nav:
       nav_file: SUMMARY.md
+  - mkdocs-jupyter:
+      execute: false # the notebooks keep their outputs, and the tests run them
+      include_source: true
   - mkdocstrings:
       handlers:
         python:

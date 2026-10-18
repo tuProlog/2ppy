@@ -75,12 +75,13 @@ Following the [Divio documentation system](https://docs.divio.com/documentation-
 - **[Tutorials](tutorials/index.md)**: learning by doing, from installation to a first logic
   program;
 - **[How-to guides](how-to/index.md)**: recipes for specific tasks;
+- **[Examples](examples/index.md)**: Jupyter notebooks showing 2PPy at work;
 - **[Reference](reference/index.md)**: precise descriptions, including the
   [API reference](api/tuprolog.md) generated from the docstrings;
 - **[Explanation](explanation/index.md)**: background and design, from logic programming basics to
   how 2PPy wraps 2P-Kt.
 
-Every example in this documentation is run by the test suite.
+Every example in this documentation, notebooks included, is run by the test suite.
 
 ## Project
 

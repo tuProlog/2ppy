@@ -27,6 +27,8 @@ tuprolog/           the package (flat layout); importing it starts the JVM
   repl/             Cmd-based REPLs (`python -m tuprolog.repl.prolog`, `...problog`)
 tests/              pytest tests (they need the JARs), including the examples of docstrings, README
                     and docs pages
+examples/           Jupyter notebooks (with their outputs), run by tests/test_examples.py and
+                    rendered in the site's Examples section (copied there by docs/gen_ref_pages.py)
 docs/               the documentation site (mkdocs.yml): index.md (the full picture), tutorials/,
                     how-to/, reference/, explanation/ (as 2P-Kt's documentation), and
                     gen_ref_pages.py (generates api/, one API-reference page per public module)
@@ -48,6 +50,7 @@ uv run poe test                       # pytest
 uv run poe static-checks              # compileall, ruff format --check, ruff check, mypy
 uv run poe static-fixes               # ruff --fix + ruff format
 uv run poe coverage && uv run poe coverage-report
+uv run jupyter lab examples/          # edit the example notebooks (Jupyter is a dev dependency)
 uv run poe docs                       # documentation site in site/ (mkdocs build --strict)
 uv run poe docs-serve                 # the same, with live reload
 uv run poe install-hooks [HOOK...]    # local hooks in .git/hooks (default: all)
@@ -99,7 +102,10 @@ Style: Google-style docstrings (`Args:`, `Returns:`, `Yields:`, `Raises:`, `Exam
 (`tuprolog.core.Term`); describe the 2P-Kt counterpart in a `Note:` when useful (e.g. "Wraps
 2P-Kt's `Struct.of`"). Examples are doctests (`>>>`), run by `tests/test_docstrings.py` (with
 `ELLIPSIS` and `NORMALIZE_WHITESPACE`; use `...` for unstable output, e.g. fresh variable names):
-keep them short, deterministic, and free of I/O on real files or the network. The site
+keep them short, deterministic, and free of I/O on real files or the network. Example notebooks
+are committed with their outputs: after editing one, re-run it (e.g. `uv run jupyter nbconvert
+--to notebook --execute --inplace examples/<name>.ipynb`), and list new ones in `examples/README.md`,
+`docs/examples/index.md` and `mkdocs.yml`'s `nav`. The site
 (`uv run poe docs`, MkDocs Material + mkdocstrings) renders the docstrings statically, with griffe:
 it builds in strict mode, so fix the warnings it reports (e.g. a `Returns:` section of an
 unannotated function).

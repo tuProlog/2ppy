@@ -154,6 +154,7 @@ Python `float` (`to_float()`, `to_python`) may lose precision; `decimal_value` g
 
 ## See also
 
+- Example notebook: [Terms and unification](../examples/01-terms-and-unification.ipynb).
 - [Build and parse terms](../how-to/build-and-parse-terms.md), a practical guide.
 - [Python–term conversions](../reference/python-term-conversions.md).
 - 2P-Kt's [term model](https://tuprolog.github.io/2p-kt/explanation/term-model/) and

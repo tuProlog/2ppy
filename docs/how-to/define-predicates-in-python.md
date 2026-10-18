@@ -145,6 +145,7 @@ of `tuprolog.solve.sideffects`, attached to responses.
 
 ## See also
 
+- Example notebook: [Predicates and functions in Python](../examples/03-predicates-and-functions-in-python.ipynb).
 - API: `tuprolog.solve.primitive` ([reference](../api/tuprolog/solve/primitive.md)),
   `tuprolog.solve.function` ([reference](../api/tuprolog/solve/function.md)),
   `tuprolog.solve.library` ([reference](../api/tuprolog/solve/library.md)),

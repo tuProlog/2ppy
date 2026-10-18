@@ -157,6 +157,7 @@ likes(bart, skateboarding)
 
 ## See also
 
+- Example notebook: [Terms and unification](../examples/01-terms-and-unification.ipynb).
 - API: `tuprolog.core` ([reference](../api/tuprolog/core.md)),
   `tuprolog.core.parsing` ([reference](../api/tuprolog/core/parsing.md)),
   `tuprolog.core.operators` ([reference](../api/tuprolog/core/operators.md)),
