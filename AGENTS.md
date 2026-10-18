@@ -67,6 +67,31 @@ uv run poe install-hooks [HOOK...]    # local hooks in .git/hooks (default: all)
   `@customize_derived(...)` (from `tuprolog.jvmutils`) for members overriding JVM methods,
   otherwise derived classes redeclaring those methods shadow them.
 
+## Documentation
+
+The Python API is documented in docstrings, for `help()` and for an API reference generated from
+them (mkdocstrings/griffe-like tools). Readers are not assumed to know 2P-Kt (nor Kotlin): explain
+the logic-programming notions a page relies on, and link 2P-Kt's documentation
+(<https://tuprolog.github.io/2p-kt/>, API at <https://tuprolog.github.io/2p-kt/api/>) only as
+further reading. The organization follows 2P-Kt's KDoc:
+
+- **Packages** (`__init__.py` docstring, before the imports): what the package is for, its key
+  notions, its main types and factories, a short example, and related packages.
+- **JVM types** re-exported by `_definitions.py`: an attribute docstring (a string literal right
+  after the assignment, e.g. `Term = _core.Term` then `"""..."""`) saying what the type models,
+  its main members as callable from Python (JVM methods also get snake_case aliases, `getX()` the
+  property `x`, `isX()` the property `is_x`, see `tuprolog.jvmutils`), and the Python protocols its
+  `_adapters.py` customizer adds (e.g. iteration, indexing, `len`).
+- **Functions, classes, methods, properties** (`_api.py`, `_adapters.py`, plain modules): a
+  one-line summary, then details, then the sections that apply.
+
+Style: Google-style docstrings (`Args:`, `Returns:`, `Yields:`, `Raises:`, `Examples:`, `Note:`,
+`See Also:`) with Markdown text; names in backticks, fully qualified when in another package
+(`tuprolog.core.Term`); describe the 2P-Kt counterpart in a `Note:` when useful (e.g. "Wraps
+2P-Kt's `Struct.of`"). Examples are doctests (`>>>`), run by `tests/test_docstrings.py` (with
+`ELLIPSIS` and `NORMALIZE_WHITESPACE`; use `...` for unstable output, e.g. fresh variable names):
+keep them short, deterministic, and free of I/O on real files or the network.
+
 ## Releases
 
 Conventional Commits drive semantic-release (`release.config.mjs`), which runs
