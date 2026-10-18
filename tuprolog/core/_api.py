@@ -122,6 +122,8 @@ def integer(value: int | BigInteger | str) -> Integer:
 def real(value: float | BigDecimal | str | Decimal) -> Real:
     if isinstance(value, BigDecimal):
         return Real.of(value)
+    if isinstance(value, float):  # its shortest repr, e.g. 0.1, which converts back to it exactly
+        value = repr(value)
     return Real.of(big_decimal(value))
 
 

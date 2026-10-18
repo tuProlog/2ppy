@@ -43,11 +43,7 @@ def test_object_type_values(name):
     assert expected.toTerm() == atom(name.lower())
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="2P-Kt ExistenceError.ObjectType.of() lacks uppercase(), unlike all other error "
-    "enums: lower-case names (i.e. the Prolog representation) are rejected, also by fromTerm()",
-)
+# 2P-Kt's ObjectType.of() lacks uppercase(), unlike all other error enums: object_type() adds it
 @pytest.mark.parametrize("name", ["procedure", atom("procedure")], ids=["str", "atom"])
 def test_object_type_from_lower_case_name(name):
     assert object_type(name) == ObjectType.PROCEDURE

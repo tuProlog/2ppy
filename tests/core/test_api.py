@@ -187,11 +187,13 @@ def test_integer_rejects_malformed_strings():
 # --- real -----------------------------------------------------------------------------------------
 
 
-@pytest.mark.parametrize("value", [0.5, 1.5, -2.25, 1e-3])
+@pytest.mark.parametrize("value", [0.5, 1.5, -2.25, 1e-3, 0.1, 1 / 3, 1e-320, 2.5e300])
 def test_real_from_float(value):
+    # the shortest repr of the float, not its binary expansion (e.g. 0.1, not 0.1000...0555...)
     term = real(value)
     assert isinstance(term, Real)
-    assert term.decimal_value == Decimal(value)
+    assert term.decimal_value == Decimal(repr(value))
+    assert term.to_float() == value
 
 
 @pytest.mark.parametrize("value", ["1.5", "-0.25", "3.14159265358979323846264338327950288"])
