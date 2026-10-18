@@ -1,4 +1,5 @@
-"""The examples (`>>>`) in the docstrings of the tuprolog package run as documented.
+"""The examples (`>>>`) in the docstrings of the tuprolog package, and in the README, run as
+documented.
 
 Besides the docstrings `doctest` finds (modules, functions, classes, methods), this checks the
 attribute docstrings, i.e. the string literals following module-level assignments, which document
@@ -11,6 +12,7 @@ import importlib
 import inspect
 import pkgutil
 from itertools import pairwise
+from pathlib import Path
 from types import ModuleType
 
 import pytest
@@ -75,3 +77,9 @@ def test_docstring_examples(name):
         runner.run(test)
     results = runner.summarize(verbose=False)
     assert results.failed == 0, f"{results.failed} failing example(s) in {name}, see the output"
+
+
+def test_readme_examples():
+    readme = Path(__file__).parent.parent / "README.md"
+    results = doctest.testfile(str(readme), module_relative=False, optionflags=OPTIONS)
+    assert results.failed == 0, f"{results.failed} failing example(s) in the README, see the output"
