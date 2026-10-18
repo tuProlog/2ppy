@@ -1,4 +1,5 @@
 from collections.abc import Callable, Iterable
+from typing import Any
 
 from jpype import JClass, JObject
 
@@ -61,7 +62,7 @@ def compute_response(result: Term) -> ComputeResponse:
     return ComputeResponse(result)
 
 
-def _boxed_index(index: int | None):
+def _boxed_index(index: int | None) -> Any:
     return None if index is None else JObject(index, JClass("java.lang.Integer"))
 
 

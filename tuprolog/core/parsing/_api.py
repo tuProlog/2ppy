@@ -1,4 +1,5 @@
 from collections.abc import Iterable
+from typing import Any
 
 from tuprolog.core import Atom, Clause, Constant, Integer, Numeric, Real, Struct, Term, Var
 from tuprolog.core.operators import DEFAULT_OPERATORS, OperatorSet
@@ -25,8 +26,8 @@ __all__ = [
 
 
 def parser_factory(
-    source, with_default_operators: bool = True, operators: OperatorSet | None = None
-):
+    source: Any, with_default_operators: bool = True, operators: OperatorSet | None = None
+) -> Any:
     if operators is None:
         if with_default_operators:
             return source.withDefaultOperators()

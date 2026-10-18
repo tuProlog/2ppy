@@ -1,5 +1,6 @@
 from collections.abc import Iterable, Mapping
 from functools import reduce
+from typing import Any
 
 from tuprolog.core import Clause
 from tuprolog.core.operators import Operator, OperatorSet, operator_set
@@ -43,7 +44,7 @@ def aliased(alias: str, library: Library) -> Library:
 def libraries(*libs: Library | Runtime | Iterable[Library], **kwargs: Library) -> Runtime:
     all_libraries: list[Library] = []
 
-    def collect(item):
+    def collect(item: Any) -> None:
         if isinstance(item, Library):
             all_libraries.append(item)
         elif isinstance(item, Runtime):

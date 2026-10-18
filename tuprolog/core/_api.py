@@ -1,5 +1,6 @@
 from collections.abc import Iterable, Mapping
 from decimal import Decimal
+from typing import Any
 
 from jpype import JArray, JClass, JString
 
@@ -79,7 +80,7 @@ def block(*terms: Term | Iterable[Term]) -> Block:
     return iterable_or_varargs(terms, lambda ts: Block.of(jiterable(ts)))
 
 
-def clause(head: Term = None, *body: Term | Iterable[Term]):
+def clause(head: Term | None = None, *body: Term | Iterable[Term]) -> Clause:
     return iterable_or_varargs(body, lambda bs: Clause.of(head, jiterable(bs)))
 
 
@@ -152,7 +153,7 @@ def to_term(value: Term | str | bool | float | Decimal | list | tuple) -> Term:
     raise TypeError(f"Cannot convert {type(value).__name__} into a term: {value!r}")
 
 
-def to_python(term: Term):
+def to_python(term: Term) -> Any:
     """Converts a term into a Python value, as the inverse of `to_term`: truths become booleans,
     integers ints, reals floats, atoms strings, well-formed lists lists, and tuples tuples.
     Other terms (e.g. variables, compound terms, partial lists) are returned as they are."""
@@ -233,7 +234,7 @@ def variables(*names: str) -> tuple[Var]:
     return tuple(var(n) for n in names)
 
 
-def _operators_or_default(operators):
+def _operators_or_default(operators: Any) -> Any:
     # tuprolog.core.operators depends on tuprolog.core: the JVM class is looked up lazily
     if operators is None:
         return JClass("it.unibo.tuprolog.core.operators.OperatorSet").DEFAULT
@@ -256,7 +257,9 @@ def _showing_tags(tags: TagsFormattingOptions) -> TagsFormattingOptions:
     )
 
 
-def default_formatter(operators=None, tags: TagsFormattingOptions | None = None) -> TermFormatter:
+def default_formatter(
+    operators: Any = None, tags: TagsFormattingOptions | None = None
+) -> TermFormatter:
     # unlike the other factories, 2P-Kt's TermFormatter.default shows tags by default
     if tags is None:
         tags = _showing_tags(DEFAULT_TAGS_FORMATTING_OPTIONS)
@@ -264,7 +267,7 @@ def default_formatter(operators=None, tags: TagsFormattingOptions | None = None)
 
 
 def readable_formatter(
-    operators=None, tags: TagsFormattingOptions = DEFAULT_TAGS_FORMATTING_OPTIONS
+    operators: Any = None, tags: TagsFormattingOptions = DEFAULT_TAGS_FORMATTING_OPTIONS
 ) -> TermFormatter:
     return TermFormatter.readable(_operators_or_default(operators), tags)
 
@@ -277,7 +280,7 @@ def pretty_variables_formatter(
 
 def pretty_expressions_formatter(
     pretty_variables: bool = True,
-    operators=None,
+    operators: Any = None,
     tags: TagsFormattingOptions = DEFAULT_TAGS_FORMATTING_OPTIONS,
 ) -> TermFormatter:
     return TermFormatter.prettyExpressions(pretty_variables, _operators_or_default(operators), tags)

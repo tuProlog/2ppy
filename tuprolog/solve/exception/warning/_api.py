@@ -1,3 +1,5 @@
+from typing import Any
+
 from tuprolog.core import Struct
 from tuprolog.solve import ExecutionContext, Signature
 from tuprolog.solve.exception import ResolutionException
@@ -14,6 +16,6 @@ def initialization_issue(
 
 
 def missing_predicate(
-    signature: Signature, context: ExecutionContext, cause=None
+    signature: Signature, context: ExecutionContext, cause: Any = None
 ) -> MissingPredicate:
     return MissingPredicate(cause, context, signature)

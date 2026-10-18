@@ -1,4 +1,4 @@
-from collections.abc import Iterable, Mapping
+from collections.abc import Callable, Iterable, Mapping
 from typing import Any
 
 from tuprolog.core import Clause, Term
@@ -71,11 +71,13 @@ __all__ = [
 ]
 
 
-def _forward_iterable_or_varargs(callable, args, *callable_args):
+def _forward_iterable_or_varargs(callable: Callable, args: Any, *callable_args: Any) -> Any:
     return iterable_or_varargs(args, lambda xs: callable(jlist(xs), *callable_args))
 
 
-def _forward_dict_or_keywords(callable, dict, kwargs, *callable_args):
+def _forward_dict_or_keywords(
+    callable: Callable, dict: Any, kwargs: Any, *callable_args: Any
+) -> Any:
     return dict_or_keyword_args(dict, kwargs, lambda ds: callable(jmap(ds), *callable_args))
 
 

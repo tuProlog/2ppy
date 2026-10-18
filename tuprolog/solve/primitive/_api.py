@@ -1,4 +1,5 @@
-from collections.abc import Callable, Iterable
+from collections.abc import Callable, Iterable, Iterator
+from typing import Any
 
 from jpype import JException, JObject
 
@@ -66,7 +67,9 @@ def python_error(context: ExecutionContext, error: BaseException) -> ResolutionE
     return LogicSystemError.forUncaughtException(context, culprit)
 
 
-def _guarded(request: SolveRequest, responses: Callable[[], Iterable[SolveResponse]]):
+def _guarded(
+    request: SolveRequest, responses: Callable[[], Iterable[SolveResponse]]
+) -> Iterator[SolveResponse]:
     try:
         yield from responses()
     except Exception as error:  # noqa: BLE001  (surfaces as a logic error, for catch/3)
@@ -126,11 +129,11 @@ def solve_request(
     return SolveRequest(signature, jlist(arguments), context, issuing_instant, max_duration)
 
 
-def solve_response(solution: Solution, *side_effects) -> SolveResponse:
+def solve_response(solution: Solution, *side_effects: Any) -> SolveResponse:
     return iterable_or_varargs(side_effects, lambda ses: SolveResponse(solution, None, jlist(ses)))
 
 
-def check_term_is_recursively_callable(request: SolveRequest, term: Term):
+def check_term_is_recursively_callable(request: SolveRequest, term: Term) -> Any:
     return PrimitiveWrapper.checkTermIsRecursivelyCallable(request, term)
 
 
@@ -139,13 +142,13 @@ def ensuring_all_arguments_are_instantiated(request: SolveRequest) -> SolveReque
 
 
 def ensuring_procedure_has_permission(
-    request: SolveRequest, signature: Signature, operation
+    request: SolveRequest, signature: Signature, operation: Any
 ) -> SolveRequest:
     return PrimitiveWrapper.ensuringProcedureHasPermission(request, signature, operation)
 
 
 def ensuring_clause_procedure_has_permission(
-    request: SolveRequest, clause: Clause, operation
+    request: SolveRequest, clause: Clause, operation: Any
 ) -> SolveRequest:
     return PrimitiveWrapper.ensuringClauseProcedureHasPermission(request, clause, operation)
 

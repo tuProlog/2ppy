@@ -39,7 +39,7 @@ _python_rounding_modes = {
 }
 
 
-def jvm_rounding_mode(mode):
+def jvm_rounding_mode(mode: str) -> RoundingMode:
     if mode == decimal.ROUND_DOWN:
         return RoundingMode.DOWN
     elif mode == decimal.ROUND_UP:
@@ -68,7 +68,9 @@ def _normalize(value: BigDecimal) -> BigDecimal:
 
 @and_then(_normalize)
 def big_decimal(
-    value: str | float | decimal.Decimal, precision=0, rounding=RoundingMode.HALF_UP
+    value: str | float | decimal.Decimal,
+    precision: int | None = 0,
+    rounding: RoundingMode = RoundingMode.HALF_UP,
 ) -> BigDecimal:
     if precision is None:
         precision = decimal.getcontext().prec

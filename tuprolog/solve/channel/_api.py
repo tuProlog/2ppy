@@ -3,7 +3,7 @@ import sys
 from collections.abc import Callable, Mapping
 from functools import singledispatch
 from io import IOBase, TextIOBase
-from typing import IO
+from typing import IO, Any
 
 from java.lang import Throwable  # type: ignore
 from jpype import JObject, JString
@@ -96,7 +96,7 @@ def input_store(
     return InputStore.of(jmap(cs))
 
 
-def _write_to(stream: IO | IOBase, value) -> None:
+def _write_to(stream: IO | IOBase, value: Any) -> None:
     # warnings are printed by message, one per line, as 2P-Kt does
     text = f"{value.getMessage()}\n" if isinstance(value, Throwable) else str(value)
     stream.write(text if isinstance(stream, TextIOBase) else text.encode("utf-8"))  # type: ignore[attr-defined]
@@ -117,7 +117,7 @@ def warn() -> OutputChannel:
     return output_channel(lambda warning: _write_to(sys.stderr, warning))
 
 
-def _pythonic(value):
+def _pythonic(value: Any) -> Any:
     return str(value) if isinstance(value, JString) else value
 
 

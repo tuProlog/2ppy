@@ -1,4 +1,4 @@
-from typing import TypeVar
+from typing import Any, TypeVar
 
 from tuprolog.solve import (
     Solution,
@@ -49,10 +49,10 @@ def has_binary_decision_diagram(solution: Solution) -> bool:
     return ProbExtensions.getHasBinaryDecisionDiagram(solution)
 
 
-def binary_decision_diagram(solution: Solution):
+def binary_decision_diagram(solution: Solution) -> Any:
     """The binary decision diagram (it.unibo.tuprolog.bdd.BinaryDecisionDiagram) of a solution."""
     return ProbExtensions.getBinaryDecisionDiagram(solution)
 
 
-def set_binary_decision_diagram(solution: Solution, bdd) -> Solution:
+def set_binary_decision_diagram(solution: Solution, bdd: Any) -> Solution:
     return ProbExtensions.setBinaryDecisionDiagram(solution, bdd)
