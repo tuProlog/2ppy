@@ -1,7 +1,7 @@
 from jpype import JImplementationFor
 
 from tuprolog import logger
-from tuprolog.jvmioutils import ensure_input_steam
+from tuprolog.jvmioutils import ensure_input_stream
 
 
 @JImplementationFor("it.unibo.tuprolog.core.parsing.TermParser")
@@ -210,7 +210,7 @@ class _KtTermReader:
         return self.getDefaultOperatorSet()
 
     def _read(self, method, input, operators):
-        input_stream = ensure_input_steam(input)
+        input_stream = ensure_input_stream(input)
         if operators is None:
             return method(input_stream)
         else:
