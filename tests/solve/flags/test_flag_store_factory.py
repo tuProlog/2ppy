@@ -12,6 +12,7 @@ from tuprolog.solve.flags import (
     flag,
     flag_store,
 )
+from tuprolog.solve.prolog import prolog_solver
 
 
 def test_flag_store_empty():
@@ -84,3 +85,15 @@ def test_flag_store_converts_python_values():
 def test_flag_store_accepts_one_shot_iterators():
     assert flag_store(iter([("a", 1), ("b", 2)])) == flag_store(a=1, b=2)
     assert flag_store(iter(["a", 1])) == flag_store(a=1)
+
+
+def test_missing_flags_raise_key_error():
+    with pytest.raises(KeyError):
+        flag_store()["missing"]
+
+
+def test_adding_mappings_converts_python_values():
+    store = flag_store() + {"unknown": "fail", "my_flag": 1}
+    assert store[Unknown] == Unknown.FAIL
+    assert store["my_flag"] == integer(1)
+    assert prolog_solver(flags=DEFAULT_FLAG_STORE + {"unknown": "fail"}).solve_once("foo").is_no

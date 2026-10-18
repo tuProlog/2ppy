@@ -31,19 +31,21 @@ default value, or another store), `minus(...)` (names). Python additions:
 
 - `len(store)`, `name in store` (also for notable flags), and the JVM map's `keys()`, `values()`
   and `items()`;
-- `store[name]` (also for notable flags) returns the value of a flag, or `None` if there is none;
+- `store[name]` (also for notable flags) returns the value of a flag, raising `KeyError` if
+  there is none;
 - `store + other` merges a `Flag`, a `NotableFlag`, another store, or a dict from names to terms
-  (later values override earlier ones); `store - name` removes a flag (also a notable one).
+  or Python values (later values override earlier ones); `store - name` removes a flag (also a notable one).
 
 Create stores with `flag_store`, or start from `DEFAULT_FLAG_STORE` or `EMPTY_FLAG_STORE`.
 
 Examples:
-    >>> from tuprolog.core import atom
-    >>> store = EMPTY_FLAG_STORE + Unknown + {"my_flag": atom("on")}
-    >>> len(store), "unknown" in store, store[Unknown]
-    (2, True, warning)
-    >>> print(store["missing"])
-    None
+    >>> store = EMPTY_FLAG_STORE + Unknown + {"my_flag": "on"}
+    >>> len(store), "unknown" in store, store[Unknown], store["my_flag"]
+    (2, True, warning, on)
+    >>> store["missing"]
+    Traceback (most recent call last):
+        ...
+    KeyError: 'missing'
     >>> store - "my_flag"
     FlagStore(flags={unknown=warning})
 """
