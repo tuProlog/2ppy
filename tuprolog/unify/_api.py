@@ -15,7 +15,7 @@ __all__ = [
 ]
 
 
-def strict_unificator(context: Substitution = None) -> Unificator:
+def strict_unificator(context: Substitution | None = None) -> Unificator:
     """Creates a strict unification strategy.
 
     A strict unificator deems two non-variable terms equal when they are identical, numbers
@@ -42,7 +42,7 @@ def strict_unificator(context: Substitution = None) -> Unificator:
         return Unificator.strict(context)
 
 
-def naive_unificator(context: Substitution = None) -> Unificator:
+def naive_unificator(context: Substitution | None = None) -> Unificator:
     """Creates a naive unification strategy, which compares numbers by value.
 
     Unlike `strict_unificator`'s strategy, a naive unificator deems two numbers equal when their
@@ -97,7 +97,7 @@ def cached_unificator(
     return Unificator.cached(unificator, cache_size)
 
 
-def unificator(context: Substitution = None) -> Unificator:
+def unificator(context: Substitution | None = None) -> Unificator:
     """Creates the recommended unification strategy: a cached, strict unificator.
 
     Args:

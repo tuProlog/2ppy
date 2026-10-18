@@ -154,7 +154,7 @@ def empty_logic_list() -> EmptyList:
     return EmptyList.getInstance()
 
 
-def cons(head: Term, tail: Term = None) -> Cons:
+def cons(head: Term, tail: Term | None = None) -> Cons:
     """Creates a list cell, i.e. the list `[head | tail]`.
 
     Args:
@@ -210,7 +210,7 @@ def empty_block() -> Block:
     return EmptyBlock.getInstance()
 
 
-def fact(struct: Term | Iterable[Term]) -> Fact:
+def fact(struct: Term) -> Fact:
     """Creates a fact, i.e. a clause `head :- true`, stating that `head` holds unconditionally.
 
     Args:
@@ -506,7 +506,7 @@ def logic_list(*items: Term | Iterable[Term]) -> List:
     return iterable_or_varargs(items, lambda xs: List.of(jiterable(_terms(xs))))
 
 
-def logic_list_from(items: Iterable[Term], last: Term = None) -> List:
+def logic_list_from(items: Iterable[Term], last: Term | None = None) -> List:
     """Creates a logic list from an iterable, ending with a given tail rather than `[]`.
 
     The items (and `last`) are converted with `to_term`, so Python values are accepted. Use

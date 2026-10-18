@@ -10,7 +10,7 @@ __all__ = ["initialization_issue", "missing_predicate"]
 
 
 def initialization_issue(
-    goal: Struct, context: ExecutionContext, cause: ResolutionException = None
+    goal: Struct, context: ExecutionContext, cause: ResolutionException | None = None
 ) -> InitializationIssue:
     """Creates the warning that an initialization goal did not succeed.
 
