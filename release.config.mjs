@@ -54,4 +54,7 @@ if (!dryRun) {
     );
 }
 
+// semantic-release itself must not tag or push either, when dry-running
+config.dryRun = dryRun;
+
 export default config;
