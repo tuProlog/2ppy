@@ -7,6 +7,11 @@ __all__ = ["MessageError"]
 
 
 MessageError = _errors.MessageError
+"""The error carrying an arbitrary thrown term, used when no other `LogicError` fits.
+
+The JVM class (also a `tuprolog.errors.PrologMessageError`). Members (snake_case aliases as
+well): `content`, the thrown term; besides those of `tuprolog.solve.exception.LogicError`.
+"""
 
 
 logger.debug("Loaded JVM classes from it.unibo.tuprolog.solve.exception.error.MessageError.*")

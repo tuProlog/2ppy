@@ -29,8 +29,13 @@ from tuprolog.theory.parsing import ClausesParser
 __all__ = ["NULL_REF", "SAFE_MODULES", "OOPLib", "oop_lib"]
 
 NULL_REF = atom("<null>")
+"""The reference (the atom `'<null>'`) standing for Python's `None` in OOPLib calls.
 
-# importable by default (by `type/2` or as `$name`): side-effect free modules of the standard library
+Results that are `None` become this atom, and this atom in arguments becomes `None`; `null_ref/1`
+gives it to Prolog code.
+"""
+
+# importable by default (by `type/2` or as `$name`): side-effect free standard modules
 SAFE_MODULES = frozenset(
     {
         "bisect",
@@ -58,6 +63,17 @@ SAFE_MODULES = frozenset(
         "uuid",
     }
 )
+"""The names of the standard modules OOPLib can import by default (a frozen set).
+
+Side-effect free modules of the standard library (e.g. `math`, `json`, `re`, `collections`,
+`datetime`): Prolog code can refer to them as aliases (e.g. `$math`) and to their types by
+`type/2` (e.g. `type('collections.Counter', T)`). Other modules are importable only with
+`oop_lib(allow_all_imports=True)`.
+
+Examples:
+    >>> "math" in SAFE_MODULES, "os" in SAFE_MODULES
+    (True, False)
+"""
 
 # built-ins giving access to code execution, files, or arbitrary attributes
 _UNSAFE_BUILTINS = frozenset(
@@ -127,6 +143,12 @@ OPERATORS = operator_set(
     operator(":=", XFX, 850),
     operator("$", FX, 100),
 )
+"""The operators OOPLib adds: `.`, `:=`, `as`, and `$`.
+
+That is, `.` (`xfy`, 800), `:=` (`xfx`, 850), `as` (`xfx`, 200), and `$` (`fx`, 100).
+
+See `tuprolog.solve.libs` for the syntax they enable.
+"""
 
 # the same rules as 2P-Kt's OOPLib, for fluent calls (`Obj.method(...)`) and assignments (`:=`)
 CLAUSES = """
@@ -140,6 +162,11 @@ fluent_reduce(R, R) :- !.
 new_object(Type, Instance) :- new_object(Type, [], Instance).
 property_reduce([A, B | C], O, P) :- !, invoke_method(A, B, B1), property_reduce([B1 | C], O, P).
 property_reduce([A | B], A, B) :- !.
+"""
+"""The Prolog source of the rules OOPLib defines on top of its primitives (as 2P-Kt's OOPLib).
+
+They implement fluent calls (`Receiver.method(Args)`), evaluations and assignments (`:=`), and
+`new_object/2`.
 """
 
 
@@ -349,23 +376,45 @@ def oop_lib(
     allow_private: bool = False,
     aliases: Mapping[str, Any] | None = None,
 ) -> Library:
-    """A library offering 2P-Kt's OOPLib Prolog API over Python objects.
+    """Creates an OOPLib library, letting Prolog code use Python objects.
 
-    `type/2`, `new_object/2,3`, `invoke_method/3`, `assign/3`, `cast/3`, `register/2`,
-    `unregister/1`, `alias/2`, `ref/1`, `object_ref/1`, `type_ref/1`, `null_ref/1`,
-    `list_items/2`, `set_items/2` and `array_items/2` work as in 2P-Kt, as well as the fluent
-    syntax (`X := $math.sqrt(2)`, `Obj.method(Args)`, `Obj.attribute := Value`, `X := V as T`).
-    As Python dispatches calls by value, there is no overload selection: `invoke_strict/3`
-    is missing, and `as` converts values by calling types (e.g. `X := '42' as $int`).
+    It offers 2P-Kt's OOPLib Prolog API over Python objects: the predicates `type/2`,
+    `new_object/2,3`, `invoke_method/3`, `assign/3`, `cast/3`, `register/2`, `unregister/1`,
+    `alias/2`, `ref/1`, `object_ref/1`, `type_ref/1`, `null_ref/1`, `list_items/2`, `set_items/2`
+    and `array_items/2`, and the fluent syntax (`X := $math.sqrt(2)`, `Obj.method(Args)`,
+    `Obj.attribute := Value`, `X := (V) as T`). See `tuprolog.solve.libs` for a guide.
 
-    Unlike OOPLib, any term is a valid receiver (e.g. `X := hello.upper`), atom methods call
-    routines and read other attributes, and calls take keyword arguments as `Key = Value`.
+    Unlike 2P-Kt's OOPLib, any term is a valid receiver (e.g. `X := hello.upper`), atom methods call
+    routines and read other attributes, and calls take keyword arguments as `Key = Value`. As Python
+    dispatches calls by value, there is no overload selection (`invoke_strict/3` is missing), and
+    `as` converts values by calling types (e.g. `X := ('42') as $int`).
 
-    Aliases cover Python built-in types (with OOPLib's names too, e.g. `$arraylist`), `$builtins`,
-    `$stdin`, `$stdout`, `$stderr`, the standard modules in `SAFE_MODULES`, and `aliases`.
-    Only these modules can be imported, and private attributes (`_name`) are not accessible,
-    unless `allow_all_imports` and `allow_private`: these limit what Prolog code can reach,
-    without sandboxing it.
+    Args:
+        allow_all_imports: whether any module can be imported (by `type/2`, as `$sys` and
+            `$system`), and all built-ins be used (e.g. `eval`, `open`); by default, only the
+            modules in `SAFE_MODULES`, and the built-ins giving no access to code execution, files,
+            or arbitrary attributes.
+        allow_private: whether private attributes (whose names start with `_`) are accessible.
+        aliases: further aliases, from names to objects (e.g. `{"point": Point}` makes `$point`
+            denote `Point`), overriding the default ones.
+
+    Returns:
+        The library, aliased `prolog.oop.python`.
+
+    Note:
+        `allow_all_imports` and `allow_private` limit what Prolog code can reach, without
+        sandboxing it: do not run untrusted Prolog code with this library.
+
+    Examples:
+        >>> from tuprolog.solve.prolog import prolog_solver
+        >>> solver = prolog_solver(libraries=oop_lib(aliases={"answer": 42}))
+        >>> list(solver.query("alias(answer, A), B := A.bit_length"))
+        [{'A': 42, 'B': 6}]
+        >>> solver.solve_once("catch(type(os, T), error(E, _), true)")["E"]
+        existence_error(oop_alias, os)
+        >>> solver = prolog_solver(libraries=oop_lib(allow_all_imports=True))
+        >>> list(solver.query("type('os.path', P), X := P.basename('/a/b.txt')"))
+        [{'P': '<module:...>', 'X': 'b.txt'}]
     """
     objects = _PythonObjects(allow_all_imports, allow_private, aliases)
 
@@ -492,3 +541,13 @@ def _items(term: Term, index: int) -> list[Term]:
 
 
 OOPLib: Library = oop_lib()
+"""The default instance of OOPLib, i.e. `oop_lib()` (alias `prolog.oop.python`).
+
+Restricted to `SAFE_MODULES` and public attributes; see `tuprolog.solve.libs` for a guide to its
+use from Prolog, and `oop_lib` to customize it.
+
+Examples:
+    >>> from tuprolog.solve.prolog import prolog_solver
+    >>> list(prolog_solver(libraries=OOPLib).query("X := 'a,b'.split(','), list_items(X, I)"))
+    [{'X': '<object:list#...>', 'I': ['a', 'b']}]
+"""
