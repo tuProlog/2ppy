@@ -141,6 +141,13 @@ def test_input_stream_unicode():
     assert stream.readline() == "città\n"
 
 
+def test_input_stream_supplementary_characters():
+    stream = ByteArrayInputStream("a😀b\n😀\n".encode())
+    assert stream.readline(2) == "a😀"
+    assert stream.readline() == "b\n"
+    assert stream.readline() == "😀\n"
+
+
 def test_empty_input_stream():
     stream = ByteArrayInputStream(b"")
     assert stream.readline() == ""

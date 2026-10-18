@@ -66,6 +66,13 @@ class _JvmInputStream:
             char = self._buffered.read()
             if char < 0:
                 break
+            if 0xD800 <= char < 0xDC00:  # high surrogate: combine it with the following low one
+                self._buffered.mark(1)
+                low = self._buffered.read()
+                if 0xDC00 <= low < 0xE000:
+                    char = 0x10000 + ((char - 0xD800) << 10) + (low - 0xDC00)
+                elif low >= 0:
+                    self._buffered.reset()
             chars.append(chr(char))
             if char == ord("\n"):
                 break
