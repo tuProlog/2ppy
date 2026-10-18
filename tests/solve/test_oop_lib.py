@@ -256,3 +256,8 @@ def test_python_exceptions_are_system_errors(solver):
     with pytest.raises(PrologSystemError, match="ValueError"):
         first(solver, "X := $math.log(0)")
     assert first(solver, "catch(X := $math.sqrt(-1), error(system_error, _), true)") == {}
+
+
+def test_atoms_call_method_wrappers():
+    solver = prolog_solver(libraries=oop_lib(allow_private=True))
+    assert first(solver, "X := hello.'__len__'") == {"X": 5}
