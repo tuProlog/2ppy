@@ -3,7 +3,7 @@ from functools import reduce
 
 from tuprolog.core import Clause
 from tuprolog.core.operators import Operator, OperatorSet, operator_set
-from tuprolog.solve import Signature
+from tuprolog.solve import Signature, signature
 from tuprolog.solve.function import LogicFunction
 from tuprolog.solve.primitive import Primitive
 
@@ -14,11 +14,14 @@ __all__ = ["aliased", "libraries", "library"]
 
 def library(
     alias: str | None = None,
-    primitives: Mapping[Signature, Primitive] = {},
+    primitives: Mapping[Signature | str, Primitive] = {},
     clauses: Iterable[Clause] = [],
     operators: OperatorSet | Iterable[Operator] | None = None,
-    functions: Mapping[Signature, LogicFunction] = {},
+    functions: Mapping[Signature | str, LogicFunction] = {},
 ) -> Library | Pluggable:
+    """A library: primitives and functions are keyed by signature, or by `name/arity` string."""
+    primitives = {_signature(k): v for k, v in primitives.items()}
+    functions = {_signature(k): v for k, v in functions.items()}
     if operators is None:
         operators = operator_set()
     elif not isinstance(operators, OperatorSet):
@@ -27,6 +30,10 @@ def library(
         return Library.of(primitives, clauses, operators, functions)
     else:
         return Library.of(alias, primitives, clauses, operators, functions)
+
+
+def _signature(key: Signature | str) -> Signature:
+    return signature(key) if isinstance(key, str) else key
 
 
 def aliased(alias: str, library: Library) -> Library:

@@ -62,6 +62,7 @@ __all__ = [
     "scope",
     "struct",
     "substitution",
+    "to_python",
     "to_term",
     "truth",
     "unifier",
@@ -131,9 +132,11 @@ def numeric(value: BigInteger | BigDecimal | str | float | Decimal) -> Numeric:
     return real(value)
 
 
-def to_term(value: Term | str | bool | float | Decimal) -> Term:
-    """Converts a Python value into a term: strings become atoms, numbers numerics, and
-    booleans truths (true/false); terms are returned as they are."""
+def to_term(value: Term | str | bool | float | Decimal | list | tuple) -> Term:
+    """Converts a Python value into a term: strings become atoms, numbers numerics, booleans
+    truths (true/false), lists logic lists, and tuples logic tuples (i.e. `(a, b)`, where a
+    trailing nested tuple flattens, as `(a, (b, c))` is `(a, b, c)`); terms are returned as they
+    are. `to_python` is its inverse."""
     if isinstance(value, Term):
         return value
     if isinstance(value, (str, JString)):
@@ -142,7 +145,30 @@ def to_term(value: Term | str | bool | float | Decimal) -> Term:
         return truth(value)
     if isinstance(value, (int, float, Decimal, BigInteger, BigDecimal)):
         return numeric(value)
+    if isinstance(value, list):
+        return logic_list(value)
+    if isinstance(value, tuple) and value:
+        return to_term(value[0]) if len(value) == 1 else logic_tuple(*value)
     raise TypeError(f"Cannot convert {type(value).__name__} into a term: {value!r}")
+
+
+def to_python(term: Term):
+    """Converts a term into a Python value, as the inverse of `to_term`: truths become booleans,
+    integers ints, reals floats, atoms strings, well-formed lists lists, and tuples tuples.
+    Other terms (e.g. variables, compound terms, partial lists) are returned as they are."""
+    if isinstance(term, Truth):
+        return bool(term.isTrue())
+    if isinstance(term, Integer):
+        return term.to_int()
+    if isinstance(term, Real):
+        return term.to_float()
+    if isinstance(term, List):
+        return [to_python(item) for item in term] if term.isWellFormed() else term
+    if isinstance(term, Tuple):
+        return tuple(to_python(item) for item in term.unfolded)
+    if isinstance(term, Atom):
+        return str(term.getValue())
+    return term
 
 
 def _terms(values: Iterable) -> list[Term]:

@@ -71,6 +71,7 @@ __all__ = [
     "scope",
     "struct",
     "substitution",
+    "to_python",
     "to_term",
     "truth",
     "unifier",

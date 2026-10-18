@@ -143,13 +143,26 @@ def test_primitive_closures_keep_python_state():
     assert [bindings(solve_all(solver, "tick(X)"), "X") for _ in range(3)] == [["1"], ["2"], ["3"]]
 
 
-def test_python_exceptions_propagate_to_the_caller():
+def test_python_exceptions_become_logic_errors():
     def broken(request):
         raise ValueError("boom")
 
     solver = solver_with_primitive("broken", 0, broken)
-    with pytest.raises(ValueError, match="boom"):
-        solve_all(solver, "broken")
+    [solution] = solve_all(solver, "broken")
+    assert solution.is_halt
+    with pytest.raises(RuntimeError, match="boom"):  # a system_error
+        solution.raise_error()
+
+
+def test_python_exceptions_raised_lazily_become_logic_errors():
+    def broken(request):
+        yield request.reply_success()
+        raise ValueError("late")
+
+    solver = solver_with_primitive("broken", 0, broken)
+    solutions = solve_all(solver, "broken")
+    assert [s.is_yes for s in solutions] == [True, False]
+    assert solutions[1].is_halt
 
 
 def test_primitive_can_use_sub_solvers():

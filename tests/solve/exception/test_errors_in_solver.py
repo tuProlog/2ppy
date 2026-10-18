@@ -5,6 +5,7 @@ from collections.abc import Callable
 import pytest
 
 from tuprolog.core import atom, integer, struct, var
+from tuprolog.errors import PrologSystemError
 from tuprolog.solve import signature
 from tuprolog.solve.exception import LogicError
 from tuprolog.solve.exception.error import (
@@ -179,16 +180,18 @@ def test_error_replied_from_primitive():
     assert caught.substitution.getByName("C") == integer(1)
 
 
-def test_python_exceptions_from_primitives_propagate():
-    # like 2P-Kt, which only turns ResolutionExceptions into Halt solutions
+def test_python_exceptions_from_primitives_become_system_errors():
     def failing(request):
         raise ValueError("python error")
 
     solver = prolog_solver(
         libraries=library("failing", primitives={signature("failing", 0): primitive(failing)})
     )
-    with pytest.raises(ValueError, match="python error"):
-        solve_once(solver, "failing")
+    solution = solve_once(solver, "failing")
+    assert solution.is_halt
+    assert isinstance(solution.exception, PrologSystemError)
+    assert "python_error('ValueError', 'python error')" in solution.exception.message
+    assert solve_once(solver, "catch(failing, error(system_error, _), true)").is_yes
 
 
 @pytest.mark.parametrize(

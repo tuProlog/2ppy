@@ -38,14 +38,18 @@ _SIGNATURE_COMPANION = Signature.class_.getField("Companion").get(None)
 
 
 def signature(name: str | Term, arity: int | None = None, vararg: bool = False) -> Signature | None:
-    """signature(name, arity, vararg=False), or signature(term) for a signature term or indicator
-    (e.g. f/2, including vararg ones like f/'+'(2, vararg)), which may yield None."""
+    """signature(name, arity, vararg=False), signature("name/arity"), or signature(term) for a
+    signature term or indicator (e.g. f/2, including vararg ones like f/'+'(2, vararg)),
+    which may yield None."""
     if isinstance(name, Term):
         if arity is not None:
             raise TypeError("signature(term) takes no arity")
         return _SIGNATURE_COMPANION.fromSignatureTerm(name)
     if arity is None:
-        raise TypeError("signature(name, arity) requires an arity")
+        functor, slash, digits = name.rpartition("/")
+        if not (slash and functor and digits.isdigit()):
+            raise TypeError("signature(name, arity) requires an arity, or a `name/arity` string")
+        name, arity = functor, int(digits)
     return Signature(name, arity, vararg)
 
 

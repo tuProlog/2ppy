@@ -1,6 +1,6 @@
 from itertools import chain
 
-from jpype import JImplementationFor, JOverride
+from jpype import JImplementationFor, JOverride, JString
 
 from tuprolog import logger
 from tuprolog.jvmutils import customize_derived, jiterable
@@ -69,11 +69,21 @@ class _KtSolveOptions:
         return [(key, self[key]) for key in self]
 
 
+def _goal(solver, goal):
+    if isinstance(goal, (str, JString)):  # parsed with the solver's current operators
+        from tuprolog.core.parsing import TermParser
+
+        return TermParser.withOperators(solver.getOperators()).parse_struct(goal)
+    return goal
+
+
 @JImplementationFor("it.unibo.tuprolog.solve.Solver")
 @customize_derived("solve", "solve_once")
 class _KtSolver:
     @JOverride
     def solve(self, goal, options=None):
+        """Solves a goal (a struct, or a string parsed with the solver's operators)."""
+        goal = _goal(self, goal)
         if options is None:
             return self._solve(goal)
         elif options.is_eager:
@@ -83,10 +93,63 @@ class _KtSolver:
 
     @JOverride
     def solve_once(self, goal, options=None):
+        goal = _goal(self, goal)
         if options is None:
             return self.solveOnce(goal)
         else:
             return self.solveOnce(goal, options)
+
+    def query(self, goal, *, limit=None, timeout=None):
+        """Yields the bindings of each solution of `goal` as a dict of Python values (see
+        `Solution.to_dict`), and raises the exception of a solution that halts."""
+        from tuprolog.solve import solve_options
+
+        options = solve_options(lazy=True, **_present(limit=limit, timeout=timeout))
+        for solution in self.solve(goal, options):
+            if solution.is_halt:
+                raise solution.exception
+            if solution.is_yes:
+                yield solution.to_dict()
+
+
+def _present(**kwargs):
+    return {k: v for k, v in kwargs.items() if v is not None}
+
+
+@JImplementationFor("it.unibo.tuprolog.solve.Solution")
+class _KtSolution:
+    def __bool__(self):
+        return bool(self.isYes())
+
+    @property
+    def bindings(self):
+        """The terms bound to the query's named variables, by variable name."""
+        if not self.isYes():
+            return {}
+        return {
+            str(var.getName()): term
+            for var, term in self.getSubstitution().items()
+            if not var.isAnonymous()
+        }
+
+    def __getitem__(self, name):
+        return self.bindings[name]
+
+    def __contains__(self, name):
+        return name in self.bindings
+
+    def to_dict(self):
+        """The values bound to the query's named variables, by variable name, as Python values
+        where possible (see `tuprolog.core.to_python`)."""
+        from tuprolog.core import to_python
+
+        return {name: to_python(term) for name, term in self.bindings.items()}
+
+    def raise_error(self):
+        """Raises the exception of a halted solution, or returns the solution as it is."""
+        if self.isHalt():
+            raise self.getException()
+        return self
 
 
 @JImplementationFor("it.unibo.tuprolog.solve.MutableSolver")

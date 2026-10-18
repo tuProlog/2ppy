@@ -38,7 +38,9 @@ __all__ = [
     "is_character_code",
     "not_implemented",
     "not_supported",
+    "predicate",
     "primitive",
+    "python_error",
     "solve_request",
     "solve_response",
 ]
