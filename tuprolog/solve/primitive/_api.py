@@ -67,7 +67,9 @@ def python_error(context: ExecutionContext, error: BaseException) -> ResolutionE
     return LogicSystemError.forUncaughtException(context, culprit)
 
 
-def _guarded(request: SolveRequest, responses: Callable[[], Iterable[SolveResponse]]):
+def _guarded(
+    request: SolveRequest, responses: Callable[[], Iterable[SolveResponse]]
+) -> Iterator[SolveResponse]:
     try:
         yield from responses()
     except Exception as error:  # noqa: BLE001  (surfaces as a logic error, for catch/3)
