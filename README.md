@@ -49,6 +49,9 @@ The JVM is started when `tuprolog` is first imported.
     parsers (`read_theory(open("kb.pl"))`), solvers' channels (`prolog_solver(std_in=io.StringIO("..."), std_out=buffer)`),
     and JVM methods expecting streams (binary), readers or writers (text). Binary streams are UTF-8 encoded.
     By default, solvers read from and write on Python's current `sys.stdin`, `sys.stdout` and `sys.stderr`.
+1. 2P-Kt's exceptions are classified by the Python exceptions in `tuprolog.errors`, and by Python's built-in ones:
+    e.g. parsing errors are `ParsingError`s and `ValueError`s, a logic `type_error` is a `PrologTypeError` and a `TypeError`,
+    and every exception raised by 2P-Kt is a `TuPrologError`.
 
 ### Use 2PPy as an interactive REPL
 

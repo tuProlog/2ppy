@@ -24,3 +24,5 @@ JVM_VERSION = ".".join(map(str, jpype.getJVMVersion()))
 logger.info("Started JVM v" + JVM_VERSION + " with classpath: " + str(jars))
 
 logger.info("Using 2P-Kt v" + str(Info.VERSION))
+
+from . import errors
