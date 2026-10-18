@@ -189,7 +189,8 @@ Welcome to the {name.title()} REPL.
                 if solution.is_halt and isinstance(solution.getException(), HaltException):
                     self.stdout.write("# goodbye.\n")  # like 2P-Kt's REPL, halt/0,1 exit
                     return True
-                formatted = str(self.solution_formatter.format(solution))
+                # 2P-Kt's formatter leaves an indented empty line when there are no bindings
+                formatted = str(self.solution_formatter.format(solution)).rstrip()
                 self.stdout.write(formatted)
                 if self.probabilistic and solution.is_yes:
                     self.stdout.write(f"\n    probability: {probability(solution)}")
@@ -211,7 +212,7 @@ Welcome to the {name.title()} REPL.
                 self.stdout.write("# goodbye.\n")
                 return True
             if not solution.is_yes:
-                self.stdout.write(str(self.solution_formatter.format(solution)))
+                self.stdout.write(str(self.solution_formatter.format(solution)).rstrip())
                 self.stdout.write("\n")
         except ParseException as e:
             self.on_parsing_error(e)
