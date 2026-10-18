@@ -154,11 +154,6 @@ def test_solve_with_lazy_options(solver):
     assert values(solutions) == ["1", "2", "3"]
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="_KtSolver.solve is registered on the Solver interface and is shadowed by "
-    "AbstractSolver.solve, so eager options still return a lazy Sequence",
-)
 def test_solve_with_eager_options_returns_a_list(solver):
     solutions = solver.solve(P_X, solve_options(lazy=False))
     assert isinstance(solutions, list)
@@ -180,11 +175,6 @@ def test_solve_with_limit(solver, limit, expected):
     assert values(solver.solve(P_X, solve_options(limit=limit))) == expected
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="_KtSolver.solve is shadowed by AbstractSolver.solve, and JPype silently ignores "
-    "the 'options' keyword argument of the Java method",
-)
 def test_solve_accepts_options_as_keyword(solver):
     assert values(solver.solve(P_X, options=solve_options(limit=1))) == ["1"]
 
@@ -309,18 +299,18 @@ def test_channel_setters_via_java_methods(solver):
     assert "undefined/1" in str(warnings[0])
 
 
-_SHADOWED_SETTER = pytest.mark.xfail(
+_IGNORED_SETTER = pytest.mark.xfail(
     strict=True,
-    reason="the MutableSolver customizer's property setters are shadowed by getter-only "
-    "properties auto-generated on concrete classes ('property ... has no setter')",
+    reason="2P-Kt 3.0.1: MutableSolver.setStandardOutput/setStandardError have no effect "
+    "(the getters keep returning the old channel)",
 )
 
 
 @pytest.mark.parametrize(
     "name",
     [
-        pytest.param("standard_output", marks=_SHADOWED_SETTER),
-        pytest.param("standard_error", marks=_SHADOWED_SETTER),
+        pytest.param("standard_output", marks=_IGNORED_SETTER),
+        pytest.param("standard_error", marks=_IGNORED_SETTER),
         "warnings",
     ],
 )

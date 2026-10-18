@@ -12,11 +12,6 @@ Q_X = rule(struct("q", var("X")), struct("p", var("X")))
 DYN = directive(struct("dynamic", indicator("r", 1)))
 Z = fact(atom("z"))
 
-SHADOWED = (
-    "the Theory customizer is registered on the interface, so concrete classes' methods "
-    "shadow it (and it calls a non-existent `{}_`, JPype keeps the original as `_{}`)"
-)
-
 
 @pytest.fixture(params=[theory, mutable_theory], ids=["immutable", "mutable"])
 def factory(request):
@@ -192,18 +187,12 @@ def test_retract_changes_mutable_theory_in_place():
     assert list(t) == [P_B]
 
 
-@pytest.mark.xfail(strict=True, reason=SHADOWED.format("retract", "retract"))
 def test_retract_varargs(kb):
     result = kb.retract(P_A, P_B)
     assert list(result.clauses) == [P_A, P_B]
     assert list(result.theory) == [Q_X]
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="retract(list) is ambiguous between Iterable and Sequence overloads, as the "
-    "Theory.retract customizer is shadowed by concrete classes",
-)
 def test_retract_iterable(kb):
     result = kb.retract([P_A, P_B])
     assert list(result.theory) == [Q_X]
@@ -233,12 +222,10 @@ def test_abolish_missing_indicator_is_noop(kb):
     assert len(kb.abolish(indicator("p", 7))) == 3
 
 
-@pytest.mark.xfail(strict=True, reason=SHADOWED.format("abolish", "abolish"))
 def test_abolish_by_name_and_arity(kb):
     assert list(kb.abolish("p", 1)) == [Q_X]
 
 
-@pytest.mark.xfail(strict=True, reason=SHADOWED.format("abolish", "abolish"))
 def test_abolish_by_indicator_keyword(kb):
     assert list(kb.abolish(indicator=indicator("p", 1))) == [Q_X]
 
@@ -265,7 +252,6 @@ def test_equality_compares_complete_variable_names():
     assert one.equals(other, False) is True
 
 
-@pytest.mark.xfail(strict=True, reason=SHADOWED.format("equals", "equals"))
 def test_equals_with_keyword_argument():
     one = theory(fact(struct("f", var("X"))))
     other = theory(fact(struct("f", var("X"))))
@@ -282,15 +268,9 @@ def test_mutable_theories_are_unhashable():
         hash(mutable_theory(P_A))
 
 
-TO_STRING_SHADOWED = pytest.mark.xfail(
-    strict=True,
-    reason="MutableTheory.to_string(True) resolves to the auto-generated java.lang.Object.to_string "
-    "(Object precedes the Theory interface in MutableIndexedTheory's MRO), so the Theory "
-    "customizer is shadowed",
-)
 FACTORIES_TO_STRING = [
     pytest.param(theory, id="immutable"),
-    pytest.param(mutable_theory, id="mutable", marks=TO_STRING_SHADOWED),
+    pytest.param(mutable_theory, id="mutable"),
 ]
 
 

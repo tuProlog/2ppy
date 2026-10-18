@@ -101,11 +101,6 @@ def test_input_stream_initially_open(stream):
     assert not stream.closed
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="the close() override registered on java.io.InputStream is shadowed by concrete "
-    "classes defining close() (and calls a non-existent close_), so closed stays False",
-)
 def test_input_stream_closed_after_close(stream):
     stream.close()
     assert stream.closed

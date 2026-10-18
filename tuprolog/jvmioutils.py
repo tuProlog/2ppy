@@ -6,6 +6,7 @@ import jpype.imports  # noqa: F401
 from jpype import JImplementationFor, JOverride
 
 from tuprolog import logger
+from tuprolog.jvmutils import customize_derived
 
 InputStream = _jio.InputStream
 
@@ -21,6 +22,7 @@ Paths = _jnio_file.Paths
 
 
 @JImplementationFor("java.io.InputStream")
+@customize_derived("close")
 class _JvmInputStream:
     def __jclass_init__(cls):
         IOBase.register(cls)
@@ -28,7 +30,7 @@ class _JvmInputStream:
     @JOverride
     def close(self):
         self._closed = True
-        self.close_()
+        self._close()
 
     @property
     def closed(self):
