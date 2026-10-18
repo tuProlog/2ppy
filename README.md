@@ -14,7 +14,9 @@ Object-oriented and modular ecosystem for symbolic AI and logic programming, cur
 
 * a module for logic unification, namely `tuprolog.unify`
 
-* a module for in-memory indexing and storing logic theories, as well as other sorts of collections of logic clauses, namely `tuprolog.theory`
+* a module for in-memory indexing and storing logic theories, namely `tuprolog.theory`
+
+* a module for other indexed collections of logic clauses (multi-sets and queues), namely `tuprolog.collections`
 
 * a module providing generic API for resolution of logic queries, namely `tuprolog.solve`
     * a module that implements deterministic logic programming and solving, namely `tuprolog.solve.prolog`
