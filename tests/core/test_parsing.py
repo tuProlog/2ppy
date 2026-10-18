@@ -1,5 +1,7 @@
 """Tests for `tuprolog.core.parsing` (API, definitions and TermParser/TermReader adapters)."""
 
+import io
+
 import jpype
 import pytest
 
@@ -285,6 +287,15 @@ def test_read_term_from_path(theory_file):
 
 def test_read_term_from_input_stream(theory_file):
     assert read_term(open_file(str(theory_file))) == struct("f", atom("a"))
+
+
+@pytest.mark.parametrize("stream", [io.StringIO, lambda text: io.BytesIO(text.encode())])
+def test_read_terms_from_python_streams(stream):
+    assert read_term(stream("f('è').")) == struct("f", atom("è"))
+    assert list(read_terms(stream("f(a). g(b)."))) == [
+        struct("f", atom("a")),
+        struct("g", atom("b")),
+    ]
 
 
 def test_read_term_with_operators(tmp_path, custom_ops):

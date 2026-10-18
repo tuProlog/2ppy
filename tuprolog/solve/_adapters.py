@@ -104,7 +104,9 @@ class _KtMutableSolver:
 
     @standard_output.setter
     def standard_output(self, channel):
-        return self.setStandardOutput(channel)
+        from tuprolog.solve import channel as _channel
+
+        self.setStandardOutput(_channel.ensure_output_channel(channel, _channel.std_out))
 
     @property
     def standard_input(self):
@@ -112,7 +114,9 @@ class _KtMutableSolver:
 
     @standard_input.setter
     def standard_input(self, channel):
-        return self.setStandardInput(channel)
+        from tuprolog.solve import channel as _channel
+
+        self.setStandardInput(_channel.ensure_input_channel(channel, _channel.std_in))
 
     @property
     def standard_error(self):
@@ -120,7 +124,9 @@ class _KtMutableSolver:
 
     @standard_error.setter
     def standard_error(self, channel):
-        return self.setStandardError(channel)
+        from tuprolog.solve import channel as _channel
+
+        self.setStandardError(_channel.ensure_output_channel(channel, _channel.std_err))
 
     @property
     def warnings(self):
@@ -128,7 +134,9 @@ class _KtMutableSolver:
 
     @warnings.setter
     def warnings(self, channel):
-        return self.setWarnings(channel)
+        from tuprolog.solve import channel as _channel
+
+        self.setWarnings(_channel.ensure_output_channel(channel, _channel.warn))
 
 
 logger.debug("Configure Kotlin adapters for types in it.unibo.tuprolog.solve.*")

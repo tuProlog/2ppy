@@ -226,9 +226,45 @@ def test_read_theory_from_pathlib_path(source_file):
     assert strings(read_theory(source_file)) == expected_strings()
 
 
+PYTHON_STREAMS = {
+    "text": lambda text: io.StringIO(text),
+    "binary": lambda text: io.BytesIO(text.encode()),
+}
+
+
+@pytest.mark.parametrize("stream", PYTHON_STREAMS.values(), ids=PYTHON_STREAMS.keys())
+def test_read_from_python_streams(stream):
+    assert strings(read_theory(stream(SOURCE))) == expected_strings()
+    assert strings(read_clauses(stream(SOURCE))) == expected_strings()
+    assert strings(read_clauses(stream(SOURCE), lazy=False)) == expected_strings()
+    assert strings(read_theory(stream("a likes b."), LIKES)) == ["likes(a, b) :- true"]
+
+
+@pytest.mark.parametrize("stream", PYTHON_STREAMS.values(), ids=PYTHON_STREAMS.keys())
+def test_read_non_ascii_from_python_streams(stream):
+    assert strings(read_theory(stream("p('è€😀')."))) == ["p('è€😀') :- true"]
+
+
+@pytest.mark.parametrize("mode", ["r", "rb"])
+def test_read_from_python_files(source_file, mode):
+    with open(source_file, mode) as file:
+        assert strings(read_theory(file)) == expected_strings()
+        assert not file.closed
+
+
+def test_read_with_clauses_reader_from_python_streams():
+    assert strings(DEFAULT_CLAUSES_READER.read_theory(io.StringIO(SOURCE))) == expected_strings()
+    # Python text streams also convert implicitly to the JVM readers 2P-Kt methods expect
+    assert strings(DEFAULT_CLAUSES_READER.readTheory(io.StringIO(SOURCE))) == expected_strings()
+    assert (
+        strings(DEFAULT_CLAUSES_READER.readTheory(io.BytesIO(SOURCE.encode())))
+        == expected_strings()
+    )
+
+
 def test_read_theory_rejects_unsupported_inputs_with_a_clear_message():
     with pytest.raises(TypeError, match="Invalid type"):
-        read_theory(io.StringIO(SOURCE))  # type: ignore[arg-type]
+        read_theory(42)  # type: ignore[arg-type]
 
 
 def test_clauses_reader_factory(source_file):

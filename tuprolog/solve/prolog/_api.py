@@ -1,5 +1,14 @@
-from tuprolog.solve import Solver, channel
-from tuprolog.solve.channel import InputChannel, OutputChannel
+from io import IOBase
+
+from tuprolog.solve import Solver
+from tuprolog.solve.channel import (
+    InputChannel,
+    OutputChannel,
+    ensure_input_channel,
+    ensure_output_channel,
+    warn,
+)
+from tuprolog.solve.channel import std_err as _std_err
 from tuprolog.solve.flags import DEFAULT_FLAG_STORE, FlagStore
 from tuprolog.solve.library import Library, Runtime, libraries
 from tuprolog.theory import Theory, mutable_theory, theory
@@ -16,10 +25,10 @@ def prolog_solver(
     flags: FlagStore = DEFAULT_FLAG_STORE,
     static_kb: Theory | None = None,
     dynamic_kb: Theory | None = None,
-    std_in: InputChannel | None = None,
-    std_out: OutputChannel | None = None,
-    std_err: OutputChannel | None = None,
-    warning: OutputChannel | None = None,
+    std_in: InputChannel | IOBase | None = None,
+    std_out: OutputChannel | IOBase | None = None,
+    std_err: OutputChannel | IOBase | None = None,
+    warning: OutputChannel | IOBase | None = None,
     mutable: bool = True,
 ) -> Solver:
     args = (
@@ -28,10 +37,10 @@ def prolog_solver(
         flags,
         theory() if static_kb is None else static_kb,
         mutable_theory() if dynamic_kb is None else dynamic_kb,
-        channel.std_in() if std_in is None else std_in,
-        channel.std_out() if std_out is None else std_out,
-        channel.std_err() if std_err is None else std_err,
-        channel.warn() if warning is None else warning,
+        ensure_input_channel(std_in),
+        ensure_output_channel(std_out),
+        ensure_output_channel(std_err, _std_err),
+        ensure_output_channel(warning, warn),
     )
     if mutable:
         return PROLOG_SOLVER_FACTORY.mutableSolverWithDefaultBuiltins(*args)
