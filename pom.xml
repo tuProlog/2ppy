@@ -20,7 +20,7 @@
     <dependency>
       <groupId>it.unibo.tuprolog</groupId>
       <artifactId>solve-problog-jvm</artifactId>
-      <version>3.0.1</version>
+      <version>3.0.3</version>
       <exclusions>
         <exclusion>
           <groupId>org.jetbrains.kotlin</groupId>
