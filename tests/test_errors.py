@@ -205,3 +205,9 @@ def test_repr_shows_class_and_message():
     error = solve_error("atom_length(1, _)")
     assert repr(error) == f"{type(error).__name__}({error.message!r})"
     assert repr(error).startswith("it.unibo.tuprolog.solve.exception.error.TypeError('The 0-th")
+
+
+def test_repr_of_errors_without_message_shows_their_term():
+    error = solve_error("X is 1 / 0")
+    assert error.message is None
+    assert "evaluation_error(zero_divisor)" in repr(error)

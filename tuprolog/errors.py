@@ -127,7 +127,9 @@ _JClass.__doc__ = property(_doc, _jpype_doc.__set__)
 
 
 def _repr(self) -> str:
-    return f"{type(self).__name__}({self.message!r})"
+    # errors without a message (e.g. evaluation errors) show their error term instead
+    message = self.message if self.message is not None else str(self)
+    return f"{type(self).__name__}({message!r})"
 
 
 def _base_of(*jvm_classes: str):
