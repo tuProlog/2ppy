@@ -53,6 +53,22 @@ def _subclasscheck(cls, subclass):
 
 _JClass.__subclasscheck__ = _subclasscheck
 
+_jpype_doc = _JClass.__dict__["__doc__"]
+
+
+def _doc(cls):
+    # JPype documents classes from their Java peer, which the classes in this module (and JPype's
+    # own bases) lack: they keep their docstring
+    if cls not in _CLASSIFICATIONS:
+        try:
+            return _jpype_doc.__get__(cls)
+        except TypeError:
+            pass
+    return cls.__dict__.get("__doc__")
+
+
+_JClass.__doc__ = property(_doc, _jpype_doc.__set__)
+
 
 def _repr(self) -> str:
     return f"{type(self).__name__}({self.message!r})"
