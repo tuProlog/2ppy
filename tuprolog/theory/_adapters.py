@@ -1,11 +1,13 @@
 from collections.abc import Iterable, Sized
 
-from jpype import JImplementationFor, JOverride
+from jpype import JClass, JImplementationFor, JOverride
 
 from tuprolog import logger
 from tuprolog.core import indicator as new_indicator
 from tuprolog.jvmutils import jiterable
 from tuprolog.pyutils import iterable_or_varargs
+
+_MutableTheory = JClass("it.unibo.tuprolog.theory.MutableTheory")
 
 
 @JImplementationFor("it.unibo.tuprolog.theory.Theory")
@@ -64,6 +66,9 @@ class _KtTheory:
         return self.equals(other, use_var_complete_name=True)
 
     def __hash__(self):
+        # value-based equality: a mutable theory's hash would change with its clauses
+        if isinstance(self, _MutableTheory):
+            raise TypeError(f"unhashable type: '{type(self).__name__}'")
         return self.hashCode()
 
     def to_string(self, as_prolog_text=False):

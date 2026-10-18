@@ -277,6 +277,11 @@ def test_theories_are_hashable():
     assert len({theory(P_A), theory(P_A), theory(P_B)}) == 2
 
 
+def test_mutable_theories_are_unhashable():
+    with pytest.raises(TypeError):
+        hash(mutable_theory(P_A))
+
+
 TO_STRING_SHADOWED = pytest.mark.xfail(
     strict=True,
     reason="MutableTheory.to_string(True) resolves to the auto-generated java.lang.Object.to_string "
