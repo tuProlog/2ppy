@@ -1,3 +1,17 @@
+"""An interactive Python shell with the whole tuprolog API imported.
+
+Run it with `python -m tuprolog`: it star-imports every public tuprolog module (e.g.
+`tuprolog.core`, `tuprolog.solve.prolog`), then starts Python's interactive interpreter.
+
+Examples:
+    ```text
+    $ python -m tuprolog
+    >>> solver = prolog_solver(static_kb=parse_theory("p(1). p(2)."))
+    >>> list(solver.query("p(X)"))
+    [{'X': 1}, {'X': 2}]
+    ```
+"""
+
 import code
 
 from tuprolog.collections import *
