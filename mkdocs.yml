@@ -30,7 +30,37 @@ theme:
 
 nav:
   - Home: index.md
-  - API reference: reference/
+  - Tutorials:
+      - tutorials/index.md
+      - tutorials/getting-started.md
+      - tutorials/your-first-logic-program.md
+  - How-to guides:
+      - how-to/index.md
+      - how-to/build-and-parse-terms.md
+      - how-to/query-solvers.md
+      - how-to/define-predicates-in-python.md
+      - how-to/use-python-objects-from-prolog.md
+      - how-to/read-and-write-streams.md
+      - how-to/handle-errors.md
+      - how-to/run-probabilistic-programs.md
+      - how-to/use-the-repl.md
+      - how-to/contribute.md
+  - Reference:
+      - reference/index.md
+      - reference/package-map.md
+      - reference/python-term-conversions.md
+      - reference/exceptions.md
+      - reference/standard-predicates.md
+      - reference/iolib.md
+      - reference/ooplib.md
+      - API reference: api/
+  - Explanation:
+      - explanation/index.md
+      - explanation/logic-programming.md
+      - explanation/terms-and-variables.md
+      - explanation/solvers-and-solutions.md
+      - explanation/architecture.md
+      - explanation/relationship-with-2p-kt.md
 
 markdown_extensions:
   - admonition

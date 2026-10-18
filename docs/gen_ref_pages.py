@@ -23,11 +23,11 @@ for path in sorted(PACKAGE.rglob("*.py")):
         continue
     if "libs" in parts and path.parent == PACKAGE / "libs":  # JVM bootstrap, not API
         continue
-    page = Path("reference", *parts).with_suffix(".md")
+    page = Path("api", *parts).with_suffix(".md")
     with mkdocs_gen_files.open(page, "w") as file:
         file.write(f"::: {'.'.join(parts)}\n")
     mkdocs_gen_files.set_edit_path(page, path.relative_to(ROOT))
-    nav[parts] = page.relative_to("reference").as_posix()
+    nav[parts] = page.relative_to("api").as_posix()
 
-with mkdocs_gen_files.open("reference/SUMMARY.md", "w") as file:
+with mkdocs_gen_files.open("api/SUMMARY.md", "w") as file:
     file.writelines(nav.build_literate_nav())

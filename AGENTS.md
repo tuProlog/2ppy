@@ -1,8 +1,8 @@
 # AGENTS.md
 
-Notes for coding agents and contributors. User-facing usage lives in `README.md`; do not duplicate
-it here. The project follows
-[template-python-project-uv](https://github.com/gciatto/template-python-project-uv); the roadmap
+Notes for coding agents and contributors. User-facing usage lives in the documentation site
+(`docs/`; `README.md` stays a concise summary pointing to it): do not duplicate it here. The
+project follows [template-python-project-uv](https://github.com/gciatto/template-python-project-uv); the roadmap
 (status, design criteria, plan) is tracked in issue #47.
 
 ## What 2PPy is
@@ -25,9 +25,11 @@ tuprolog/           the package (flat layout); importing it starts the JVM
     _api.py           Pythonic factory functions (snake_case, defaults, varargs)
     _adapters.py      @JImplementationFor customizers adding Python protocols to JVM types
   repl/             Cmd-based REPLs (`python -m tuprolog.repl.prolog`, `...problog`)
-tests/              pytest tests (they need the JARs), including the docstrings' and README's examples
-docs/               the documentation site's sources: index.md (the README), gen_ref_pages.py
-                    (one API-reference page per public module); configured by mkdocs.yml
+tests/              pytest tests (they need the JARs), including the examples of docstrings, README
+                    and docs pages
+docs/               the documentation site (mkdocs.yml): index.md (the full picture), tutorials/,
+                    how-to/, reference/, explanation/ (as 2P-Kt's documentation), and
+                    gen_ref_pages.py (generates api/, one API-reference page per public module)
 scripts/            fetch_jars.py (Maven), githooks.py (local Git hooks)
 pom.xml             the 2P-Kt artifacts and version to fetch
 .github/workflows/
@@ -74,7 +76,9 @@ uv run poe install-hooks [HOOK...]    # local hooks in .git/hooks (default: all)
 
 ## Documentation
 
-The Python API is documented in docstrings, for `help()` and for an API reference generated from
+The site's pages (`docs/`) give the full picture, organized as 2P-Kt's documentation (tutorials,
+how-to guides, reference, explanation; see `mkdocs.yml`'s `nav`), and link the API reference for
+details. The Python API is documented in docstrings, for `help()` and for an API reference generated from
 them (mkdocstrings/griffe-like tools). Readers are not assumed to know 2P-Kt (nor Kotlin): explain
 the logic-programming notions a page relies on, and link 2P-Kt's documentation
 (<https://tuprolog.github.io/2p-kt/>, API at <https://tuprolog.github.io/2p-kt/api/>) only as
