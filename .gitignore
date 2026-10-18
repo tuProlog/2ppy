@@ -149,3 +149,6 @@ dmypy.json
 # JVM dependencies, fetched by `uv run poe fetch-jars` (see pom.xml)
 tuprolog/libs/*.jar
 tuprolog/libs/*/
+
+# documentation site, built by `uv run poe docs`
+site/

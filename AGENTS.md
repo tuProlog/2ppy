@@ -25,13 +25,16 @@ tuprolog/           the package (flat layout); importing it starts the JVM
     _api.py           Pythonic factory functions (snake_case, defaults, varargs)
     _adapters.py      @JImplementationFor customizers adding Python protocols to JVM types
   repl/             Cmd-based REPLs (`python -m tuprolog.repl.prolog`, `...problog`)
-tests/              pytest tests (they need the JARs)
+tests/              pytest tests (they need the JARs), including the docstrings' and README's examples
+docs/               the documentation site's sources: index.md (the README), gen_ref_pages.py
+                    (one API-reference page per public module); configured by mkdocs.yml
 scripts/            fetch_jars.py (Maven), githooks.py (local Git hooks)
 pom.xml             the 2P-Kt artifacts and version to fetch
 .github/workflows/
   check.yml         static-checks + coverage, then tests on ubuntu/windows/macos x Python 3.10-3.13,
                     then deploy.yml
   deploy.yml        semantic-release (dry run off master and on the initial commit)
+  docs.yml          builds the documentation site, deploys it on GitHub Pages from master
 ```
 
 ## Commands
@@ -43,6 +46,8 @@ uv run poe test                       # pytest
 uv run poe static-checks              # compileall, ruff format --check, ruff check, mypy
 uv run poe static-fixes               # ruff --fix + ruff format
 uv run poe coverage && uv run poe coverage-report
+uv run poe docs                       # documentation site in site/ (mkdocs build --strict)
+uv run poe docs-serve                 # the same, with live reload
 uv run poe install-hooks [HOOK...]    # local hooks in .git/hooks (default: all)
 ```
 
@@ -90,7 +95,10 @@ Style: Google-style docstrings (`Args:`, `Returns:`, `Yields:`, `Raises:`, `Exam
 (`tuprolog.core.Term`); describe the 2P-Kt counterpart in a `Note:` when useful (e.g. "Wraps
 2P-Kt's `Struct.of`"). Examples are doctests (`>>>`), run by `tests/test_docstrings.py` (with
 `ELLIPSIS` and `NORMALIZE_WHITESPACE`; use `...` for unstable output, e.g. fresh variable names):
-keep them short, deterministic, and free of I/O on real files or the network.
+keep them short, deterministic, and free of I/O on real files or the network. The site
+(`uv run poe docs`, MkDocs Material + mkdocstrings) renders the docstrings statically, with griffe:
+it builds in strict mode, so fix the warnings it reports (e.g. a `Returns:` section of an
+unannotated function).
 
 ## Releases
 
