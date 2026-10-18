@@ -8,7 +8,7 @@ from jpype import JClass, JObject
 from tuprolog.core import Term, to_python, to_term
 from tuprolog.jvmutils import jlist
 from tuprolog.solve import MAX_TIMEOUT, ExecutionContext, Signature, current_time_instant
-from tuprolog.solve.primitive import SolveRequest
+from tuprolog.solve.primitive import SolveRequest, python_error
 
 from ._definitions import (
     AbstractLogicFunction,
@@ -32,7 +32,9 @@ def logic_function(callable: Callable[[ComputeRequest], ComputeResponse]) -> Log
     """Creates a logic function from a Python function on compute requests.
 
     Unlike `function`, the Python function sees the whole request, including the solver's
-    context, and works on terms.
+    context, and works on terms. The exceptions it raises become logic errors (see
+    `tuprolog.solve.primitive.python_error`): 2P-Kt's are kept, any other one becomes a
+    `system_error`, which `catch/3` can handle.
 
     Args:
         callable: A function taking a `ComputeRequest`, and returning a `ComputeResponse` (e.g.
@@ -55,7 +57,10 @@ def logic_function(callable: Callable[[ComputeRequest], ComputeResponse]) -> Log
 
     class CallableToLogicFunctionAdapter(AbstractLogicFunction):
         def compute(self, request: ComputeRequest) -> ComputeResponse:
-            return callable(request)
+            try:
+                return callable(request)
+            except Exception as error:
+                raise python_error(request.context, error) from error
 
     return JObject(CallableToLogicFunctionAdapter(), LogicFunction)
 
@@ -72,9 +77,7 @@ def function(callable: Callable) -> LogicFunction:
         The logic function.
 
     Note:
-        Exceptions raised by `callable` propagate, as Python exceptions, out of the solving
-        method (e.g. `Solver.solve_once`), rather than ending the resolution with a *halt*
-        solution: raise `tuprolog.solve.exception` errors from primitives to report logic errors.
+        Exceptions raised by `callable` become logic errors, as in `logic_function`.
 
     Examples:
         >>> from tuprolog.solve.library import library
