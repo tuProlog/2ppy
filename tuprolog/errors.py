@@ -6,6 +6,62 @@ Each class is injected as a base of the matching JVM exception class: JVM except
 caught as they are, and `except` clauses can name either these classes or Python's built-in ones,
 e.g. a logic `type_error` is both a `PrologTypeError` and a `TypeError`.
 These classes only classify JVM exceptions: instantiate the JVM classes, not them.
+
+Solving a query does not raise the errors of the query itself: in Prolog, errors are *thrown* as
+terms (e.g. `error(type_error(atom, 1), Extra)`), and they are reported as the `exception` of the
+solution they end (see `tuprolog.solve`). Parsing, unification and library loading, instead, raise
+their errors as Python exceptions.
+
+| Class | Python bases | Raised when |
+| --- | --- | --- |
+| `TuPrologError` | `Exception` | 2P-Kt raises any exception |
+| `SubstitutionError` | `TuPrologError`, `ValueError` | a substitution is invalid |
+| `ParsingError` | `TuPrologError`, `ValueError` | some text is not valid Prolog |
+| `UnificationError` | `TuPrologError`, `ValueError` | two terms do not unify |
+| `LibraryError` | `TuPrologError` | a library cannot be found or loaded |
+| `ResolutionError` | `TuPrologError` | solving a query goes wrong |
+| `HaltError` | `ResolutionError` | a query halts the solver |
+| `TimeOutError` | `ResolutionError` | a query runs out of time |
+| `PrologWarning` | `ResolutionError`, `Warning` | a warning is issued while solving |
+| `PrologError` | `ResolutionError` | an ISO error term `error(Type, Extra)` is thrown |
+| `PrologTypeError` | `PrologError`, `TypeError` | `type_error(Type, Culprit)` |
+| `PrologDomainError` | `PrologError`, `ValueError` | `domain_error(Domain, Culprit)` |
+| `PrologRepresentationError` | `PrologError`, `ValueError` | `representation_error(Limit)` |
+| `PrologInstantiationError` | `PrologError`, `ValueError` | `instantiation_error` |
+| `PrologEvaluationError` | `PrologError`, `ArithmeticError` | `evaluation_error(Error)` |
+| `PrologExistenceError` | `PrologError`, `LookupError` | `existence_error(Type, Culprit)` |
+| `PrologPermissionError` | `PrologError` | `permission_error(Action, Type, Culprit)` |
+| `PrologSyntaxError` | `PrologError`, `ValueError` | `syntax_error(Message)` |
+| `PrologSystemError` | `PrologError`, `RuntimeError` | `system_error` |
+| `PrologMessageError` | `PrologError` | any other error |
+
+Each class classifies the 2P-Kt class named alike, with `Exception` in place of `Error` (e.g.
+`TuPrologError` classifies `TuPrologException`), except: `ParsingError` classifies
+`ParseException` and `PrologSyntaxException`, `UnificationError` classifies `NoUnifyException`,
+`PrologWarning` classifies `Warning`, `PrologError` classifies `LogicError`, and the subclasses of
+`PrologError` classify the classes in 2P-Kt's `it.unibo.tuprolog.solve.exception.error` package
+named without the `Prolog` prefix (e.g. `PrologTypeError` classifies `TypeError`). Every JVM
+exception keeps its JVM bases too (e.g. `java.lang.RuntimeException`), and its `message`.
+
+Examples:
+    >>> from tuprolog.core.parsing import parse_struct
+    >>> from tuprolog.solve.prolog import prolog_solver
+    >>> solution = next(iter(prolog_solver().solve(parse_struct("atom_length(1, N)"))))
+    >>> error = solution.exception
+    >>> isinstance(error, PrologTypeError), isinstance(error, TypeError)
+    (True, True)
+    >>> error.type
+    type_error(atom, 1)
+    >>> from tuprolog.theory.parsing import parse_theory
+    >>> try:
+    ...     parse_theory("a :- .")
+    ... except ValueError as error:
+    ...     print(isinstance(error, ParsingError))
+    True
+
+See Also:
+    2P-Kt's reference on
+    [errors and exceptions](https://tuprolog.github.io/2p-kt/reference/errors-and-exceptions/).
 """
 
 from _jpype import _JClass, _JException  # type: ignore
@@ -118,10 +174,19 @@ class ResolutionError(TuPrologError, internal=True):
 
     @property
     def context(self):
+        """The execution context in which the error occurred.
+
+        It holds the solver's state at that time: its libraries, flags, knowledge bases and
+        current substitution, among other things.
+        """
         return self.getContext()
 
     @property
     def logic_stack_trace(self) -> list:
+        """The goals being executed when the error occurred, innermost first.
+
+        Each one is a `tuprolog.core.Struct`; the last one is the query, as `'?-'(Query)`.
+        """
         return list(self.getLogicStackTrace())
 
 
@@ -131,6 +196,7 @@ class HaltError(ResolutionError, internal=True):
 
     @property
     def exit_status(self) -> int:
+        """The exit status the query asked for, e.g. 3 for `halt(3)`."""
         return int(self.getExitStatus())
 
 
@@ -155,6 +221,7 @@ class PrologError(ResolutionError, internal=True):
 
     @property
     def extra_data(self):
+        """The second argument of the thrown `error/2` term (usually a description), or None."""
         return self.getExtraData()
 
     @property
@@ -165,49 +232,78 @@ class PrologError(ResolutionError, internal=True):
 
 @_base_of(_ERROR + "TypeError")
 class PrologTypeError(PrologError, TypeError, internal=True):
-    pass
+    """A value has the wrong type, e.g. an atom was expected but `1` was given.
+
+    Its `type` is `type_error(Type, Culprit)`, where `Type` is the expected type (e.g. `atom`,
+    `integer`, `callable`, `evaluable`).
+    """
 
 
 @_base_of(_ERROR + "DomainError")
 class PrologDomainError(PrologError, ValueError, internal=True):
-    pass
+    """A value has the right type but is not admissible, e.g. a negative length.
+
+    Its `type` is `domain_error(Domain, Culprit)`, where `Domain` names the admissible values.
+    """
 
 
 @_base_of(_ERROR + "RepresentationError")
 class PrologRepresentationError(PrologError, ValueError, internal=True):
-    pass
+    """An implementation limit was exceeded, e.g. a too large character code.
+
+    Its `type` is `representation_error(Limit)`.
+    """
 
 
 @_base_of(_ERROR + "InstantiationError")
 class PrologInstantiationError(PrologError, ValueError, internal=True):
-    pass
+    """An argument is an unbound variable, while a value is needed.
+
+    Its `type` is `instantiation_error`, e.g. for `atom_length(X, N)`.
+    """
 
 
 @_base_of(_ERROR + "EvaluationError")
 class PrologEvaluationError(PrologError, ArithmeticError, internal=True):
-    pass
+    """An arithmetic evaluation failed, e.g. a division by zero.
+
+    Its `type` is `evaluation_error(Error)`, e.g. `evaluation_error(zero_divisor)` for `X is 1/0`.
+    """
 
 
 @_base_of(_ERROR + "ExistenceError")
 class PrologExistenceError(PrologError, LookupError, internal=True):
-    pass
+    """Something which should exist does not, e.g. a called predicate or a file.
+
+    Its `type` is `existence_error(Type, Culprit)`, e.g. `existence_error(procedure, foo/0)`.
+    """
 
 
 @_base_of(_ERROR + "PermissionError")
 class PrologPermissionError(PrologError, internal=True):
-    pass
+    """An operation is not allowed, e.g. modifying a built-in predicate.
+
+    Its `type` is `permission_error(Action, Type, Culprit)`, e.g.
+    `permission_error(modify, static_procedure, atom_length/2)`.
+    """
 
 
 @_base_of(_ERROR + "SyntaxError")
 class PrologSyntaxError(PrologError, ValueError, internal=True):
-    pass
+    """Some text read while solving (e.g. by `read_term/2`) is not valid Prolog.
+
+    Its `type` is `syntax_error(Message)`. Parsing text from Python raises `ParsingError`s instead.
+    """
 
 
 @_base_of(_ERROR + "SystemError")
 class PrologSystemError(PrologError, RuntimeError, internal=True):
-    pass
+    """An internal problem occurred, e.g. an uncaught exception that is not an `error/2` term.
+
+    Its `type` is `system_error`.
+    """
 
 
 @_base_of(_ERROR + "MessageError")
 class PrologMessageError(PrologError, internal=True):
-    pass
+    """An error which no other class represents, carrying a message."""
