@@ -1,3 +1,3 @@
 from ._definitions import *
 
-__all__ = ["IOLib", "OOPLib"]
+__all__ = ["IOLib"]

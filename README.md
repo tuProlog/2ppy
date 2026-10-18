@@ -21,7 +21,7 @@ Object-oriented and modular ecosystem for symbolic AI and logic programming, cur
 * a module providing generic API for resolution of logic queries, namely `tuprolog.solve`
     * a module that implements deterministic logic programming and solving, namely `tuprolog.solve.prolog`
     * a module that implements probabilistic logic programming and solving, namely `tuprolog.solve.problog`
-    * a module exposing 2P-Kt's IO and OOP libraries (e.g. `read/1`, `open/3`, `new_object/3`), namely `tuprolog.solve.libs`
+    * a module exposing 2P-Kt's IO library (e.g. `read/1`, `get_char/1`, `open/3`), namely `tuprolog.solve.libs`
 
 * two parsing modules: one aimed at parsing terms, namely `tuprolog.core.parsing`, and the other aimed at parsing theories, namely `tuprolog.theory.parsing`
 
