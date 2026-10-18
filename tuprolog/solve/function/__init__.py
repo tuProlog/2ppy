@@ -12,5 +12,6 @@ __all__ = [
     "compute_response",
     "eval_as_arithmetic_expression",
     "eval_as_expression",
+    "function",
     "logic_function",
 ]

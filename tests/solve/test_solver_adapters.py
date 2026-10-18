@@ -179,9 +179,9 @@ def test_solve_accepts_options_as_keyword(solver):
     assert values(solver.solve(P_X, options=solve_options(limit=1))) == ["1"]
 
 
-def test_solve_rejects_python_strings(solver):
-    with pytest.raises(TypeError):
-        solver.solve("p(X)")
+def test_solve_accepts_python_strings(solver):
+    assert [s.to_dict() for s in solver.solve("p(X)")] == [s.to_dict() for s in solver.solve(P_X)]
+    assert solver.solve_once("p(X)").is_yes
 
 
 def test_solve_once(solver):

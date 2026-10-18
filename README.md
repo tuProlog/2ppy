@@ -43,7 +43,36 @@ The JVM is started when `tuprolog` is first imported.
 
 1. Import `tuprolog.*` modules in your Python scripts
 1. Use the Pythonic API to write, parse or solve your logic programs. You can find some examples in the [tests folder](tests).
-1. Python values are converted where terms are expected (e.g. `struct("f", "a", 1)` is `f(a, 1)`, see `tuprolog.core.to_term`).
+1. Query solvers the Pythonic way:
+    ```python
+    from tuprolog.solve.prolog import prolog_solver
+    from tuprolog.theory.parsing import parse_theory
+
+    solver = prolog_solver(static_kb=parse_theory("parent(abe, homer). parent(homer, bart)."))
+    for bindings in solver.query("parent(X, Y)"):  # errors are raised as Python exceptions
+        print(bindings)  # {'X': 'abe', 'Y': 'homer'}, then {'X': 'homer', 'Y': 'bart'}
+    solution = solver.solve_once("parent(abe, Who)")  # goals may be strings
+    if solution:  # i.e. solution.is_yes
+        print(solution["Who"])  # homer (a term), see also solution.bindings and solution.to_dict()
+    ```
+1. Extend solvers with plain Python functions, whose arguments and results are converted:
+    `predicate` makes a primitive from a function returning a boolean, or returning (or yielding) tuples
+    of argument values, one per solution; `function` makes an arithmetic function.
+    ```python
+    from tuprolog.solve.function import function
+    from tuprolog.solve.library import library
+    from tuprolog.solve.primitive import predicate
+
+    lib = library(
+        "my.lib",
+        primitives={"upper/2": predicate(lambda s, _: [(s, s.upper())])},
+        functions={"half/1": function(lambda x: x / 2)},
+    )
+    list(prolog_solver(libraries=lib).query("upper(abc, U), H is half(3)"))  # [{'U': 'ABC', 'H': 1.5}]
+    ```
+    Python exceptions raised by primitives become logic `system_error`s, which `catch/3` can handle.
+1. Python values are converted where terms are expected (e.g. `struct("f", "a", 1)` is `f(a, 1)`, see `tuprolog.core.to_term`),
+    and back (see `tuprolog.core.to_python`).
     Methods without a Pythonic counterpart are forwarded to the underlying JVM objects, so they may return JVM types (e.g. `java.lang.String`).
 1. Python streams (`io.IOBase`, e.g. files, `sys.stdin`, `io.StringIO`, `io.BytesIO`) are accepted wherever 2P-Kt reads or writes:
     parsers (`read_theory(open("kb.pl"))`), solvers' channels (`prolog_solver(std_in=io.StringIO("..."), std_out=buffer)`),
