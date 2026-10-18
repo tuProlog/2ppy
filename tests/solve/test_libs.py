@@ -1,0 +1,48 @@
+"""Tests for `tuprolog.solve.libs`, the IO and OOP libraries of 2P-Kt."""
+
+import io
+
+import jpype
+
+from tests.solve.primitive._support import bindings, solve_all
+from tuprolog.solve.library import Library, libraries
+from tuprolog.solve.libs import IOLib, OOPLib
+from tuprolog.solve.prolog import prolog_solver
+
+
+def test_definitions():
+    assert IOLib == jpype.JClass("it.unibo.tuprolog.solve.libs.io.IOLib").INSTANCE
+    assert OOPLib == jpype.JClass("it.unibo.tuprolog.solve.libs.oop.OOPLib").INSTANCE
+    assert isinstance(IOLib, Library)
+    assert isinstance(OOPLib, Library)
+    assert (IOLib.alias, OOPLib.alias) == ("prolog.io", "prolog.oop")
+
+
+def test_io_lib_reads_files(tmp_path):
+    path = tmp_path / "terms.pl"
+    path.write_text("f(a). g(b).")
+    solver = prolog_solver(libraries=libraries(IOLib))
+    goal = f"open('{path.as_posix()}', read, S), read(S, X), read(S, Y), close(S)"
+    solution = solve_all(solver, goal)[0]
+    assert solution.is_yes
+    assert (bindings([solution], "X"), bindings([solution], "Y")) == (["f(a)"], ["g(b)"])
+
+
+def test_io_lib_writes_files(tmp_path):
+    path = tmp_path / "out.txt"
+    solver = prolog_solver(libraries=libraries(IOLib))
+    goal = f"open('{path.as_posix()}', write, S), write(S, 'è'), close(S)"
+    assert solve_all(solver, goal)[0].is_yes
+    assert path.read_text(encoding="utf-8") == "è"
+
+
+def test_oop_lib_invokes_jvm_methods():
+    out = io.StringIO()
+    solver = prolog_solver(libraries=libraries(OOPLib), std_out=out)
+    goal = (
+        "type('java.lang.StringBuilder', T), new_object(T, [], O), "
+        "invoke_method(O, append(hello), _), invoke_method(O, toString, R)"
+    )
+    solution = solve_all(solver, goal)[0]
+    assert solution.is_yes
+    assert bindings([solution], "R") == ["hello"]
