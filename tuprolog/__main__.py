@@ -6,6 +6,7 @@ from tuprolog.core.exception import *
 from tuprolog.core.impl import *
 from tuprolog.core.operators import *
 from tuprolog.core.parsing import *
+from tuprolog.errors import *
 from tuprolog.solve import *
 from tuprolog.solve.channel import *
 from tuprolog.solve.data import *
