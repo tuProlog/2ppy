@@ -2,9 +2,10 @@
 
 import it.unibo.tuprolog.solve.function as _function  # type: ignore
 import jpype.imports  # noqa: F401
-from jpype import JImplements, JOverride
+from jpype import JOverride
 
 from tuprolog import logger
+from tuprolog.jvmutils import jimplements
 
 __all__ = [
     "AbstractLogicFunction",
@@ -57,7 +58,7 @@ Create responses with `compute_response`, or `ComputeRequest.reply_with`.
 """
 
 
-@JImplements(LogicFunction)
+@jimplements(LogicFunction)
 class AbstractLogicFunction:
     """A base class for logic functions written in Python: subclasses implement `compute`.
 
@@ -69,7 +70,7 @@ class AbstractLogicFunction:
         ...     def compute(self, request):
         ...         return request.reply_with(integer(len(request.arguments)))
         >>> solver = prolog_solver(libraries=library("my.lib", functions={"arity/3": Arity()}))
-        >>> solver.solve_once("X is arity(a, b, c)")["X"]
+        >>> solver.solve_once("X is arity(1, 2, 3)")["X"]  # arguments are evaluated: numbers
         3
     """
 

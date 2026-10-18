@@ -66,6 +66,7 @@ __all__ = [
     "Triple",
     "customize_derived",
     "jarray",
+    "jimplements",
     "jiterable",
     "jiterator",
     "jlist",
@@ -536,6 +537,33 @@ def customize_derived(*names: str) -> Callable:
 
         proto.__jclass_init__ = __jclass_init__
         return proto
+
+    return decorator
+
+
+def jimplements(*interfaces: Any, **kwargs: Any) -> Callable:
+    """Makes a Python class implement JVM interfaces, as `jpype.JImplements` does.
+
+    `jpype.JImplements` replaces the decorated class with a generated subclass, named after it but
+    with no docstring and `jpype._jproxy` as module: this decorator gives the subclass the
+    docstring, module and qualified name of the decorated class, for `help()` and documentation
+    tools.
+
+    Args:
+        *interfaces: The JVM interfaces (classes, or their names).
+        **kwargs: The options of `jpype.JImplements` (e.g. `deferred=True`).
+
+    Returns:
+        The class decorator.
+    """
+
+    def decorator(cls: type) -> type:
+        proxy = JImplements(*interfaces, **kwargs)(cls)
+        if proxy is not cls:
+            proxy.__module__ = cls.__module__
+            proxy.__qualname__ = cls.__qualname__
+            proxy.__doc__ = cls.__dict__.get("__doc__")
+        return proxy
 
     return decorator
 

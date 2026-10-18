@@ -1,8 +1,9 @@
 import it.unibo.tuprolog.core as _core  # type: ignore
 import jpype.imports  # noqa: F401
-from jpype import JImplements, JOverride
+from jpype import JOverride
 
 from tuprolog import logger
+from tuprolog.jvmutils import jimplements
 
 __all__ = [
     "DEFAULT_TAGS_FORMATTING_OPTIONS",
@@ -567,7 +568,7 @@ FAIL = Truth.FAIL
 """The atom `fail`, i.e. a goal that always fails."""
 
 
-@JImplements(TermComparator)
+@jimplements(TermComparator)
 class AbstractTermComparator:
     """A base class for term comparators implemented in Python.
 
@@ -593,7 +594,7 @@ class AbstractTermComparator:
         raise NotImplementedError()
 
 
-@JImplements(TermConvertible)
+@jimplements(TermConvertible)
 class AbstractTermConvertible:
     """A base class for Python objects convertible into terms: override `toTerm()`.
 
@@ -605,7 +606,7 @@ class AbstractTermConvertible:
         raise NotImplementedError()
 
 
-@JImplements(TermVisitor)
+@jimplements(TermVisitor)
 class AbstractTermVisitor:
     """A base class for term visitors implemented in Python (see `TermVisitor`).
 
