@@ -253,12 +253,12 @@ class PythonByteChannel:
         return read(size)
 
     @JOverride
-    def read(self, buffer):
+    def read(self, buffer) -> int:
         """Reads bytes from the stream into a JVM `java.nio.ByteBuffer`.
 
         Returns:
-            The amount of bytes read: 0 if a non-blocking stream has no data yet, -1 at the end of
-            the stream.
+            The number of bytes read, 0 if a non-blocking stream has no data yet, or -1 at the
+            end of the stream.
         """
         size = buffer.remaining()
         if size == 0:
@@ -275,11 +275,11 @@ class PythonByteChannel:
         return len(data)
 
     @JOverride
-    def write(self, buffer):
+    def write(self, buffer) -> int:
         """Writes the bytes remaining in a JVM `java.nio.ByteBuffer` to the stream.
 
         Returns:
-            The amount of bytes written.
+            The number of bytes written.
         """
         size = buffer.remaining()
         data = JByte[size]
