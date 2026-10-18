@@ -230,6 +230,76 @@ def _is_defined(cls, name: str) -> bool:
     return any(name in base.__dict__ for base in cls.__mro__)
 
 
+def _dispatch_overloads(methods: list) -> Callable:
+    if len(methods) == 1:
+        return methods[0]
+
+    def dispatch(self, *args, **kwargs):
+        # binding before calling keeps JVM calls virtual
+        for method in methods[:-1]:
+            try:
+                return method.__get__(self)(*args, **kwargs)
+            except TypeError as e:
+                if not str(e).startswith("No matching overloads"):
+                    raise
+        return methods[-1].__get__(self)(*args, **kwargs)
+
+    return dispatch
+
+
+def _jvm_methods(cls, name: str, *aliases: str) -> list:
+    methods = []
+    for base in cls.__mro__:
+        for key in (name,) + aliases:
+            method = base.__dict__.get(key)
+            if isinstance(method, JMethodClass) and method not in methods:
+                methods.append(method)
+    return methods
+
+
+def jvm_method(obj: Any, name: str) -> Callable:
+    """The JVM method `name` of `obj`, with all the overloads declared along its class hierarchy,
+    even when Python members (e.g. customizers, or auto-generated snake_case properties) shadow it."""
+    return _dispatch_overloads(_jvm_methods(type(obj), name, "_jvm_" + name, "_" + name)).__get__(
+        obj
+    )
+
+
+def customize_derived(*names: str) -> Callable:
+    """
+    Class decorator for customizers (to be put below `@JImplementationFor`): applies the members
+    `names` of the customizer to every class deriving from the customized one, too.
+
+    JPype copies a customizer's members onto the customized class only: a derived class (re)declaring
+    a JVM method with the same name would shadow them. Here the JVM methods are kept as `_<name>`, as
+    `@JOverride` does on the customized class itself. As JPype splits overloads among the classes
+    declaring them (e.g. MutableTheory.equals(Object) vs AbstractTheory.equals(Theory, Boolean)),
+    `_<name>` tries all the JVM methods named `name` along the MRO.
+    """
+
+    def decorator(proto):
+        init = proto.__dict__.get("__jclass_init__")
+
+        def __jclass_init__(cls):
+            if init is not None:
+                init(cls)
+            for name in names:
+                member = proto.__dict__[name]
+                own = cls.__dict__.get(name)
+                if isinstance(own, JMethodClass):  # keeps it for derived classes
+                    cls._customize("_jvm_" + name, own)
+                methods = _jvm_methods(cls, name, "_jvm_" + name, "_" + name)
+                if methods:
+                    cls._customize("_" + name, _dispatch_overloads(methods))
+                if getattr(cls, name, None) is not member:
+                    cls._customize(name, member)
+
+        proto.__jclass_init__ = __jclass_init__
+        return proto
+
+    return decorator
+
+
 @JImplementationFor("java.lang.Object")
 class _KtObjectWithSmartPythonicAccessors:
     """

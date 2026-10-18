@@ -3,7 +3,7 @@ from itertools import chain
 from jpype import JImplementationFor, JOverride
 
 from tuprolog import logger
-from tuprolog.jvmutils import jiterable
+from tuprolog.jvmutils import customize_derived, jiterable
 from tuprolog.pyutils import iterable_or_varargs
 
 
@@ -70,16 +70,14 @@ class _KtSolveOptions:
 
 
 @JImplementationFor("it.unibo.tuprolog.solve.Solver")
+@customize_derived("solve", "solve_once")
 class _KtSolver:
-    def __jclass_init__(self):
-        pass
-
     @JOverride
     def solve(self, goal, options=None):
         if options is None:
             return self._solve(goal)
         elif options.is_eager:
-            return self.solveList(goal, options)
+            return list(self.solveList(goal, options))
         else:
             return self._solve(goal, options)
 
@@ -92,10 +90,8 @@ class _KtSolver:
 
 
 @JImplementationFor("it.unibo.tuprolog.solve.MutableSolver")
+@customize_derived("standard_output", "standard_input", "standard_error", "warnings")
 class _KtMutableSolver:
-    def __jclass_init__(self):
-        pass
-
     def load_static_clauses(self, *clauses):
         return iterable_or_varargs(clauses, lambda cs: self.loadStaticClauses(jiterable(list(cs))))
 

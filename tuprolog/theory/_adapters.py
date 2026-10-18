@@ -3,14 +3,16 @@ from collections.abc import Iterable, Sized
 from jpype import JClass, JImplementationFor, JOverride
 
 from tuprolog import logger
+from tuprolog.core import Term
 from tuprolog.core import indicator as new_indicator
-from tuprolog.jvmutils import jiterable
+from tuprolog.jvmutils import customize_derived, jiterable, jvm_method
 from tuprolog.pyutils import iterable_or_varargs
 
 _MutableTheory = JClass("it.unibo.tuprolog.theory.MutableTheory")
 
 
 @JImplementationFor("it.unibo.tuprolog.theory.Theory")
+@customize_derived("retract", "abolish", "equals", "to_string")
 class _KtTheory:
     def __jclass_init__(cls):
         Sized.register(cls)
@@ -41,26 +43,29 @@ class _KtTheory:
     @JOverride
     def retract(self, clause, *clauses):
         if len(clauses) == 0:
-            return self.retract_(clause)
-        return iterable_or_varargs((clause,) + clauses, lambda cs: self.retract_(jiterable(cs)))
+            if isinstance(clause, Iterable) and not isinstance(clause, Term):
+                # a Python iterable would be ambiguous between the Iterable and Sequence overloads
+                return self._retract(jiterable(clause))
+            return self._retract(clause)
+        return iterable_or_varargs((clause,) + clauses, lambda cs: self._retract(jiterable(cs)))
 
     def retract_all(self, clause):
         return self.retractAll(clause)
 
     @JOverride
-    def abolish(self, name, arity=None, indicator=None):
+    def abolish(self, name=None, arity=None, indicator=None):
         if name is not None:
             if arity is not None:
-                return self.abolish_(new_indicator(name, arity))
+                return self._abolish(new_indicator(name, arity))
             else:
-                return self.abolish_(name)
+                return self._abolish(name)
         elif indicator is not None:
-            return self.abolish_(indicator)
+            return self._abolish(indicator)
         raise ValueError("You should provide at least either a name-arity couple or an indicator")
 
     @JOverride
     def equals(self, other, use_var_complete_name=True):
-        return self.equals_(other, use_var_complete_name)
+        return self._equals(other, use_var_complete_name)
 
     def __eq__(self, other):
         return self.equals(other, use_var_complete_name=True)
@@ -72,7 +77,8 @@ class _KtTheory:
         return self.hashCode()
 
     def to_string(self, as_prolog_text=False):
-        return self.toString(as_prolog_text)
+        # toString would resolve to java.lang.Object's, which precedes Theory in the MRO of some classes
+        return jvm_method(self, "toString")(as_prolog_text)
 
 
 logger.debug("Configure Kotlin adapters for types in it.unibo.tuprolog.theory.*")
