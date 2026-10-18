@@ -2,7 +2,7 @@
 
 import pytest
 
-from tuprolog.core import atom
+from tuprolog.core import atom, integer
 from tuprolog.solve.flags import (
     DEFAULT_FLAG_STORE,
     EMPTY_FLAG_STORE,
@@ -73,9 +73,9 @@ def test_flag_store_later_positional_arguments_override_earlier_ones():
     assert flag_store(DEFAULT_FLAG_STORE, ("unknown", Unknown.FAIL))[Unknown] == Unknown.FAIL
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="flag_store() treats a single iterable as a (name, value) pair, not as many flags",
-)
 def test_flag_store_accepts_a_single_iterable_of_flags():
     assert flag_store([Unknown, MaxArity]) == flag_store(Unknown, MaxArity)
+
+
+def test_flag_store_converts_python_values():
+    assert flag_store({"a": "x"}, b=1) == flag_store({"a": atom("x"), "b": integer(1)})

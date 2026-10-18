@@ -2,31 +2,36 @@ from collections.abc import Iterable, Mapping
 
 from jpype import JString
 
-from tuprolog.core import Term
+from tuprolog.core import Term, to_term
 from tuprolog.jvmutils import jmap
 
 from ._definitions import Flag, FlagStore, NotableFlag
 
 
-def flag(first: str | NotableFlag | Iterable, value: Term = None) -> Flag:
+def flag(first: str | NotableFlag | Iterable, value: Term | str | float | None = None) -> Flag:
     if isinstance(first, NotableFlag):
         if value is None:
             return first.toPair()
         else:
-            return first.to(value)
+            return first.to(to_term(value))
     elif isinstance(first, (str, JString)):
         if value is None:
             raise ValueError("Argument value is None")
-        return Flag(first, value)
+        return Flag(first, to_term(value))
     elif isinstance(first, Flag) and value is None:
         return first
     elif isinstance(first, Iterable) and value is None:
         items = list(first)
         if len(items) != 2 or not isinstance(items[0], (str, JString)):
             raise ValueError(f"Expected a (name, value) pair, got {items}")
-        return Flag(*items)
+        return Flag(items[0], to_term(items[1]))
     else:
         raise ValueError("Argument first is not iterable nor str")
+
+
+def _is_pair(item) -> bool:
+    items = list(item)
+    return len(items) == 2 and isinstance(items[0], (str, JString))
 
 
 def flag_store(
@@ -38,9 +43,14 @@ def flag_store(
         if isinstance(f, (NotableFlag, Flag, FlagStore)):
             store = store.plus(f)
         elif isinstance(f, Mapping):
-            store = store.plus(jmap(f))
-        else:
+            store = store.plus(jmap({k: to_term(v) for k, v in f.items()}))
+        elif isinstance(f, (Term, str, JString)) or not isinstance(f, Iterable):
+            # ValueError, consistently with flag()
+            raise ValueError(f"Expected flags, flag stores, or iterables of them, got {f!r}")  # noqa: TRY004
+        elif _is_pair(f):
             store = store.plus(flag(f))
+        else:  # an iterable of flags
+            store = store.plus(flag_store(*f))
     if kwargs:
-        store = store.plus(jmap(kwargs))
+        store = store.plus(jmap({k: to_term(v) for k, v in kwargs.items()}))
     return store

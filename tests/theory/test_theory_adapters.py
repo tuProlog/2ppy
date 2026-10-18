@@ -321,11 +321,6 @@ def test_mutable_theory_clauses_is_iterable():
     assert list(mutable_theory(P_A, Q_X, DYN).clauses) == [P_A, Q_X, DYN]
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="IndexedTheory.clauses/rules/directives return anonymous Kotlin Iterables "
-    "that are not Python-iterable (README 'known issues'; needs protect_iterable)",
-)
 @pytest.mark.parametrize(
     "prop, expected",
     [("clauses", [P_A, Q_X, DYN]), ("rules", [P_A, Q_X]), ("directives", [DYN])],

@@ -111,11 +111,6 @@ def test_signature_keyword_arity():
     assert signature("f", arity=1) == signature("f", 1)
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="signature (like yes/no/halt_solution) is a functools.singledispatch function, "
-    "which requires the first argument to be positional",
-)
 def test_signature_all_keyword_arguments():
     assert signature(name="f", arity=1) == signature("f", 1)
 
@@ -338,3 +333,10 @@ def test_solve_options_are_immutable_values():
     changed = opts.set_limit(2).set_lazy(False).set_timeout(5)
     assert (changed.limit, changed.is_lazy, changed.timeout) == (2, False, 5)
     assert (opts.limit, opts.is_lazy, opts.timeout) == (ALL_SOLUTIONS, True, MAX_TIMEOUT)
+
+
+def test_signature_requires_an_arity_unless_from_a_term():
+    with pytest.raises(TypeError):
+        signature("f")
+    with pytest.raises(TypeError):
+        signature(struct("/", atom("f"), integer(1)), 1)

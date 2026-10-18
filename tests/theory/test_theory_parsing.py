@@ -222,11 +222,6 @@ def test_read_parse_error(tmp_path):
         read_theory(str(path))
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="jvmioutils.ensure_input_steam accepts only str or java InputStream: pathlib.Path is "
-    "rejected (and its error message itself raises 'can only concatenate str')",
-)
 def test_read_theory_from_pathlib_path(source_file):
     assert strings(read_theory(source_file)) == expected_strings()
 

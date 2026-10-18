@@ -273,11 +273,6 @@ def test_java_assert_and_retract_methods(solver):
     assert len(solver.dynamic_kb) == 0
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="jvmutils.to_snake_case leaves a trailing capital alone ('assertA' -> 'assertA'), "
-    "so MutableSolver has no snake_case assert_a/assert_z (Theory has them)",
-)
 def test_snake_case_assert_methods(solver):
     solver.assert_z(Q_B)
     solver.assert_a(Q_A)

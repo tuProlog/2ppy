@@ -12,13 +12,14 @@ from tuprolog.math import (
     python_decimal,
     python_integer,
 )
-from tuprolog.pyutils import iterable_or_varargs
+from tuprolog.pyutils import iterable_or_varargs, register_single_value_type
 
 
 @JImplementationFor("it.unibo.tuprolog.core.Term")
 class _KtTerm:
     def __jclass_init__(cls):
-        pass
+        # e.g. struct("f", logic_list(...)) has one argument, the list
+        register_single_value_type(cls)
 
     def __getitem__(self, item):
         if isinstance(item, tuple):
@@ -103,6 +104,9 @@ class _KtRecursive:
 
     def __len__(self):
         return self.getSize()
+
+    def __iter__(self):
+        return iter(self.toSequence())
 
     def to_iterable(self):
         return self.toSequence()

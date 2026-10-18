@@ -1,3 +1,4 @@
+import re
 from collections.abc import Callable, Mapping, MutableMapping
 from collections.abc import Iterable as PyIterable
 from collections.abc import Iterator as PyIterator
@@ -44,7 +45,29 @@ SequencesKt = _ksequences.SequencesKt
 PyUtils = _tuprolog_utils.PyUtils
 
 
+_ITERABLE_ITERATOR = Iterable.class_.getMethod("iterator")
+
+_ITERATOR_HAS_NEXT = Iterator.class_.getMethod("hasNext")
+
+_ITERATOR_NEXT = Iterator.class_.getMethod("next")
+
+
+def _is_anonymous(obj: Any) -> bool:
+    # JPype wraps instances of non-public JVM classes (e.g. Kotlin's synthetic Iterable
+    # implementations) as java.lang.Object$Anonymous, hiding their interfaces
+    return type(obj).__name__ == "java.lang.Object$Anonymous"
+
+
+def _iterate_reflectively(iterable: Any) -> PyIterator:
+    # interface methods are still callable via reflection on anonymous instances
+    iterator = _ITERABLE_ITERATOR.invoke(iterable)
+    while _ITERATOR_HAS_NEXT.invoke(iterator):
+        yield _ITERATOR_NEXT.invoke(iterator)
+
+
 def protect_iterable(iterable: Any) -> Any:
+    if _is_anonymous(iterable):
+        return iterable  # Python-iterable, see _KtObjectWithSmartPythonicAccessors
     return PyUtils.iterable(iterable)
 
 
@@ -208,11 +231,12 @@ class _JvmComparable:
         return self.compareTo(other) >= 0
 
 
+_CAMEL_BOUNDARY = re.compile(r"(?<=[a-z0-9])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])")
+
+
 def to_snake_case(camel_str: str) -> str:
-    return "".join(
-        "_" + x.lower() if x.isupper() and camel_str[i + 1 : i + 2].islower() else x
-        for i, x in enumerate(camel_str)
-    ).lstrip("_")
+    """E.g. getHTTPCode -> get_http_code, toURI -> to_uri, assertA -> assert_a."""
+    return _CAMEL_BOUNDARY.sub("_", camel_str).lower()
 
 
 def _virtual_getter(name: str) -> Callable:
@@ -300,6 +324,12 @@ def customize_derived(*names: str) -> Callable:
     return decorator
 
 
+def _anonymous_iter(self):
+    if not Iterable.class_.isInstance(self):
+        raise TypeError(f"'{type(self).__name__}' object is not iterable")
+    return _iterate_reflectively(self)
+
+
 @JImplementationFor("java.lang.Object")
 class _KtObjectWithSmartPythonicAccessors:
     """
@@ -308,6 +338,8 @@ class _KtObjectWithSmartPythonicAccessors:
     """
 
     def __jclass_init__(self):
+        if self.__name__ == "java.lang.Object$Anonymous":
+            self._customize("__iter__", _anonymous_iter)
         members = dir(self)
         for name in members:
             member = getattr(self, name, None)
@@ -356,7 +388,8 @@ class _JvmThrowable:
 
     @property
     def message(self):
-        return self.getMessage()
+        message = self.getMessage()
+        return None if message is None else str(message)
 
 
 class _KtFunction:

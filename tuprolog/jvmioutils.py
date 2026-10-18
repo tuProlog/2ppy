@@ -1,4 +1,5 @@
 from io import SEEK_SET, IOBase
+from os import PathLike, fspath
 
 import java.io as _jio  # type: ignore
 import java.nio.file as _jnio_file  # type: ignore
@@ -109,9 +110,9 @@ def open_file(path: str) -> InputStream:
     return Files.newInputStream(Paths.get(path))
 
 
-def ensure_input_steam(input: str | InputStream) -> InputStream:
-    if isinstance(input, str):
-        return open_file(input)
+def ensure_input_steam(input: str | PathLike | InputStream) -> InputStream:
+    if isinstance(input, (str, PathLike)):
+        return open_file(fspath(input))
     elif isinstance(input, InputStream):
         return input
     else:

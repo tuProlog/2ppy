@@ -4,14 +4,22 @@ from typing import Any, TypeVar
 T = TypeVar("T")
 
 
+# types whose instances are single values even if iterable (e.g. strings, logic lists)
+_single_value_types: tuple[type, ...] = (str, bytes)
+
+
+def register_single_value_type(cls: type) -> None:
+    global _single_value_types
+    _single_value_types += (cls,)
+
+
 def iterable_or_varargs(
     args: Sequence[Any], dispatch: Callable[[Iterable[Any]], Any] = lambda x: x
 ) -> Any:
     assert isinstance(args, Sequence)
     if len(args) == 1:
         item = args[0]
-        # strings are iterable, but they are single values rather than collections
-        if isinstance(item, Iterable) and not isinstance(item, (str, bytes)):
+        if isinstance(item, Iterable) and not isinstance(item, _single_value_types):
             return dispatch(item)
         else:
             return dispatch([item])

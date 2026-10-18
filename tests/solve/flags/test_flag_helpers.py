@@ -88,10 +88,6 @@ def test_flag_rejects_pair_and_value():
         flag(("custom", atom("v")), atom("w"))
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="flag() does not convert Python values into terms: flag('a', 1) holds a JVM Long",
-)
 def test_flag_converts_python_values_to_terms():
     assert isinstance(flag("custom", 1).second, Term)
     assert flag("custom", 1).second == integer(1)

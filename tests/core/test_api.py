@@ -313,11 +313,6 @@ def test_struct_with_single_string_argument_is_not_split():
     assert struct("f", "abc").arity == 1
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="Python str arguments are not converted into Atoms: a java.lang.String leaks into "
-    "the Struct arguments (heap pollution)",
-)
 def test_struct_converts_string_arguments_into_atoms():
     assert struct("f", "abc") == struct("f", atom("abc"))
 
