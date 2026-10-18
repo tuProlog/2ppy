@@ -7,18 +7,18 @@
   <parent>
     <groupId>org.jetbrains.kotlin</groupId>
     <artifactId>kotlin-bom</artifactId>
-    <version>1.9.10</version>
+    <version>1.9.25</version>
   </parent>
   <dependencies>
     <dependency>
         <groupId>it.unibo.tuprolog</groupId>
         <artifactId>repl-jvm</artifactId>
-        <version>0.31.16</version>
+        <version>0.31.21</version>
     </dependency>
     <dependency>
         <groupId>it.unibo.tuprolog</groupId>
         <artifactId>solve-problog-jvm</artifactId>
-        <version>0.31.16</version>
+        <version>0.31.21</version>
     </dependency>
   </dependencies>
 </project>
