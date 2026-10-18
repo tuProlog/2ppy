@@ -28,11 +28,16 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://github.com/tuProlog/2ppy"
+Documentation = "https://tuprolog.github.io/2ppy/"
 Issues = "https://github.com/tuProlog/2ppy/issues"
 
 [build-system]
 requires = ["uv_build>=0.13.0,<0.14.0"]
 build-backend = "uv_build"
+
+[tool.uv]
+# `uv sync` installs the documentation tools too
+default-groups = ["dev", "docs"]
 
 [tool.uv.build-backend]
 module-name = "tuprolog"
@@ -45,6 +50,13 @@ dev = [
     "poethepoet>=0.45.0",
     "pytest>=9.0.3",
     "ruff>=0.15.12",
+]
+docs = [
+    "mkdocs>=1.6.1,<2", # MkDocs 2 is planned to drop the plugins and themes used here
+    "mkdocs-gen-files>=0.6.1",
+    "mkdocs-literate-nav>=0.6.3",
+    "mkdocs-material>=9.7.7",
+    "mkdocstrings-python>=2.0.9",
 ]
 
 [tool.poe.tasks]
@@ -70,6 +82,9 @@ static-fixes = [
     "ruff-fix",
     "format",
 ]
+# the documentation site (see mkdocs.yml), with the API reference generated from the docstrings
+docs = "mkdocs build --strict"
+docs-serve = "mkdocs serve"
 # Local, untracked Git hooks; append hook names to pick some (pre-commit,
 # conventional-commits, no-ai-signature, pre-push)
 install-hooks = "python scripts/githooks.py install"

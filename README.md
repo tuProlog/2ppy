@@ -3,7 +3,8 @@
 [![PyPI](https://img.shields.io/pypi/v/2ppy)](https://pypi.org/project/2ppy/)
 [![Python](https://img.shields.io/pypi/pyversions/2ppy)](https://pypi.org/project/2ppy/)
 [![CI/CD](https://github.com/tuProlog/2ppy/actions/workflows/check.yml/badge.svg)](https://github.com/tuProlog/2ppy/actions/workflows/check.yml)
-[![License](https://img.shields.io/github/license/tuProlog/2ppy)](LICENSE)
+[![Docs](https://img.shields.io/badge/docs-tuprolog.github.io%2F2ppy-blue)](https://tuprolog.github.io/2ppy/)
+[![License](https://img.shields.io/github/license/tuProlog/2ppy)](https://github.com/tuProlog/2ppy/blob/master/LICENSE)
 
 2PPy brings [tuProlog](https://github.com/tuProlog/2p-kt) (2P-Kt) to Python: an object-oriented,
 modular ecosystem for symbolic AI and logic programming. With it, Python programs can
@@ -58,7 +59,8 @@ which bundles a Java runtime. The Java virtual machine (JVM) is started, once pe
 ## Guide
 
 The examples below are [doctests](https://docs.python.org/3/library/doctest.html), checked by the
-test suite. Every module, class and function has a docstring: use `help(...)` for the details.
+test suite. Every module, class and function has a docstring: use `help(...)` for the details, or
+browse the [API reference](https://tuprolog.github.io/2ppy/reference/tuprolog/).
 
 ### Terms
 
@@ -344,7 +346,7 @@ The project follows [template-python-project-uv](https://github.com/gciatto/temp
 Requirements: [uv](https://docs.astral.sh/uv/getting-started/installation/) and
 [Apache Maven](https://maven.apache.org/install.html) (`mvn` on the `PATH`), which downloads
 2P-Kt's JARs from [Maven Central](https://mvnrepository.com/artifact/it.unibo.tuprolog), as declared in
-[`pom.xml`](pom.xml).
+[`pom.xml`](https://github.com/tuProlog/2ppy/blob/master/pom.xml).
 
 ```bash
 uv sync                      # create the environment, with the development tools
@@ -353,11 +355,13 @@ uv run poe test              # run the tests (including the examples in docstrin
 uv run poe static-checks     # compileall, ruff format --check, ruff check, mypy (what CI runs)
 uv run poe static-fixes      # ruff check --fix + ruff format
 uv run poe coverage && uv run poe coverage-report
+uv run poe docs              # documentation site in site/ (API reference from the docstrings)
+uv run poe docs-serve        # the same, served with live reload
 uv build                     # wheel and sdist in dist/ (JARs included)
 ```
 
 Write the code inside `tuprolog/` and the tests inside `tests/`.
-Contributor notes (layout, conventions, documentation style) are in [`AGENTS.md`](AGENTS.md).
+Contributor notes (layout, conventions, documentation style) are in [`AGENTS.md`](https://github.com/tuProlog/2ppy/blob/master/AGENTS.md).
 Optional local Git hooks: `uv run poe install-hooks [HOOK...]` (`pre-commit`, `conventional-commits`,
 `no-ai-signature`, `pre-push`).
 
@@ -370,5 +374,7 @@ corresponding [GitHub Release](https://github.com/tuProlog/2ppy/releases).
 `pyproject.toml` is the only version source: never bump it by hand.
 The release workflow needs the `PYPI_TOKEN` and `RELEASE_TOKEN` repository secrets.
 
-CI runs the static checks and the tests on Ubuntu, Windows and macOS, with Python 3.10 to 3.13.
+CI runs the static checks and the tests on Ubuntu, Windows and macOS, with Python 3.10 to 3.13,
+and builds the documentation site, which every push to `master` deploys on
+[GitHub Pages](https://tuprolog.github.io/2ppy/).
 Dependencies are kept up to date by [Renovate](https://docs.renovatebot.com/).
