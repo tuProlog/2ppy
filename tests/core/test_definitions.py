@@ -26,6 +26,7 @@ from tuprolog.core import (
     integer,
     logic_list,
     logic_tuple,
+    pretty_expressions_formatter,
     real,
     rule,
     struct,
@@ -118,7 +119,7 @@ def test_default_term_formatter():
 
 
 def test_pretty_term_formatter():
-    formatter = TermFormatter.prettyExpressions()
+    formatter = pretty_expressions_formatter()
     assert formatter.format(struct("+", atom("a"), struct("*", atom("b"), atom("c")))) == (
         "a + b * c"
     )

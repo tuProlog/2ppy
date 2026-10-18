@@ -104,15 +104,7 @@ def test_if_then_else(solver):
         ("abs(-4)", "4"),
         ("max(2, 5)", None),
         ("7 / 2", "3.5"),
-        pytest.param(
-            "2 ** -1",
-            "0.5",
-            marks=pytest.mark.xfail(
-                strict=True,
-                reason="2P-Kt 0.31.16: 'X is 2 ** -1' leaks a raw java.lang.ArithmeticException "
-                "out of solve instead of yielding 0.5 (or at least a Halt solution)",
-            ),
-        ),
+        ("2 ** -1", "0.5"),
         ("sqrt(16)", "4.0"),
         ("12345678901234567890 * 10", "123456789012345678900"),
     ],
@@ -148,7 +140,7 @@ def test_findall_bagof_setof(solver):
 
 @pytest.mark.xfail(
     strict=True,
-    reason="2P-Kt 0.31.16: setof/3 removes duplicates but does not sort ([c, b, a])",
+    reason="2P-Kt 3.0.1: setof/3 removes duplicates but does not sort ([c, b, a])",
 )
 def test_setof_sorts(solver):
     assert answers(solver, "setof(Y, member(Y, [c, a, b, a]), X)") == ["[a, b, c]"]
@@ -351,7 +343,7 @@ def test_atoms_and_strings(solver):
 
 @pytest.mark.xfail(
     strict=True,
-    reason="2P-Kt 0.31.16: sub_atom(hello, 1, 3, _, X) yields a spurious second Yes "
+    reason="2P-Kt 3.0.1: sub_atom(hello, 1, 3, _, X) yields a spurious second Yes "
     "with an empty substitution",
 )
 def test_sub_atom_is_deterministic_when_fully_specified(solver):

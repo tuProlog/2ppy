@@ -82,6 +82,12 @@ TermConvertible = _core.TermConvertible
 TermFormatter = _core.TermFormatter
 
 
+TagsFormattingOptions = TermFormatter.TagsFormattingOptions
+
+
+DEFAULT_TAGS_FORMATTING_OPTIONS: TagsFormattingOptions = TagsFormattingOptions()
+
+
 Terms = _core.Terms
 
 

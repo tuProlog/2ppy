@@ -2,7 +2,14 @@ from collections.abc import Iterable, Mapping
 from functools import singledispatch
 from typing import Any
 
-from tuprolog.core import EMPTY_UNIFIER, Struct, Substitution, Term, TermFormatter
+from tuprolog.core import (
+    EMPTY_UNIFIER,
+    Struct,
+    Substitution,
+    Term,
+    TermFormatter,
+    pretty_expressions_formatter,
+)
 from tuprolog.jvmutils import JavaSystem, jlist, jmap
 
 from ._definitions import (
@@ -75,7 +82,7 @@ def current_time_instant() -> int:
 
 def solution_formatter(term_formatter: TermFormatter | None = None) -> SolutionFormatter:
     if term_formatter is None:
-        term_formatter = TermFormatter.prettyExpressions()
+        term_formatter = pretty_expressions_formatter()
     return SolutionFormatter.of(term_formatter)
 
 

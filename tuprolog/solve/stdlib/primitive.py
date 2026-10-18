@@ -118,6 +118,9 @@ Halt1: _primitive.Halt1 = _primitive.Halt1.INSTANCE
 Integer: _primitive.Integer = _primitive.Integer.INSTANCE
 
 
+InternalHelp: _primitive.InternalHelp = _primitive.InternalHelp.INSTANCE
+
+
 Is: _primitive.Is = _primitive.Is.INSTANCE
 
 

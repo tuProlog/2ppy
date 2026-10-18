@@ -5,10 +5,10 @@ import pytest
 import tuprolog.solve as solve_module
 from tuprolog.core import (
     EMPTY_UNIFIER,
-    TermFormatter,
     atom,
     indicator,
     integer,
+    pretty_variables_formatter,
     struct,
     substitution,
     var,
@@ -293,7 +293,7 @@ def test_solution_formatter_halt(solver):
 
 def test_solution_formatter_with_custom_term_formatter(solver):
     yes = solver.solve_once(struct("q", var("X")))
-    fmt = solution_formatter(TermFormatter.prettyVariables())
+    fmt = solution_formatter(pretty_variables_formatter())
     assert fmt.format(yes) == "yes: q('+'(a, b))\n    X = '+'(a, b)"
 
 

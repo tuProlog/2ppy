@@ -1,13 +1,14 @@
 from collections.abc import Iterable, Mapping
 from decimal import Decimal
 
-from jpype import JArray, JString
+from jpype import JArray, JClass, JString
 
 from tuprolog.jvmutils import jiterable, jmap
 from tuprolog.math import BigDecimal, BigInteger, big_decimal, big_integer
 from tuprolog.pyutils import iterable_or_varargs
 
 from ._definitions import (
+    DEFAULT_TAGS_FORMATTING_OPTIONS,
     Atom,
     Block,
     Clause,
@@ -25,7 +26,9 @@ from ._definitions import (
     Scope,
     Struct,
     Substitution,
+    TagsFormattingOptions,
     Term,
+    TermFormatter,
     Truth,
     Tuple,
     Var,
@@ -149,3 +152,40 @@ def scope(*variables: Var | str) -> Scope:
 def variables(*names: str) -> tuple[Var]:
     assert len(names) > 0
     return tuple(var(n) for n in names)
+
+
+def _operators_or_default(operators):
+    # tuprolog.core.operators depends on tuprolog.core: the JVM class is looked up lazily
+    if operators is None:
+        return JClass("it.unibo.tuprolog.core.operators.OperatorSet").DEFAULT
+    return operators
+
+
+def canonical_formatter() -> TermFormatter:
+    return TermFormatter.canonical()
+
+
+def default_formatter(
+    operators=None, tags: TagsFormattingOptions = DEFAULT_TAGS_FORMATTING_OPTIONS
+) -> TermFormatter:
+    return TermFormatter.default(_operators_or_default(operators), tags)
+
+
+def readable_formatter(
+    operators=None, tags: TagsFormattingOptions = DEFAULT_TAGS_FORMATTING_OPTIONS
+) -> TermFormatter:
+    return TermFormatter.readable(_operators_or_default(operators), tags)
+
+
+def pretty_variables_formatter(
+    tags: TagsFormattingOptions = DEFAULT_TAGS_FORMATTING_OPTIONS,
+) -> TermFormatter:
+    return TermFormatter.prettyVariables(tags)
+
+
+def pretty_expressions_formatter(
+    pretty_variables: bool = True,
+    operators=None,
+    tags: TagsFormattingOptions = DEFAULT_TAGS_FORMATTING_OPTIONS,
+) -> TermFormatter:
+    return TermFormatter.prettyExpressions(pretty_variables, _operators_or_default(operators), tags)

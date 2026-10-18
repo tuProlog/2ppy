@@ -22,13 +22,22 @@ DEFAULT_FLAG_STORE: FlagStore = FlagStore.DEFAULT
 DoubleQuotes: NotableFlag = _flags.DoubleQuotes.INSTANCE
 
 
+GroundQueriesHaveBooleanSolution: NotableFlag = _flags.GroundQueriesHaveBooleanSolution.INSTANCE
+
+
 LastCallOptimization: NotableFlag = _flags.LastCallOptimization.INSTANCE
 
 
 MaxArity: NotableFlag = _flags.MaxArity.INSTANCE
 
 
+ShowWildCardVariablesInSolutions: NotableFlag = _flags.ShowWildCardVariablesInSolutions.INSTANCE
+
+
 TrackVariables: NotableFlag = _flags.TrackVariables.INSTANCE
+
+
+UniqueSolutions: NotableFlag = _flags.UniqueSolutions.INSTANCE
 
 
 Unknown: NotableFlag = _flags.Unknown.INSTANCE

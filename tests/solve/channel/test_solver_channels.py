@@ -23,7 +23,7 @@ def test_write_on_python_stdout():
 
 @pytest.mark.xfail(
     strict=True,
-    reason="2P-Kt 0.31.16: MutableSolver.setStandardOutput leaves write/1 on the old channel",
+    reason="2P-Kt 3.0.1: MutableSolver.setStandardOutput leaves write/1 on the old channel",
 )
 def test_stdout_can_be_replaced_on_mutable_solvers():
     first, second = [], []
@@ -81,9 +81,6 @@ def test_echo_from_python_input_to_python_output():
     assert "".join(written) == "ab"
 
 
-@pytest.mark.xfail(
-    strict=True, reason="2P-Kt 0.31.16 fails on a second read/1 from a string channel"
-)
 def test_read_many_terms_from_string_channel():
     solver = prolog_solver(libraries=IO, std_in=input_channel("a. b.\n"))
     solutions = solve_all(solver, "read(X), read(Y)")
@@ -91,10 +88,6 @@ def test_read_many_terms_from_string_channel():
     assert bindings(solutions, "Y") == ["b"]
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="2P-Kt 0.31.16 cannot read terms from InputChannelFromFunction (callable channels)",
-)
 def test_read_term_from_callable_channel():
     chars = iter("foo(bar).\n")
     solver = prolog_solver(libraries=IO, std_in=input_channel(lambda: next(chars, None)))

@@ -10,15 +10,27 @@ from tuprolog.solve.flags import (
     EMPTY_FLAG_STORE,
     DoubleQuotes,
     FlagStore,
+    GroundQueriesHaveBooleanSolution,
     LastCallOptimization,
     MaxArity,
     NotableFlag,
+    ShowWildCardVariablesInSolutions,
     TrackVariables,
+    UniqueSolutions,
     Unknown,
     flag,
 )
 
-NOTABLE_FLAGS = [DoubleQuotes, LastCallOptimization, MaxArity, TrackVariables, Unknown]
+NOTABLE_FLAGS = [
+    DoubleQuotes,
+    GroundQueriesHaveBooleanSolution,
+    LastCallOptimization,
+    MaxArity,
+    ShowWildCardVariablesInSolutions,
+    TrackVariables,
+    UniqueSolutions,
+    Unknown,
+]
 
 
 def test_empty_flag_store():
@@ -48,8 +60,19 @@ def test_notable_flags(notable):
         (TrackVariables, ["ON", "OFF"]),
         (LastCallOptimization, ["ON", "OFF"]),
         (DoubleQuotes, ["ATOM"]),
+        (GroundQueriesHaveBooleanSolution, ["ON", "OFF"]),
+        (ShowWildCardVariablesInSolutions, ["ON", "OFF"]),
+        (UniqueSolutions, ["ON", "OFF"]),
     ],
-    ids=["unknown", "track_variables", "last_call_optimization", "double_quotes"],
+    ids=[
+        "unknown",
+        "track_variables",
+        "last_call_optimization",
+        "double_quotes",
+        "ground_queries_have_boolean_solution",
+        "show_wildcard_variables_in_solutions",
+        "unique_solutions",
+    ],
 )
 def test_notable_flag_admissible_values(notable, names):
     values = [getattr(notable, name) for name in names]
@@ -64,23 +87,7 @@ def test_notable_flag_editability():
     assert not MaxArity.is_editable
 
 
-@pytest.mark.parametrize(
-    "notable",
-    [
-        pytest.param(
-            f,
-            marks=[
-                pytest.mark.xfail(
-                    strict=True, reason="2P-Kt 0.31.16's NotableFlag.fromName omits TrackVariables"
-                )
-            ]
-            if f is TrackVariables
-            else [],
-        )
-        for f in NOTABLE_FLAGS
-    ],
-    ids=lambda f: str(f.name),
-)
+@pytest.mark.parametrize("notable", NOTABLE_FLAGS, ids=lambda f: str(f.name))
 def test_notable_flag_from_name(notable):
     assert NotableFlag.fromName(notable.name) == notable
 

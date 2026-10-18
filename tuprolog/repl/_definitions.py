@@ -5,8 +5,9 @@ from typing import IO
 
 from jpype import JException
 
+from tuprolog.core import pretty_expressions_formatter
 from tuprolog.core.parsing import ParseException, TermParser
-from tuprolog.solve import SolutionFormatter, Solver, TermFormatter, solution_formatter
+from tuprolog.solve import SolutionFormatter, Solver, solution_formatter
 from tuprolog.solve.exception import HaltException
 from tuprolog.theory.parsing import ClausesParser
 
@@ -49,7 +50,7 @@ Welcome to the {name.title()} REPL.
 
     @property
     def solution_formatter(self) -> SolutionFormatter:
-        return solution_formatter(TermFormatter.prettyExpressions(self.solver.operators))
+        return solution_formatter(pretty_expressions_formatter(operators=self.solver.operators))
 
     @property  # Cmd reads the prompt as an attribute: a property computes it
     def prompt(self) -> str:  # type: ignore[override]
@@ -113,4 +114,4 @@ Welcome to the {name.title()} REPL.
         return False
 
     def on_parsing_error(self, err: ParseException) -> None:
-        self.stdout.write(f"Error: {err.message}\n".replace("'<EOF>'", "end of input"))
+        self.stdout.write(f"Error: {err.message}\n")

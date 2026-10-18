@@ -573,5 +573,5 @@ def test_scope_directive(s, a, b):
 
 def test_scope_snake_case_accessors(s):
     assert isinstance(s, Scope)
-    assert s.empty_list == empty_logic_list()
+    assert s.empty_logic_list == empty_logic_list()
     assert {str(k) for k in s.variables} == {"X", "Y"}
