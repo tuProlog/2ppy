@@ -250,11 +250,6 @@ def test_evaluation_error_is_described():
     assert "evaluation_error(zero_divisor)" in output
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="2P-Kt's SolutionFormatter prints a whitespace-only line after solutions with an "
-    "empty substitution (2P-Kt's own REPL prints 'yes.' via groundQueriesHaveBooleanSolution)",
-)
 def test_ground_solution_has_no_blank_line():
     output = run("?- true.\n")
     assert all(line.strip() for line in output.splitlines()[1:])
