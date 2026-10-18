@@ -79,3 +79,8 @@ def test_flag_store_accepts_a_single_iterable_of_flags():
 
 def test_flag_store_converts_python_values():
     assert flag_store({"a": "x"}, b=1) == flag_store({"a": atom("x"), "b": integer(1)})
+
+
+def test_flag_store_accepts_one_shot_iterators():
+    assert flag_store(iter([("a", 1), ("b", 2)])) == flag_store(a=1, b=2)
+    assert flag_store(iter(["a", 1])) == flag_store(a=1)
