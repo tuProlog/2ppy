@@ -125,7 +125,7 @@ def test_reset_libraries_end_to_end(emitting):
 
 @pytest.mark.xfail(
     strict=True,
-    reason="2P-Kt 0.31.16: UnloadLibraries leaves loaded libraries in place (Runtime.minus is "
+    reason="2P-Kt 3.0.1: UnloadLibraries leaves loaded libraries in place (Runtime.minus is "
     "inverted)",
 )
 def test_unload_libraries_end_to_end(emitting):
@@ -181,7 +181,7 @@ def test_remove_operators_end_to_end(emitting):
 
 
 @pytest.mark.xfail(
-    strict=True, reason="2P-Kt 0.31.16: ResetOperators merges operators instead of replacing them"
+    strict=True, reason="2P-Kt 3.0.1: ResetOperators merges operators instead of replacing them"
 )
 def test_reset_operators_end_to_end(emitting):
     solver = emitting(reset_operators(ARROW))

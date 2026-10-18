@@ -158,7 +158,7 @@ class _KtScope:
 
     def cons(self, head, tail=None):
         if tail is None:
-            return self.listOf(head)
+            return self.logicListOf(head)
         else:
             return self.consOf(head, tail)
 
@@ -199,10 +199,10 @@ class _KtScope:
         return self.varOf(name)
 
     def list(self, *items):
-        return iterable_or_varargs(items, lambda xs: self.listOf(jiterable(xs)))
+        return iterable_or_varargs(items, lambda xs: self.logicListOf(jiterable(xs)))
 
     def list_from(self, items, last=None):
-        return self.listFrom(jiterable(items), last)
+        return self.logicListFrom(jiterable(items), last)
 
     def tuple(self, first, second, *others):
         return iterable_or_varargs(

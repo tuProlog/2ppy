@@ -130,13 +130,13 @@ def test_operator_clauses():
 )
 def test_syntax_error_is_reported_and_repl_continues(text):
     output = run(text)
-    assert "Error: mismatched input '.'" in output
+    assert "Error: Unexpected token '.' at 1:3; expected term" in output
     assert "yes: true" in output
 
 
-def test_syntax_error_at_end_of_input_mentions_it():
+def test_unterminated_quoted_literal_is_reported():
     output = run('?- "abc.\n')
-    assert "Error: mismatched input end of input" in output
+    assert "Error: Unterminated quoted literal beginning at 1:1" in output
     assert "'<EOF>'" not in output
 
 

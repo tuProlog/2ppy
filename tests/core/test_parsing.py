@@ -314,11 +314,6 @@ def test_read_terms_single_unterminated_term():
     assert list(read_terms(stream)) == [struct("f", atom("a"))]
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="2P-Kt 0.31.16's TermReader.readTerms fails on '.'-terminated terms "
-    "('extraneous input .'); fixed upstream",
-)
 def test_read_terms_from_path(theory_file):
     terms = list(read_terms(str(theory_file)))
     assert len(terms) == 3
@@ -326,10 +321,5 @@ def test_read_terms_from_path(theory_file):
     assert terms[2] == atom("h")
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="2P-Kt 0.31.16's TermReader.readTerms fails on '.'-terminated terms "
-    "('extraneous input .'); fixed upstream",
-)
 def test_term_reader_read_all(theory_file):
     assert len(list(term_reader().read_all(str(theory_file)))) == 3

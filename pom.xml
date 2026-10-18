@@ -1,24 +1,32 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.mycompany.app</groupId>
-  <artifactId>my-app</artifactId>
+  <groupId>it.unibo.tuprolog</groupId>
+  <artifactId>2ppy-jars</artifactId>
   <version>1</version>
-  <parent>
-    <groupId>org.jetbrains.kotlin</groupId>
-    <artifactId>kotlin-bom</artifactId>
-    <version>1.9.25</version>
-  </parent>
   <dependencies>
     <dependency>
-        <groupId>it.unibo.tuprolog</groupId>
-        <artifactId>repl-jvm</artifactId>
-        <version>0.31.21</version>
+      <groupId>it.unibo.tuprolog</groupId>
+      <artifactId>repl-jvm</artifactId>
+      <version>3.0.1</version>
+      <exclusions>
+        <!-- metadata-only artifact, unpublished for recent Kotlin versions (tuProlog/2p-kt#859) -->
+        <exclusion>
+          <groupId>org.jetbrains.kotlin</groupId>
+          <artifactId>kotlin-stdlib-common</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
-        <groupId>it.unibo.tuprolog</groupId>
-        <artifactId>solve-problog-jvm</artifactId>
-        <version>0.31.21</version>
+      <groupId>it.unibo.tuprolog</groupId>
+      <artifactId>solve-problog-jvm</artifactId>
+      <version>3.0.1</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.jetbrains.kotlin</groupId>
+          <artifactId>kotlin-stdlib-common</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
 </project>

@@ -5,14 +5,14 @@ from tuprolog.core import (
     Real,
     Struct,
     Term,
-    TermFormatter,
     numeric,
+    pretty_expressions_formatter,
     real,
     struct,
     var,
 )
 
-formatter = TermFormatter.prettyExpressions()
+formatter = pretty_expressions_formatter()
 
 
 def is_sum(term: Struct):

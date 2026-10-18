@@ -332,7 +332,7 @@ def test_channel_property_setters(solver, name):
 
 @pytest.mark.xfail(
     strict=True,
-    reason="2P-Kt 0.31.16: MutableSolver.setStandardOutput replaces the 'stdout' alias only, "
+    reason="2P-Kt 3.0.1: MutableSolver.setStandardOutput replaces the 'stdout' alias only, "
     "while write/1 keeps using the old '$current'/'user_output' channel",
 )
 def test_set_standard_output_redirects_write(solver):

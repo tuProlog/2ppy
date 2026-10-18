@@ -276,7 +276,7 @@ def test_ensuring_term_is_well_formed_list(capturer):
 
 @pytest.mark.xfail(
     strict=True,
-    reason="2P-Kt 0.31.16's PrimitiveWrapper.isCharacterCode is inverted (true for non-codes)",
+    reason="2P-Kt 3.0.1's PrimitiveWrapper.isCharacterCode is inverted (true for non-codes)",
 )
 @pytest.mark.parametrize("code, expected", [(65, True), (0, True), (-1, False), (0x110000, False)])
 def test_is_character_code(code, expected):
