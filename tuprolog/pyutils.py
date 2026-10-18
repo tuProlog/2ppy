@@ -61,7 +61,8 @@ def iterable_or_varargs(
         >>> iterable_or_varargs(("abc",), list)
         ['abc']
     """
-    assert isinstance(args, Sequence)
+    if not isinstance(args, Sequence):
+        raise TypeError(f"Expected a sequence of arguments, got {type(args).__name__}")
     if len(args) == 1:
         item = args[0]
         if isinstance(item, Iterable) and not isinstance(item, _single_value_types):

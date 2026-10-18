@@ -689,14 +689,15 @@ def variables(*names: str) -> tuple[Var]:
         A tuple of the variables, in the order of `names`.
 
     Raises:
-        AssertionError: if no names are given.
+        ValueError: if no names are given.
 
     Examples:
         >>> X, Y = variables("X", "Y")
         >>> X.name, Y.name
         ('X', 'Y')
     """
-    assert len(names) > 0
+    if not names:
+        raise ValueError("variables() requires at least one name")
     return tuple(var(n) for n in names)
 
 

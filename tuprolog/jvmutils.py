@@ -175,7 +175,8 @@ def protect_iterable(iterable: Any) -> Any:
 @JImplements("java.util.Iterator", deferred=True)
 class _IteratorAdapter:
     def __init__(self, iterator):
-        assert isinstance(iterator, PyIterator)
+        if not isinstance(iterator, PyIterator):
+            raise TypeError(f"Expected an iterator, got {type(iterator).__name__}")
         self._iterator = iterator
         self._queue = None
 
@@ -207,7 +208,8 @@ class _IteratorAdapter:
 @JImplements("java.lang.Iterable", deferred=True)
 class _IterableAdapter:
     def __init__(self, iterable):
-        assert isinstance(iterable, PyIterable)
+        if not isinstance(iterable, PyIterable):
+            raise TypeError(f"Expected an iterable, got {type(iterable).__name__}")
         if isinstance(iterable, PyIterator):
             # one-shot iterators (e.g. generators) are buffered lazily, as JVM code may iterate
             # an Iterable more than once
@@ -290,7 +292,8 @@ def jlist(iterable: PyIterable) -> Iterable:
         >>> jlist(x * x for x in range(3))
         [0, 1, 4]
     """
-    assert isinstance(iterable, PyIterable)
+    if not isinstance(iterable, PyIterable):
+        raise TypeError(f"Expected an iterable, got {type(iterable).__name__}")
     if isinstance(iterable, list):
         return Arrays.asList(iterable)
     lst = ArrayList()
@@ -316,7 +319,8 @@ def jiterable(iterable: PyIterable) -> Any:
         >>> iterator.hasNext(), iterator.next()
         (True, 0)
     """
-    assert isinstance(iterable, PyIterable)
+    if not isinstance(iterable, PyIterable):
+        raise TypeError(f"Expected an iterable, got {type(iterable).__name__}")
     return _IterableAdapter(iterable)
 
 
@@ -347,7 +351,8 @@ def jiterator(iterator: PyIterator) -> Iterator:
         >>> iterator.next(), iterator.next(), iterator.hasNext()
         (1, 2, False)
     """
-    assert isinstance(iterator, PyIterator)
+    if not isinstance(iterator, PyIterator):
+        raise TypeError(f"Expected an iterator, got {type(iterator).__name__}")
     return _IteratorAdapter(iterator)
 
 
@@ -358,7 +363,8 @@ def jmap(dictionary: Mapping) -> Map:
         >>> jmap({"a": 1})["a"]
         1
     """
-    assert isinstance(dictionary, Mapping)
+    if not isinstance(dictionary, Mapping):
+        raise TypeError(f"Expected a mapping, got {type(dictionary).__name__}")
     return Map @ dictionary
 
 
@@ -644,7 +650,8 @@ class _KtFunction:
         self._arity = arity
 
     def invoke(self, *args):
-        assert len(args) == self._arity
+        if len(args) != self._arity:
+            raise TypeError(f"Expected {self._arity} arguments, got {len(args)}")
         return self._function(*args)
 
     def __call__(self, *args):

@@ -603,7 +603,7 @@ def test_variables_with_same_name_are_distinct():
 
 
 def test_variables_requires_names():
-    with pytest.raises((AssertionError, ValueError, TypeError)):
+    with pytest.raises(ValueError):
         variables()
 
 

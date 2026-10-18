@@ -130,7 +130,7 @@ def test_jlist_of_terms():
 
 
 def test_jlist_rejects_non_iterables():
-    with pytest.raises(AssertionError):
+    with pytest.raises(TypeError):
         jlist(1)  # type: ignore[arg-type]
 
 
@@ -167,7 +167,7 @@ def test_jiterable_conversion():
 
 
 def test_jiterable_rejects_non_iterables():
-    with pytest.raises(AssertionError):
+    with pytest.raises(TypeError):
         jiterable(1)  # type: ignore[arg-type]
 
 
@@ -201,7 +201,7 @@ def test_jiterator_used_by_jvm():
 
 
 def test_jiterator_rejects_iterables():
-    with pytest.raises(AssertionError):
+    with pytest.raises(TypeError):
         jiterator([1, 2])  # type: ignore[arg-type]
 
 
@@ -223,7 +223,7 @@ def test_jmap_of_terms():
 
 
 def test_jmap_rejects_non_mappings():
-    with pytest.raises(AssertionError):
+    with pytest.raises(TypeError):
         jmap([("a", 1)])  # type: ignore[arg-type]
 
 
@@ -362,7 +362,7 @@ def test_kfunction_classes_are_cached():
 
 
 def test_kfunction_checks_arity():
-    with pytest.raises(AssertionError):
+    with pytest.raises(TypeError):
         kfunction(1)(lambda x: x)(1, 2)
 
 
