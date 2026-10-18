@@ -1,3 +1,16 @@
+## [1.3.0](https://github.com/tuProlog/2ppy/compare/1.2.0...1.3.0) (2026-10-18)
+
+### Features
+
+* **errors:** classify 2P-Kt's exceptions with Python exception classes ([#98](https://github.com/tuProlog/2ppy/issues/98)) ([105c62f](https://github.com/tuProlog/2ppy/commit/105c62fef7b3bff972373a3cd4ce7869706a17fd))
+* **solve:** Pythonic querying and Python-defined predicates and functions ([#99](https://github.com/tuProlog/2ppy/issues/99)) ([9c9711d](https://github.com/tuProlog/2ppy/commit/9c9711d07ca53d6b175b2178ff225ecd4418bc03))
+
+## [1.2.0](https://github.com/tuProlog/2ppy/compare/1.1.1...1.2.0) (2026-10-18)
+
+### Features
+
+* **io:** wrap IOLib, and adapt 2ppy to accept Python streams wherever 2P-Kt reads or writes ([#97](https://github.com/tuProlog/2ppy/issues/97)) ([4e79c8d](https://github.com/tuProlog/2ppy/commit/4e79c8d096a819f9888e35d3245a9a60a19d6396))
+
 ## [1.1.1](https://github.com/tuProlog/2ppy/compare/1.1.0...1.1.1) (2026-10-18)
 
 ### Bug Fixes
