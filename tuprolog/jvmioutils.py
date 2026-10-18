@@ -38,10 +38,10 @@ import java.io as _jio  # type: ignore
 import java.nio.channels as _jnio_channels  # type: ignore
 import java.nio.file as _jnio_file  # type: ignore
 import jpype.imports  # noqa: F401
-from jpype import JArray, JByte, JConversion, JImplementationFor, JImplements, JOverride
+from jpype import JArray, JByte, JConversion, JImplementationFor, JOverride
 
 from tuprolog import logger
-from tuprolog.jvmutils import customize_derived
+from tuprolog.jvmutils import customize_derived, jimplements
 
 __all__ = [
     "BufferedReader",
@@ -219,7 +219,7 @@ class _JvmInputStream:
         raise OSError("This IOBase is backed by an instance of <java.io.InputStream>")
 
 
-@JImplements(
+@jimplements(
     "java.nio.channels.ReadableByteChannel", "java.nio.channels.WritableByteChannel", deferred=True
 )
 class PythonByteChannel:

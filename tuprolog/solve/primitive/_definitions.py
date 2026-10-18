@@ -2,9 +2,10 @@ from collections.abc import Iterable
 
 import it.unibo.tuprolog.solve.primitive as _primitive  # type: ignore
 import jpype.imports  # noqa: F401
-from jpype import JImplements, JOverride
+from jpype import JOverride
 
 from tuprolog import logger
+from tuprolog.jvmutils import jimplements
 
 __all__ = [
     "AbstractPrimitive",
@@ -110,7 +111,7 @@ Build responses with the `reply_*` methods of requests, or with `solve_response`
 """
 
 
-@JImplements(Primitive)
+@jimplements(Primitive)
 class AbstractPrimitive:
     """A base class for primitives implemented in Python, as subclasses overriding `solve`.
 
