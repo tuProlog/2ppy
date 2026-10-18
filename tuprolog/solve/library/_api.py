@@ -29,8 +29,8 @@ def library(
             `None`.
         primitives: The primitives (see `tuprolog.solve.primitive`), keyed by signature or by
             `name/arity` string.
-        clauses: The clauses (`tuprolog.core.Clause`), as a list or another JVM-convertible
-            collection (not a lazy sequence, like that of `tuprolog.theory.parsing.parse_clauses`).
+        clauses: The clauses (`tuprolog.core.Clause`), as any iterable (e.g. a list, a theory, or
+            the lazy sequence of `tuprolog.theory.parsing.parse_clauses`).
         operators: The operators, as an `OperatorSet` or an iterable of operators.
         functions: The functions (see `tuprolog.solve.function`), keyed by signature or by
             `name/arity` string.
@@ -50,6 +50,7 @@ def library(
         operators = operator_set()
     elif not isinstance(operators, OperatorSet):
         operators = operator_set(list(operators))
+    clauses = list(clauses)  # e.g. Kotlin sequences, which JPype does not convert into lists
     if alias is None:
         return Library.of(primitives, clauses, operators, functions)
     else:
