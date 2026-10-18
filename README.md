@@ -21,7 +21,8 @@ Object-oriented and modular ecosystem for symbolic AI and logic programming, cur
 * a module providing generic API for resolution of logic queries, namely `tuprolog.solve`
     * a module that implements deterministic logic programming and solving, namely `tuprolog.solve.prolog`
     * a module that implements probabilistic logic programming and solving, namely `tuprolog.solve.problog`
-    * a module exposing 2P-Kt's IO library (e.g. `read/1`, `get_char/1`, `open/3`), namely `tuprolog.solve.libs`
+    * a module exposing 2P-Kt's IO library (e.g. `read/1`, `get_char/1`, `open/3`), namely `tuprolog.solve.libs`,
+      and an object-oriented library (`OOPLib`) letting Prolog code drive Python objects
 
 * two parsing modules: one aimed at parsing terms, namely `tuprolog.core.parsing`, and the other aimed at parsing theories, namely `tuprolog.theory.parsing`
 
@@ -71,6 +72,18 @@ The JVM is started when `tuprolog` is first imported.
     list(prolog_solver(libraries=lib).query("upper(abc, U), H is half(3)"))  # [{'U': 'ABC', 'H': 1.5}]
     ```
     Python exceptions raised by primitives become logic `system_error`s, which `catch/3` can handle.
+1. Drive Python objects from Prolog with `tuprolog.solve.libs.OOPLib`, which offers 2P-Kt's OOPLib Prolog API over Python objects:
+    ```prolog
+    ?- X := $math.sqrt(16).                       % X = 4.0
+    ?- new_object($list, [], L), L.append(a), L.append(b), list_items(L, Items).  % Items = [a, b]
+    ?- X := $json.dumps([1, 2], indent = 2).      % keyword arguments as Key = Value
+    ?- X := '42' as $int.                         % conversions call types
+    ```
+    Aliases (`$name`) cover Python's built-in types (also under OOPLib's names, e.g. `$arraylist`), `$builtins`,
+    `$stdin`/`$stdout`/`$stderr`, and side-effect free standard modules (`$math`, `$json`, `$re`, `$itertools`, …).
+    Only those modules are importable, and private attributes are not accessible: `oop_lib(allow_all_imports=True,
+    allow_private=True, aliases={...})` builds a library lifting these limits or adding aliases. They limit what
+    Prolog code can reach, without sandboxing it.
 1. Python values are converted where terms are expected (e.g. `struct("f", "a", 1)` is `f(a, 1)`, see `tuprolog.core.to_term`),
     and back (see `tuprolog.core.to_python`).
     Methods without a Pythonic counterpart are forwarded to the underlying JVM objects, so they may return JVM types (e.g. `java.lang.String`).

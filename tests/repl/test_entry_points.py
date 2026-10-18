@@ -1,6 +1,7 @@
 import builtins
 import code
 import os
+import re
 import runpy
 import subprocess
 import sys
@@ -113,6 +114,6 @@ def test_repl_problog_subprocess():
 def test_shell_subprocess():
     result = run_module("tuprolog", "print(prolog_solver().solve_once(parse_struct('X = 1')))\n")
     assert result.returncode == 0, result.stderr
-    assert "substitution={X_0=1}" in result.stdout
+    assert re.search(r"substitution=\{X_\d+=1\}", result.stdout)
     assert "now exiting InteractiveConsole" in result.stderr
     assert "Traceback" not in result.stderr
