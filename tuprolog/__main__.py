@@ -1,5 +1,6 @@
 import code
 
+from tuprolog.collections import *
 from tuprolog.core import *
 from tuprolog.core.exception import *
 from tuprolog.core.impl import *
