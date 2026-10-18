@@ -336,11 +336,16 @@ class _PythonObjects:
     def invoke(self, receiver: Any, method: Term, index: int) -> Any:
         if isinstance(method, Atom):
             found = self.attribute(receiver, str(method.value), index)
-            return found() if inspect.isroutine(found) else found
+            return found() if _is_routine(found) else found
         if isinstance(method, Struct):
             args, kwargs = self.arguments(method.args, index)
             return self.attribute(receiver, str(method.functor), index)(*args, **kwargs)
         raise _type_error(index, "callable", method)
+
+
+def _is_routine(value: Any) -> bool:
+    # before Python 3.11, inspect.isroutine misses method-wrappers, e.g. "abc".__len__
+    return inspect.isroutine(value) or isinstance(value, types.MethodWrapperType)
 
 
 def _is_keyword_argument(term: Term) -> bool:
