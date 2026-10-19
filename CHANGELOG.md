@@ -1,3 +1,9 @@
+## [1.7.0](https://github.com/tuProlog/2ppy/compare/1.6.0...1.7.0) (2026-10-19)
+
+### Features
+
+* Textual terminal IDE backed by 2P-Kt's GUI core ([#103](https://github.com/tuProlog/2ppy/issues/103)) ([0026da0](https://github.com/tuProlog/2ppy/commit/0026da005b3bb1a1405d9e18d0a8816f19d5e8d8))
+
 ## [1.6.0](https://github.com/tuProlog/2ppy/compare/1.5.0...1.6.0) (2026-10-18)
 
 ### Features
