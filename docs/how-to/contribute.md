@@ -7,21 +7,28 @@ conventions, the documentation, and the release process. The sources are on
 
 ## Set up the environment
 
-You need [uv](https://docs.astral.sh/uv/getting-started/installation/) and
-[Apache Maven](https://maven.apache.org/install.html) (`mvn` on the `PATH`), which downloads
-2P-Kt's JARs from [Maven Central](https://mvnrepository.com/artifact/it.unibo.tuprolog), as declared
-in [`pom.xml`](https://github.com/tuProlog/2ppy/blob/master/pom.xml).
+You need [uv](https://docs.astral.sh/uv/getting-started/installation/) and a JDK 17 or newer
+(`java` on the `PATH`, or `JAVA_HOME` set). The JVM side of 2PPy is a
+[Gradle](https://gradle.org/) project in
+[`jvm/`](https://github.com/tuProlog/2ppy/tree/master/jvm), run through its wrapper (no Gradle
+installation needed): it downloads 2P-Kt's JARs from
+[Maven Central](https://mvnrepository.com/artifact/it.unibo.tuprolog), at the version declared in
+[`jvm/gradle/libs.versions.toml`](https://github.com/tuProlog/2ppy/blob/master/jvm/gradle/libs.versions.toml),
+and compiles the Kotlin adapters making 2P-Kt usable from Python (`jvm/src/main/kotlin`, e.g. the
+facade of `tuprolog.gui`), without changing 2P-Kt itself.
 
 ```bash
 git clone https://github.com/tuProlog/2ppy.git && cd 2ppy
 uv sync                      # create the environment, with the development and documentation tools
-uv run poe fetch-jars        # download the JARs into tuprolog/libs/ (needed before testing or building)
+uv run poe build-jars        # build the JVM side, and copy the JARs into tuprolog/libs/ (needed
+                             # before testing or building)
 ```
 
 ## Run the checks
 
 ```bash
 uv run poe test              # the tests, including the examples in docstrings, README and docs pages
+uv run poe test-jvm          # the tests of the JVM side (jvm/src/test)
 uv run poe static-checks     # compileall, ruff format --check, ruff check, mypy (what CI runs)
 uv run poe static-fixes      # ruff check --fix + ruff format
 uv run poe coverage && uv run poe coverage-report
@@ -38,19 +45,21 @@ Optional local Git hooks run some of these automatically:
   `solve`, ...), each split into `_definitions.py` (the JVM types, re-exported under Pythonic
   names), `_api.py` (Pythonic factory functions) and `_adapters.py` (Python protocols added to JVM
   types); see [Architecture](../explanation/architecture.md).
-- `tests/` holds the pytest tests; `docs/` the documentation site; `scripts/` the JAR fetcher and
-  the Git hooks.
+- `jvm/` is the JVM side: a Gradle project declaring 2P-Kt's artifacts, with the Kotlin adapters
+  2PPy needs on top of them; `poe build-jars` copies its JAR and runtime classpath into
+  `tuprolog/libs/`.
+- `tests/` holds the pytest tests; `docs/` the documentation site; `scripts/` the Git hooks.
 - Contributor notes, with the full list of conventions, are in
   [`AGENTS.md`](https://github.com/tuProlog/2ppy/blob/master/AGENTS.md).
 
 ## Follow the conventions
 
-- Wrap 2P-Kt, never re-implement it in Python: when 2P-Kt's API is in the way, prefer fixing it
-  there.
+- Wrap 2P-Kt, never re-implement it in Python: when 2P-Kt's API is in the way, adapt it in
+  Kotlin, in `jvm/src/main/kotlin` (or fix it upstream, when the fix belongs there).
 - Code must run on Python 3.10 (Ruff: line length 100, target py310).
 - Every module declares a literal `__all__`.
 - Manage dependencies with `uv add` (or `uv add --dev`), never by editing `uv.lock`; the 2P-Kt
-  version lives in `pom.xml`.
+  version lives in `jvm/gradle/libs.versions.toml`.
 - Tests must not use the network, and must not depend on JVM options (the JVM starts once per
   process, shared by all tests).
 - `static-checks` and the tests must pass before committing.

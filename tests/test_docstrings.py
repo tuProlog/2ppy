@@ -20,7 +20,7 @@ import pytest
 import tuprolog
 
 # modules whose import has side effects beyond defining names (they run interactive loops)
-ENTRY_POINTS = {"tuprolog.__main__"}
+ENTRY_POINTS = {"tuprolog.__main__", "tuprolog.tui.__main__"}
 
 MODULES = sorted(
     info.name

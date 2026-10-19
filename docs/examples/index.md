@@ -21,6 +21,6 @@ Install 2PPy and Jupyter (`pip install 2ppy jupyter`), download a notebook, and 
 `jupyter lab`. From a clone of the repository, Jupyter is a development dependency:
 
 ```bash
-uv sync && uv run poe fetch-jars
+uv sync && uv run poe build-jars
 uv run jupyter lab examples/
 ```

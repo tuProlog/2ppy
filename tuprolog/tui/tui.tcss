@@ -1,0 +1,90 @@
+#pages {
+    height: 2;
+}
+
+#source {
+    height: 1fr;
+}
+
+#controls {
+    height: auto;
+}
+
+#prompt {
+    padding: 1 1 0 1;
+}
+
+#query {
+    width: 1fr;
+    min-width: 20;
+}
+
+#timeout-label {
+    padding: 1 0 0 1;
+}
+
+#timeout {
+    width: 14;
+}
+
+#controls Button {
+    min-width: 8;
+    margin: 0 0 0 1;
+}
+
+#panels {
+    height: 1fr;
+}
+
+#panels TabPane > * {
+    height: 1fr;
+}
+
+#panels TabPane > Button, #panels TabPane > .documentation-bar {
+    height: auto;
+}
+
+.documentation-bar Static {
+    width: 1fr;
+    max-height: 3;
+    padding: 0 1;
+    color: $text-muted;
+}
+
+.documentation-bar Button {
+    margin: 0 0 0 1;
+}
+
+PromptScreen, ChoiceScreen, DocumentationScreen {
+    align: center middle;
+}
+
+.dialog {
+    width: 70;
+    height: auto;
+    padding: 1 2;
+    border: thick $primary;
+    background: $surface;
+}
+
+.dialog-title {
+    margin: 0 0 1 0;
+}
+
+.dialog-buttons {
+    height: auto;
+    margin: 1 0 0 0;
+}
+
+.dialog-buttons Button {
+    margin: 0 1 0 0;
+}
+
+.documentation {
+    width: 90%;
+    height: 85%;
+}
+
+.documentation VerticalScroll {
+    height: 1fr;
+}

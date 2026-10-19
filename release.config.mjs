@@ -23,7 +23,16 @@ const verifyConditionsCmd = dryRun
     ? undefined
     : `test -n "$${tokenVar}" || { echo "${tokenVar} is not set" >&2; exit 1; }`;
 
-const prepareCmd = `uv version \${nextRelease.version} && uv build && ${publishCmd}`;
+// The Docker image (see Dockerfile), for amd64 and arm64, on GitHub Packages: tagged with the version
+// and `latest`. Built in `prepare`, before publishing on PyPI (so that a failing build stops the
+// release), and pushed in `publish`, once the release is tagged (the build is cached by then).
+const image = `ghcr.io/${(process.env.GITHUB_REPOSITORY || "tuprolog/2ppy").toLowerCase()}`;
+const dockerBuildCmd = "docker buildx build --platform linux/amd64,linux/arm64"
+    + ` --tag ${image}:\${nextRelease.version} --tag ${image}:latest .`;
+
+// dist/ is emptied first, as the image installs every wheel there
+const prepareCmd = `rm -rf dist && uv version \${nextRelease.version} && uv build && ${dockerBuildCmd} && ${publishCmd}`;
+const dockerPublishCmd = `${dockerBuildCmd} --push`;
 
 import config from 'semantic-release-preconfigured-conventional-commits' with {type: 'json'};
 
@@ -31,6 +40,7 @@ config.plugins.push(
     ["@semantic-release/exec", {
         "verifyConditionsCmd": verifyConditionsCmd,
         "prepareCmd": prepareCmd,
+        "publishCmd": dockerPublishCmd,
     }]
 )
 

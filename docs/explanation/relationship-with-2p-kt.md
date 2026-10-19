@@ -54,7 +54,7 @@ are left out of their packages' `__all__`, so that star imports do not shadow th
 ## Versions
 
 Each 2PPy release depends on one 2P-Kt version, declared in
-[`pom.xml`](https://github.com/tuProlog/2ppy/blob/master/pom.xml):
+[`jvm/gradle/libs.versions.toml`](https://github.com/tuProlog/2ppy/blob/master/jvm/gradle/libs.versions.toml):
 
 ```pycon
 >>> import tuprolog

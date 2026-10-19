@@ -48,7 +48,8 @@ Predicates can be written in Python:
 
 ```
 
-Interactive Prolog: `python -m tuprolog.repl.prolog`.
+Interactive Prolog: `python -m tuprolog.repl.prolog`, or the terminal IDE: `2ppy-tui` (also as a
+Docker image: `docker run -it --rm ghcr.io/tuprolog/2ppy`).
 
 See the [tutorials](https://tuprolog.github.io/2ppy/tutorials/) and the
 [example notebooks](https://github.com/tuProlog/2ppy/tree/master/examples) to get started, and the
@@ -57,7 +58,7 @@ See the [tutorials](https://tuprolog.github.io/2ppy/tutorials/) and the
 ## Contributing
 
 ```bash
-uv sync && uv run poe fetch-jars    # environment and 2P-Kt's JARs (requires Apache Maven)
+uv sync && uv run poe build-jars    # environment and JARs (requires a JDK 17+)
 uv run poe static-checks            # what CI checks
 uv run poe test                     # tests, including every documented example
 uv run poe docs                     # the documentation site

@@ -13,7 +13,7 @@ import mkdocs_gen_files
 ROOT = Path(__file__).parent.parent
 PACKAGE = ROOT / "tuprolog"
 # modules whose import has side effects beyond defining names (they run interactive loops)
-ENTRY_POINTS = {("tuprolog", "__main__")}
+ENTRY_POINTS = {("tuprolog", "__main__"), ("tuprolog", "tui", "__main__")}
 
 nav = mkdocs_gen_files.Nav()
 
