@@ -1,3 +1,9 @@
+## [1.7.1](https://github.com/tuProlog/2ppy/compare/1.7.0...1.7.1) (2026-10-19)
+
+### Documentation
+
+* **readme:** explain what to expect from 2PPy, the terminal IDE, and how to install it from PyPI ([76f1459](https://github.com/tuProlog/2ppy/commit/76f1459043663f6a57b5ebadcd86dc149fcb1cc0))
+
 ## [1.7.0](https://github.com/tuProlog/2ppy/compare/1.6.0...1.7.0) (2026-10-19)
 
 ### Features
