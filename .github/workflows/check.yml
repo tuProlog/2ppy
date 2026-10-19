@@ -30,19 +30,22 @@ jobs:
       - name: Restore Development Environment
         run: uv sync
 
-      - name: Set up Java (Maven fetches 2P-Kt's JARs)
+      - name: Set up Java (Gradle builds jvm/ and fetches 2P-Kt's JARs)
         uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: '25'
-          cache: maven
+          cache: gradle
 
-      - name: Fetch JARs
-        run: uv run poe fetch-jars
+      - name: Build JARs
+        run: uv run poe build-jars
 
       - name: Static Checks
         shell: bash
         run: uv run poe static-checks
+
+      - name: Test the JVM side
+        run: uv run poe test-jvm
 
       - name: Test with Coverage
         shell: bash
@@ -88,15 +91,15 @@ jobs:
       - name: Restore Development Environment
         run: uv sync
 
-      - name: Set up Java (Maven fetches 2P-Kt's JARs)
+      - name: Set up Java (Gradle builds jvm/ and fetches 2P-Kt's JARs)
         uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: '25'
-          cache: maven
+          cache: gradle
 
-      - name: Fetch JARs
-        run: uv run poe fetch-jars
+      - name: Build JARs
+        run: uv run poe build-jars
 
       - name: Test
         shell: bash

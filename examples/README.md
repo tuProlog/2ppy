@@ -17,6 +17,6 @@ suite runs them.
 To run them, from a clone of the repository:
 
 ```bash
-uv sync && uv run poe fetch-jars    # or: pip install 2ppy jupyter
+uv sync && uv run poe build-jars    # or: pip install 2ppy jupyter
 uv run jupyter lab examples/
 ```

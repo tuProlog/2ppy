@@ -12,6 +12,8 @@ way it does. Read them to build a mental model; for step-by-step instructions, s
   produces solutions.
 - [Architecture](architecture.md): how 2PPy wraps 2P-Kt, running on the JVM, behind a Pythonic
   API.
+- [How the terminal IDE works](terminal-ide.md): how 2ppy TUI renders 2P-Kt's GUI core, sends
+  it actions, and fulfils its effects.
 - [Relationship with 2P-Kt](relationship-with-2p-kt.md): how 2PPy's packages map onto 2P-Kt's
   modules, and what is (not) exposed.
 

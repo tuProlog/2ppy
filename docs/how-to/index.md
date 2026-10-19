@@ -17,5 +17,7 @@ How-to guides are recipes: each shows how to accomplish one task, assuming you k
 - [Run probabilistic programs](run-probabilistic-programs.md): compute the probability of
   queries with ProbLog.
 - [Use the REPL](use-the-repl.md): experiment with Prolog interactively.
+- [Use the terminal IDE](use-the-terminal-ide.md): install and start it (locally, or with
+  Docker), then edit theories and solve queries in a terminal user interface.
 - [Contribute](contribute.md): set up a development environment, run the checks, write
   documentation, and release.

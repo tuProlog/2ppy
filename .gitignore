@@ -146,7 +146,9 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# JVM dependencies, fetched by `uv run poe fetch-jars` (see pom.xml)
+!jvm/gradle/wrapper/gradle-wrapper.jar
+
+# JVM side, built by `uv run poe build-jars` (see jvm/)
 tuprolog/libs/*.jar
 tuprolog/libs/*/
 

@@ -38,15 +38,37 @@ jobs:
       - name: Restore Development Environment
         run: uv sync
 
-      - name: Set up Java (Maven fetches 2P-Kt's JARs)
+      - name: Set up Java (Gradle builds jvm/ and fetches 2P-Kt's JARs)
         uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: '25'
-          cache: maven
+          cache: gradle
 
-      - name: Fetch JARs
-        run: uv run poe fetch-jars
+      - name: Build JARs
+        run: uv run poe build-jars
+
+      - name: Set up QEMU (the Docker image is built for arm64 too)
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Check the Docker Image
+        # also on dry runs: the image installs the wheel, then 2ppy-tui starts the JVM
+        run: |
+          uv build
+          docker buildx build --load --tag 2ppy:check .
+          docker run --rm 2ppy:check --version
+          docker run --rm -e TWOPPY_TIMEOUT=0 2ppy:check 2>&1 | grep "timeout must be positive"
+          rm -rf dist
+
+      - name: Log in to GitHub Packages
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get Node Version
         id: get-node-version

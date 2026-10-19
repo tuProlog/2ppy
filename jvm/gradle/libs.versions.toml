@@ -1,0 +1,16 @@
+[versions]
+# the 2P-Kt release 2PPy wraps: keep Kotlin aligned with the one it is built with
+tuprolog = "3.0.3"
+kotlin = "2.4.21"
+junit = "5.13.4"
+
+[libraries]
+tuprolog-gui = { module = "it.unibo.tuprolog:gui-jvm", version.ref = "tuprolog" }
+tuprolog-gui-plp = { module = "it.unibo.tuprolog:gui-plp-jvm", version.ref = "tuprolog" }
+tuprolog-repl = { module = "it.unibo.tuprolog:repl-jvm", version.ref = "tuprolog" }
+tuprolog-solve-problog = { module = "it.unibo.tuprolog:solve-problog-jvm", version.ref = "tuprolog" }
+tuprolog-solve-prolog = { module = "it.unibo.tuprolog:solve-prolog-jvm", version.ref = "tuprolog" }
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

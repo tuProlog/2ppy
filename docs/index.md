@@ -36,6 +36,7 @@ No knowledge of 2P-Kt, Kotlin or Java is needed, and no Java installation either
 | **Python objects from Prolog** | Let Prolog code create Python objects and call their methods (OOPLib) | [Use Python objects from Prolog](how-to/use-python-objects-from-prolog.md) |
 | **Input/output** | Use Python streams (files, `io.StringIO`, `sys.stdout`) wherever logic code reads or writes | [Read and write streams](how-to/read-and-write-streams.md) |
 | **Interactive use** | Prolog and ProbLog REPLs, and a Python shell with the whole API loaded | [Use the REPL](how-to/use-the-repl.md) |
+| **Terminal IDE** | Edit theories and solve queries in a terminal user interface, page by page; installed with 2PPy, or run with Docker | [Use the terminal IDE](how-to/use-the-terminal-ide.md), [How it works](explanation/terminal-ide.md) |
 
 ## How it works
 
@@ -64,6 +65,7 @@ The package mirrors 2P-Kt's modules:
 | [`tuprolog.solve`](api/tuprolog/solve.md) | the solver API, the [Prolog](api/tuprolog/solve/prolog.md) and [ProbLog](api/tuprolog/solve/problog.md) solvers, primitives, libraries, flags, channels |
 | [`tuprolog.errors`](api/tuprolog/errors.md) | Python exception classes for 2P-Kt's errors |
 | [`tuprolog.repl`](api/tuprolog/repl.md) | the REPLs |
+| [`tuprolog.gui`](api/tuprolog/gui.md) and [`tuprolog.tui`](api/tuprolog/tui.md) | the core of tuProlog's IDEs, and the terminal IDE |
 
 The [package map](reference/package-map.md) lists every module.
 

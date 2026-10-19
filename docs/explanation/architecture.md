@@ -10,7 +10,7 @@ of tuProlog. This page explains how the two are connected, and why 2PPy is built
  tuprolog (2PPy)  ──────────── Python
         │   JPype: calls between Python and JVM objects, in the same process
         ▼
- 2P-Kt JARs      ──────────── JVM (bundled by jdk4py)
+ 2P-Kt JARs + 2PPy's adapters ── JVM (bundled by jdk4py)
 ```
 
 ## Write once, wrap elsewhere
@@ -19,12 +19,15 @@ The logic engine (terms, unification, parsing, theories, solvers, libraries) is 
 Kotlin, as 2P-Kt, and 2PPy wraps it. 2PPy re-implements nothing that 2P-Kt already provides: it
 exposes 2P-Kt's objects to Python, and makes them comfortable to use from Python. This keeps the
 behaviour of 2PPy identical to 2P-Kt's (and to tuProlog's other front ends), and lets 2PPy benefit
-from every improvement of the engine; when 2P-Kt's API is awkward from Python, the preferred fix is
-in 2P-Kt itself.
+from every improvement of the engine. When 2P-Kt's API is awkward from Python, the fix goes either
+in 2P-Kt itself, when it belongs there, or in a Kotlin adapter of 2PPy: the `jvm/` directory of the
+repository is a Gradle project declaring 2P-Kt's artifacts, and compiling the adapters 2PPy needs on
+top of them (e.g. the facade `tuprolog.gui` wraps, hiding Kotlin coroutines behind callbacks and
+futures), without changing 2P-Kt.
 
 The price is a dependency on the Java virtual machine (JVM), which 2PPy makes invisible:
 
-- the wheel ships 2P-Kt's JARs (in `tuprolog/libs/`);
+- the wheel ships 2P-Kt's JARs and 2PPy's adapters (in `tuprolog/libs/`);
 - the [`jdk4py`](https://pypi.org/project/jdk4py/) dependency ships a Java runtime, so no Java
   installation is needed;
 - [JPype](https://jpype.readthedocs.io) runs the JVM *inside* the Python process, so Python and

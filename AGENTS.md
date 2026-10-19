@@ -9,15 +9,17 @@ project follows [template-python-project-uv](https://github.com/gciatto/template
 
 A Python wrapper of [2P-Kt](https://github.com/tuProlog/2p-kt) via [JPype](https://jpype.readthedocs.io):
 logic is written once in Kotlin and wrapped here ("write once, wrap elsewhere"), with an API as
-Pythonic as possible. Never re-implement in Python what 2P-Kt already provides: wrap it, and
-prefer fixing the Kotlin API (e.g. `@JvmStatic`, `@JvmOverloads`) over Python workarounds.
+Pythonic as possible. Never re-implement in Python what 2P-Kt already provides: wrap it. When
+2P-Kt's API is awkward from Python (e.g. coroutines, receiver lambdas, missing `@JvmStatic` /
+`@JvmOverloads`), prefer a Kotlin adapter in `jvm/src/main/kotlin` over Python workarounds, and fix
+2P-Kt upstream only when the fix belongs there.
 
 ## Layout
 
 ```
 tuprolog/           the package (flat layout); importing it starts the JVM
   __init__.py       starts the JVM on the JARs in libs/, exposes `Info`, `__version__`, `logger`
-  libs/             2P-Kt's JARs (untracked, `poe fetch-jars`) + java.py (locates jdk4py's JVM)
+  libs/             the JVM side's JARs (untracked, `poe build-jars`) + java.py (locates jdk4py's JVM)
   jvmutils.py       JVM <-> Python bridging: iterables, maps, automatic snake_case accessors
   pyutils.py        Python helpers (iterable-or-varargs forwarding, ...)
   <module>/         one sub-package per 2P-Kt module (core, unify, theory, solve, ...), each with
@@ -25,6 +27,9 @@ tuprolog/           the package (flat layout); importing it starts the JVM
     _api.py           Pythonic factory functions (snake_case, defaults, varargs)
     _adapters.py      @JImplementationFor customizers adding Python protocols to JVM types
   repl/             Cmd-based REPLs (`python -m tuprolog.repl.prolog`, `...problog`)
+  gui/              2P-Kt's toolkit-neutral GUI core (state/actions/effects), via jvm/'s GuiFacade
+  tui/              Textual terminal IDE (`2ppy-tui`): _model.py (Python snapshots, actions,
+                    effects), _bridge.py (JVM <-> snapshots), _app.py (widgets), _screens.py
 tests/              pytest tests (they need the JARs), including the examples of docstrings, README
                     and docs pages
 examples/           Jupyter notebooks (with their outputs), run by tests/test_examples.py and
@@ -32,8 +37,13 @@ examples/           Jupyter notebooks (with their outputs), run by tests/test_ex
 docs/               the documentation site (mkdocs.yml): index.md (the full picture), tutorials/,
                     how-to/, reference/, explanation/ (as 2P-Kt's documentation), and
                     gen_ref_pages.py (generates api/, one API-reference page per public module)
-scripts/            fetch_jars.py (Maven), githooks.py (local Git hooks)
-pom.xml             the 2P-Kt artifacts and version to fetch
+scripts/            githooks.py (local Git hooks)
+jvm/                the JVM side, a Gradle project (wrapper included): 2P-Kt's artifacts and version
+                    (gradle/libs.versions.toml), Kotlin adapters for Python (src/main/kotlin, e.g.
+                    GuiFacade) and their JUnit tests (src/test); `installJars` syncs its JAR and
+                    runtime classpath into tuprolog/libs/ (preserving the *.py files there)
+Dockerfile          the Docker image (Python + the wheel in dist/, starting 2ppy-tui), released by
+                    release.config.mjs on GitHub Packages
 .github/workflows/
   check.yml         static-checks + coverage, then tests on ubuntu/windows/macos x Python 3.10-3.13,
                     then deploy.yml
@@ -45,7 +55,8 @@ pom.xml             the 2P-Kt artifacts and version to fetch
 
 ```bash
 uv sync                               # env + dev tools
-uv run poe fetch-jars                 # JARs into tuprolog/libs/ (requires mvn)
+uv run poe build-jars                 # build jvm/, JARs into tuprolog/libs/ (requires a JDK 17+)
+uv run poe test-jvm                   # JUnit tests of jvm/
 uv run poe test                       # pytest
 uv run poe static-checks              # compileall, ruff format --check, ruff check, mypy
 uv run poe static-fixes               # ruff --fix + ruff format
@@ -54,6 +65,7 @@ uv run jupyter lab examples/          # edit the example notebooks (Jupyter is a
 uv run poe docs                       # documentation site in site/ (mkdocs build --strict)
 uv run poe docs-serve                 # the same, with live reload
 uv run poe install-hooks [HOOK...]    # local hooks in .git/hooks (default: all)
+uv build && docker buildx build --load -t 2ppy .   # the Docker image (after build-jars)
 ```
 
 ## Conventions
@@ -66,7 +78,7 @@ uv run poe install-hooks [HOOK...]    # local hooks in .git/hooks (default: all)
 - Ruff: line length 100, target py310. Code must run on Python 3.10 (the lowest version in
   the CI matrix and `requires-python`; keep the three in sync).
 - Manage dependencies with `uv add` / `uv add --dev`, never by hand-editing `uv.lock`.
-  The 2P-Kt version lives in `pom.xml`.
+  The 2P-Kt version lives in `jvm/gradle/libs.versions.toml` (keep Kotlin aligned with 2P-Kt's).
 - Tests must not hit the network (fetching the JARs is a setup step, not part of the tests).
 - The JVM can be started only once per process: tests share it, and must not depend on
   JVM options.
@@ -113,6 +125,10 @@ unannotated function).
 ## Releases
 
 Conventional Commits drive semantic-release (`release.config.mjs`), which runs
-`uv version <next> && uv build && uv publish` in its prepare step, after `poe fetch-jars`
-(the JARs ship in the wheel and the sdist). `pyproject.toml` is the only version source;
+`uv version <next> && uv build && uv publish` in its prepare step, after `poe build-jars`
+(the JARs ship in the wheel and the sdist). The `Dockerfile` installs the wheel in `dist/` (and
+nothing else: no uv, no JDK, as jdk4py ships the JVM) into an image starting `2ppy-tui`:
+semantic-release builds it for amd64 and arm64 in prepare (before `uv publish`), and pushes it to
+`ghcr.io/tuprolog/2ppy` (version and `latest` tags) in publish; `deploy.yml` smoke-tests it on
+every run. `pyproject.toml` is the only version source;
 never bump it by hand. `CHANGELOG.md` is generated.

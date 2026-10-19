@@ -12,7 +12,7 @@ import tuprolog
 from tuprolog import libs
 from tuprolog.libs import java
 
-POM = Path(__file__).parent.parent / "pom.xml"
+VERSIONS = Path(__file__).parent.parent / "jvm" / "gradle" / "libs.versions.toml"
 
 
 def test_version_comes_from_package_metadata():
@@ -38,9 +38,9 @@ def test_jars_are_on_the_classpath():
         assert Path(jar).parent == libs.CLASSPATH.resolve()
 
 
-def test_info_matches_pom_version():
+def test_info_matches_the_declared_version():
     assert isinstance(tuprolog.Info, jpype.JClass)
-    expected = re.search(r"<artifactId>repl-jvm</artifactId>\s*<version>([^<]+)<", POM.read_text())
+    expected = re.search(r'^tuprolog = "([^"]+)"', VERSIONS.read_text(), re.MULTILINE)
     assert expected is not None
     assert str(tuprolog.Info.VERSION) == expected.group(1)
 

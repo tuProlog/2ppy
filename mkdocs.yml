@@ -44,6 +44,7 @@ nav:
       - how-to/handle-errors.md
       - how-to/run-probabilistic-programs.md
       - how-to/use-the-repl.md
+      - how-to/use-the-terminal-ide.md
       - how-to/contribute.md
   - Examples:
       - examples/index.md
@@ -69,6 +70,7 @@ nav:
       - explanation/terms-and-variables.md
       - explanation/solvers-and-solutions.md
       - explanation/architecture.md
+      - explanation/terminal-ide.md
       - explanation/relationship-with-2p-kt.md
 
 markdown_extensions:

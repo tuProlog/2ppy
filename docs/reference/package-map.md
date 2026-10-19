@@ -56,5 +56,7 @@ indexing, `len`, operators). Importing any of them starts the JVM (see
 | [`tuprolog.pyutils`](../api/tuprolog/pyutils.md) | Pure-Python helpers. | `iterable_or_varargs`, `dict_or_keyword_args` |
 | [`tuprolog.utils`](../api/tuprolog/utils.md) | General-purpose JVM interfaces of 2P-Kt's types. | `Castable`, `Taggable` |
 | [`tuprolog.repl`](../api/tuprolog/repl.md) | Interactive shells: `python -m tuprolog.repl.prolog` and `python -m tuprolog.repl.problog`. | `PrologREPL` |
+| [`tuprolog.gui`](../api/tuprolog/gui.md) | The toolkit-neutral core of tuProlog's IDEs: state, actions and effects. | `prolog_gui`, `GuiFacade`, `GuiState`, `PageAction`, `GuiEffect` |
+| [`tuprolog.tui`](../api/tuprolog/tui.md) | A terminal IDE: `2ppy-tui` or `python -m tuprolog.tui`. | `PrologTui`, `GuiBridge`, `JvmGuiBridge` |
 
 `python -m tuprolog` opens a Python shell with the whole API imported.
