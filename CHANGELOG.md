@@ -1,3 +1,13 @@
+## [1.7.2](https://github.com/tuProlog/2ppy/compare/1.7.1...1.7.2) (2026-10-21)
+
+### Bug Fixes
+
+* **deps:** update dependency org.junit:junit-bom to v5.14.4 ([#107](https://github.com/tuProlog/2ppy/issues/107)) ([064a7c8](https://github.com/tuProlog/2ppy/commit/064a7c8710f41b72c52940d5dac8597699fa42de))
+
+### Build and continuous integration
+
+* **deps:** update docker/login-action action to v4 ([#108](https://github.com/tuProlog/2ppy/issues/108)) ([5995615](https://github.com/tuProlog/2ppy/commit/59956157bb325a91802da534f236b03494d9baa5))
+
 ## [1.7.1](https://github.com/tuProlog/2ppy/compare/1.7.0...1.7.1) (2026-10-19)
 
 ### Documentation

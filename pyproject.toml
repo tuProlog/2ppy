@@ -1,6 +1,6 @@
 [project]
 name = "2ppy"
-version = "1.7.1"
+version = "1.7.2"
 description = "Python-based implementation of tuProlog -- the open ecosystem for symbolic AI --, based on 2P-Kt"
 readme = "README.md"
 authors = [
