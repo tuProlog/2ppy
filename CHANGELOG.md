@@ -1,3 +1,18 @@
+## [1.7.3](https://github.com/tuProlog/2ppy/compare/1.7.2...1.7.3) (2026-10-21)
+
+### Dependency updates
+
+* **deps:** update gradle to v9.8.2 ([#112](https://github.com/tuProlog/2ppy/issues/112)) ([2667883](https://github.com/tuProlog/2ppy/commit/2667883753e27ad973ac7d7ae6319d8a91875ec8))
+
+### Bug Fixes
+
+* **deps:** update dependency org.junit:junit-bom to v6 ([#111](https://github.com/tuProlog/2ppy/issues/111)) ([d486a11](https://github.com/tuProlog/2ppy/commit/d486a11c5f0d9c85d35c11f4979fb8f905ec7ca1))
+
+### Build and continuous integration
+
+* **deps:** update docker/setup-buildx-action action to v4 ([#109](https://github.com/tuProlog/2ppy/issues/109)) ([0e3ab40](https://github.com/tuProlog/2ppy/commit/0e3ab40118112fb5675485e79de1531045f3aa0c))
+* **deps:** update docker/setup-qemu-action action to v4 ([#110](https://github.com/tuProlog/2ppy/issues/110)) ([7f28c53](https://github.com/tuProlog/2ppy/commit/7f28c53b8bfbdd255d75afb73421118949e98e96))
+
 ## [1.7.2](https://github.com/tuProlog/2ppy/compare/1.7.1...1.7.2) (2026-10-21)
 
 ### Bug Fixes
