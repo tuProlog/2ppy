@@ -1,3 +1,13 @@
+## [1.7.5](https://github.com/tuProlog/2ppy/compare/1.7.4...1.7.5) (2026-10-22)
+
+### Bug Fixes
+
+* **deps:** update tuprolog to v3.0.5 ([#115](https://github.com/tuProlog/2ppy/issues/115)) ([3ea3115](https://github.com/tuProlog/2ppy/commit/3ea31153d6c56c257ab922be2f0040b79c972da9))
+
+### Build and continuous integration
+
+* **deps:** update astral-sh/setup-uv action to v10.3.2 ([#114](https://github.com/tuProlog/2ppy/issues/114)) ([0290ff9](https://github.com/tuProlog/2ppy/commit/0290ff9ba306074d177055b16414a30b97ec5165))
+
 ## [1.7.4](https://github.com/tuProlog/2ppy/compare/1.7.3...1.7.4) (2026-10-22)
 
 ### Bug Fixes
