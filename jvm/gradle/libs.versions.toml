@@ -1,6 +1,6 @@
 [versions]
 # the 2P-Kt release 2PPy wraps: keep Kotlin aligned with the one it is built with
-tuprolog = "3.0.4"
+tuprolog = "3.0.5"
 kotlin = "2.4.21"
 junit = "6.1.3"
 
