@@ -1,3 +1,9 @@
+## [1.7.4](https://github.com/tuProlog/2ppy/compare/1.7.3...1.7.4) (2026-10-22)
+
+### Bug Fixes
+
+* **deps:** update tuprolog to v3.0.4 ([#113](https://github.com/tuProlog/2ppy/issues/113)) ([4f6df15](https://github.com/tuProlog/2ppy/commit/4f6df1545c6a41b0328011ca195bac5de04e4d2a))
+
 ## [1.7.3](https://github.com/tuProlog/2ppy/compare/1.7.2...1.7.3) (2026-10-21)
 
 ### Dependency updates
