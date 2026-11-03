@@ -1,3 +1,18 @@
+## [1.7.6](https://github.com/tuProlog/2ppy/compare/1.7.5...1.7.6) (2026-11-03)
+
+### Dependency updates
+
+* **deps:** update dependency semantic-release-preconfigured-conventional-commits to v1.1.158 ([#118](https://github.com/tuProlog/2ppy/issues/118)) ([ad23a9e](https://github.com/tuProlog/2ppy/commit/ad23a9ef832e0c7f02ab45cf9c8916f6763dcca5))
+* **deps:** update node.js to v26 ([#117](https://github.com/tuProlog/2ppy/issues/117)) ([f88de98](https://github.com/tuProlog/2ppy/commit/f88de983a62a687eb5aeb6cfb979873a40585ba5))
+
+### Bug Fixes
+
+* **deps:** update tuprolog to v3.0.6 ([#119](https://github.com/tuProlog/2ppy/issues/119)) ([36bd08f](https://github.com/tuProlog/2ppy/commit/36bd08f63d8ff341e56657bf510a21c975a492a4))
+
+### Build and continuous integration
+
+* **deps:** update astral-sh/setup-uv action to v10.3.3 ([#116](https://github.com/tuProlog/2ppy/issues/116)) ([4c74a71](https://github.com/tuProlog/2ppy/commit/4c74a7143ae9a3f28fa8ac7fbd9ffa7c9a003657))
+
 ## [1.7.5](https://github.com/tuProlog/2ppy/compare/1.7.4...1.7.5) (2026-10-22)
 
 ### Bug Fixes
