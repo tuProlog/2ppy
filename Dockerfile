@@ -2,7 +2,7 @@
 # It installs the wheel in dist/ (`uv run poe build-jars && uv build`); release.config.mjs builds
 # and publishes it on each release. Its options can be set via TWOPPY_* environment variables
 # (see `2ppy-tui --help`), e.g.: docker run -it --rm -e TWOPPY_QUERY="member(X, [1, 2])" <image>
-FROM python:3.13-slim
+FROM python:3.15-slim
 
 LABEL org.opencontainers.image.source="https://github.com/tuProlog/2ppy" \
       org.opencontainers.image.description="2PPy (tuProlog for Python), running 2ppy TUI by default" \
